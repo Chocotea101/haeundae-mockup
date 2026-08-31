@@ -1,0 +1,2741 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#D31421">
+<title>우리동네 주진우 — 비공식 시안 (프로토타입)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --ground: #faf8f4;
+  --surface: #ffffff;
+  --ink: #24272b;
+  --muted: #6d7178;
+  --line: #eae6de;
+  --accent: #D31421;
+  --accent-ink: #A50F1A;
+  --accent-soft: #FAEEEE;
+  --accent-wash: #FDF6F6;
+  --warm: #b57b17;
+  --warm-soft: #faf1dd;
+  --good: #1e8a56;
+  --good-soft: #e6f4ec;
+  --danger: #c9503d;
+  --shadow: 0 1px 2px rgba(36, 39, 43, 0.04), 0 12px 32px -24px rgba(36, 39, 43, 0.22);
+  --shadow-lift: 0 18px 48px -18px rgba(36, 39, 43, 0.28);
+  --font-body: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html.big body { zoom: 1.16; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16.5px;
+  line-height: 1.72;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: var(--font-body); cursor: pointer; }
+a { color: var(--accent); text-underline-offset: 3px; }
+
+.demo-banner a { color: var(--warm); }
+.demo-banner {
+  background: var(--warm-soft);
+  color: var(--warm);
+  font-size: 13.5px;
+  text-align: center;
+  padding: 9px 16px;
+  font-weight: 600;
+}
+
+/* ── 헤더 ── */
+.site-head {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.head-in {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  /* 브랜드 · 탭 · 큰 글씨 버튼을 한 줄에 나란히 둔다.
+     자리가 모자라면 가운데 탭만 가로로 밀려 스크롤된다. */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex: none;
+}
+.brand svg { display: block; }
+.brand .word {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.brand .word small {
+  display: block;
+  font-weight: 500;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+nav.tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* 좁아지면 이 줄만 줄어들고, 로고·버튼은 밀리지 않는다 */
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 4px;
+}
+nav.tabs::-webkit-scrollbar { display: none; }
+
+/* 좁은 화면 — 한 줄에 다 넣으면 탭이 0폭으로 눌려 메뉴가 사라진다.
+   브랜드·버튼은 윗줄에 두고 탭만 아랫줄로 내려 가로 스크롤시킨다. */
+@media (max-width: 1000px) {
+  .head-in { flex-wrap: wrap; padding-bottom: 6px; }
+  nav.tabs {
+    order: 3;
+    flex: 1 0 100%;
+    margin-left: 0;
+    padding-top: 2px;
+  }
+}
+.tab-btn { white-space: nowrap; flex: none; }
+.tab-btn {
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: var(--muted);
+  padding: 8px 11px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.tab-btn:hover { background: var(--ground); color: var(--ink); }
+.tab-btn.active { background: var(--accent-soft); color: var(--accent-ink); font-weight: 700; }
+.head-tools { margin-left: auto; }
+.bigtext-btn {
+  flex: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  font-size: 13.5px;
+  padding: 8px 16px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.bigtext-btn.on { background: var(--accent); color: #fff; border-color: transparent; }
+
+/* ── 공통 레이아웃 ── */
+main { max-width: 1060px; margin: 0 auto; padding: 36px 20px 88px; overflow-x: hidden; }
+.view { display: none; }
+.view.on { display: block; }
+.view.slide-r { animation: slide-r 0.3s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.view.slide-l { animation: slide-l 0.3s cubic-bezier(0.2, 0.8, 0.3, 1); }
+@keyframes slide-r { from { opacity: 0; transform: translateX(30px); } }
+@keyframes slide-l { from { opacity: 0; transform: translateX(-30px); } }
+
+h2.sec {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+h2.sec .pun { color: var(--accent); font-size: 0.72em; font-weight: 700; }
+.sec-sub { color: var(--muted); font-size: 15px; margin: 0 0 24px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: var(--ground);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip.blue { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+.chip.warm { background: var(--warm-soft); color: var(--warm); border-color: transparent; }
+.chip.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 26px;
+  text-decoration: none;
+  box-shadow: 0 6px 16px -8px rgba(14, 107, 168, 0.5);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.btn:hover { background: var(--accent-ink); transform: translateY(-1px); }
+.btn.ghost { background: var(--surface); color: var(--accent-ink); border: 1.5px solid var(--accent); box-shadow: none; }
+.btn.ghost:hover { background: var(--accent-soft); }
+
+/* ── 홈 히어로 ── */
+.hero {
+  text-align: center;
+  padding: 58px 18px 50px;
+  background: linear-gradient(180deg, var(--accent-wash) 0%, rgba(238, 246, 252, 0) 88%);
+  border-radius: 28px;
+  margin-bottom: 10px;
+}
+.hero .greet { font-size: 16px; color: var(--muted); font-weight: 600; margin: 0 0 12px; }
+.hero h1 {
+  font-size: clamp(32px, 5.8vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.28;
+  margin: 0;
+  text-wrap: balance;
+}
+.hero .pun-word { color: var(--accent); }
+#flip {
+  display: inline-block;
+  color: var(--warm);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  min-width: 1em;
+}
+.hero .reading { font-family: var(--font-mono); font-size: 13.5px; color: var(--muted); margin: 16px 0 14px; min-height: 1.5em; }
+.pun-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 28px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.pun-track .pt {
+  color: #b9bdc4;
+  padding: 4px 13px;
+  border-radius: 999px;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+.pun-track .pt.on { color: var(--accent-ink); background: var(--accent-soft); }
+.pun-track .pt-sep { color: #d3d7dd; font-weight: 500; }
+@media (max-width: 460px) { .pun-track { font-size: 13px; gap: 5px; } .pun-track .pt { padding: 4px 9px; } }
+.hero .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) {
+  #flip { transition: none; }
+  .view.slide-r, .view.slide-l { animation: none; }
+  .btn:hover { transform: none; }
+}
+
+.home-h { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; margin: 38px 0 4px; }
+.home-sub { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
+.act-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+.act-shot {
+  border: none; background: none; padding: 0; text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.as-photo {
+  display: flex; align-items: flex-end; padding: 10px;
+  aspect-ratio: 4 / 3; border-radius: 14px; margin-bottom: 8px;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.act-shot:hover .as-photo { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.act-shot b { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.as-meta { font-size: 12.5px; color: var(--muted); }
+
+.home-tally {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; padding: 22px 20px; margin-top: 24px;
+  box-shadow: var(--shadow);
+}
+@media (max-width: 620px) { .home-tally { grid-template-columns: repeat(2, 1fr); gap: 18px 12px; } }
+.ht-item { text-align: center; }
+.ht-item b { display: block; font-size: 30px; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); line-height: 1.1; }
+.ht-item b em { font-style: normal; font-size: 0.55em; }
+.ht-item span { font-size: 13px; color: var(--muted); font-weight: 600; }
+
+.now-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+@media (max-width: 780px) { .now-grid { grid-template-columns: 1fr; } }
+.now-card { padding: 20px 22px; text-align: left; }
+.now-card .k {
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  color: var(--accent-ink);
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+.now-card b { font-size: 15.5px; line-height: 1.55; display: block; margin-bottom: 8px; letter-spacing: -0.01em; }
+.now-card .m { font-size: 13.5px; color: var(--muted); }
+
+/* ── 공약 트래커 ── */
+.rule-box {
+  background: var(--accent-soft);
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-size: 14.5px;
+  margin-bottom: 22px;
+}
+.rule-box b { color: var(--accent-ink); }
+.pledge { padding: 22px 24px; margin-bottom: 14px; display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; align-items: start; }
+.pledge b { font-size: 17.5px; font-weight: 700; letter-spacing: -0.01em; }
+.pledge .why { grid-column: 1 / -1; font-size: 14.5px; color: var(--muted); margin: 0; }
+.pledge .links { grid-column: 1 / -1; font-size: 13.5px; }
+.pbar { grid-column: 1 / -1; height: 10px; border-radius: 999px; background: var(--ground); overflow: hidden; margin-top: 2px; }
+.pbar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #E8515C); border-radius: 999px; }
+.status {
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--ground);
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status.s2 { background: var(--warm-soft); color: var(--warm); }
+.status.s3 { background: var(--accent-soft); color: var(--accent-ink); }
+.status.s4 { background: var(--good-soft); color: var(--good); }
+.track { grid-column: 1 / -1; margin: 4px 0 0; }
+.track summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+}
+.track summary::-webkit-details-marker { display: none; }
+.track summary::after { content: "▾"; font-size: 11px; }
+.track[open] summary::after { content: "▴"; }
+.track-list { list-style: none; margin: 12px 0 0; padding: 0 0 0 2px; }
+.track-list li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 14.5px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+  color: var(--muted);
+}
+.track-list li:last-child { border-bottom: none; color: var(--ink); font-weight: 500; }
+.track-list li.has-shot { grid-template-columns: 46px 1fr; grid-template-rows: auto auto; }
+.tk-shot {
+  grid-column: 2;
+  display: flex; align-items: flex-end; padding: 8px;
+  aspect-ratio: 16 / 7; border-radius: 10px; margin-top: 8px;
+  max-width: 380px;
+}
+.track-note { font-size: 12.5px; color: var(--muted); margin: 12px 0 0; line-height: 1.6; }
+
+.tk-d { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); }
+.delay-note {
+  grid-column: 1 / -1;
+  background: var(--warm-soft);
+  color: var(--warm);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin: 0;
+}
+
+.status.s0 { background: var(--ground); border: 1.5px dashed var(--line); color: var(--muted); }
+.verify-note {
+  background: var(--warm-soft);
+  border-radius: 12px;
+  padding: 13px 17px;
+  font-size: 13.5px;
+  color: var(--warm);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.pledge > b .chip { vertical-align: 2px; margin-left: 6px; }
+.pledge .why .chip { margin-right: 6px; }
+
+.subhead { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; margin: 38px 0 14px; }
+.plain-li { padding: 16px 20px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.plain-li b { font-size: 15.5px; font-weight: 700; }
+.plain-li .m { font-size: 13.5px; color: var(--muted); }
+
+/* ── 의정현황 서브탭 ── */
+.subtabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 26px;
+}
+@media (max-width: 760px) { .subtabs { grid-template-columns: repeat(2, 1fr); } }
+.subtab {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 15px;
+  padding: 14px 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.subtab:hover { border-color: var(--accent); transform: translateY(-1px); }
+.subtab .st-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.subtab .st-pun { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+.subtab .st-count { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.subtab.active { background: var(--accent); border-color: transparent; box-shadow: 0 8px 20px -12px rgba(14, 107, 168, 0.6); }
+.subtab.active .st-name { color: #fff; }
+.subtab.active .st-pun { color: rgba(255, 255, 255, 0.82); }
+.subtab.active .st-count { color: rgba(255, 255, 255, 0.7); }
+
+.pane { display: none; }
+.pane.on { display: block; animation: pane-in 0.26s ease; }
+@keyframes pane-in { from { opacity: 0; transform: translateY(9px); } }
+.pane-lede { color: var(--muted); font-size: 15px; margin: 0 0 18px; max-width: 68ch; }
+.pane-lede b { color: var(--ink); }
+
+.mini-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.ms {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 12px 20px;
+  text-align: center;
+  flex: 1;
+  min-width: 88px;
+}
+.ms b { display: block; font-size: 23px; font-weight: 800; color: var(--accent); line-height: 1.2; }
+.ms span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+
+.bill-card { padding: 20px 22px; margin-bottom: 12px; }
+.bill-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.bill-top b { font-size: 16.5px; font-weight: 700; letter-spacing: -0.01em; }
+.bill-card .why { font-size: 14.5px; color: var(--muted); margin: 0 0 10px; }
+.bill-card .why b { color: var(--ink); }
+.bill-card .links { margin: 0; display: flex; gap: 7px; flex-wrap: wrap; }
+
+.act-item {
+  padding: 18px 22px;
+  margin-bottom: 11px;
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+@media (max-width: 620px) { .act-item { grid-template-columns: 52px 1fr; } }
+.act-date {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.25;
+}
+.act-date small { display: block; font-size: 11px; color: var(--muted); }
+.act-body b { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.act-body .why { font-size: 14px; color: var(--muted); margin: 3px 0 0; }
+
+/* ── 현장 활동 (사진 카드) ── */
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 8px;
+}
+@media (max-width: 760px) { .field-grid { grid-template-columns: 1fr; } }
+.field-card { overflow: hidden; display: flex; flex-direction: column; }
+.ph {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 14px;
+}
+.ph-a { background: linear-gradient(135deg, #dbe9f5 0%, #b9d4ea 100%); }
+.ph-b { background: linear-gradient(135deg, #e2e9f3 0%, #c3cfe2 100%); }
+.ph-c { background: linear-gradient(135deg, #f5ead9 0%, #e6d3b3 100%); }
+.ph-d { background: linear-gradient(135deg, #dcece6 0%, #b9d8cc 100%); }
+.ph::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 26% 34%, rgba(255, 255, 255, 0.55), transparent 44%),
+    radial-gradient(circle at 74% 68%, rgba(255, 255, 255, 0.32), transparent 40%);
+}
+.ph-tag {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.86);
+  color: #5b6069;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+.fc-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.fc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.fc-when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.fc-body > b {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.45;
+}
+.fc-saw, .fc-did {
+  font-size: 14.5px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.68;
+}
+.fc-did { color: var(--ink); }
+.fc-did b { color: var(--good); font-weight: 700; }
+.lbl {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-right: 8px;
+  vertical-align: 1px;
+  background: var(--ground);
+  color: var(--muted);
+}
+.fc-did .lbl { background: var(--good-soft); color: var(--good); }
+.field-card .links { margin: auto 0 0; padding-top: 4px; font-size: 13.5px; }
+
+/* ── 소식 ── */
+.brief { padding: 22px 24px; margin-bottom: 14px; }
+.brief .when { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); margin-bottom: 6px; font-weight: 500; }
+.brief b { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.brief ul { margin: 12px 0 0; padding-left: 20px; font-size: 15px; }
+.brief li { margin-bottom: 5px; }
+.brief li::marker { color: var(--accent); }
+
+/* ── 민원 폼 ── */
+.form-wrap { max-width: 660px; }
+.notice-strip {
+  background: var(--warm-soft);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--warm);
+  margin-bottom: 22px;
+}
+.field { margin-bottom: 22px; }
+.field > label { display: block; font-weight: 700; font-size: 15.5px; margin-bottom: 10px; }
+.field small { color: var(--muted); font-weight: 500; }
+.kind-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 560px) { .kind-row { grid-template-columns: 1fr; } }
+.kindbtn {
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.kindbtn:hover { border-color: var(--accent); }
+.kindbtn b { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.kindbtn span { font-size: 13px; color: var(--muted); }
+.kindbtn.on { background: var(--accent); border-color: transparent; }
+.kindbtn.on b { color: #fff; }
+.kindbtn.on span { color: rgba(255, 255, 255, 0.82); }
+
+.dong-clear {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 6px 2px 0;
+  margin-top: 2px;
+}
+.dong-clear:hover { color: var(--danger); }
+.dong-groups { display: flex; flex-direction: column; gap: 9px; }
+.dgroup { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dg-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 42px;
+  flex: none;
+}
+.dgroup .pick { padding: 9px 16px; font-size: 14.5px; }
+
+.chips { display: flex; gap: 9px; flex-wrap: wrap; }
+.pick {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  font-size: 15px;
+  padding: 10px 18px;
+  color: var(--muted);
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+.pick:hover { border-color: var(--accent); color: var(--accent-ink); }
+.pick.on { background: var(--accent); color: #fff; border-color: transparent; }
+textarea, input[type="text"], input[type="tel"], input[type="password"], input[type="email"], input[type="date"] {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  padding: 13px 15px;
+}
+textarea { min-height: 120px; resize: vertical; }
+textarea:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.route-hint {
+  display: none;
+  background: var(--accent-soft);
+  border-radius: 13px;
+  padding: 14px 17px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+.route-hint.on { display: block; }
+.route-hint b { color: var(--accent-ink); }
+.agree { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted); margin: 18px 0; }
+.agree input { margin-top: 5px; accent-color: var(--accent); width: 16px; height: 16px; }
+.err { color: var(--danger); font-size: 13.5px; font-weight: 600; margin-top: 7px; display: none; }
+.err.on { display: block; }
+
+/* ── 내 민원 조회 ── */
+.lookup { display: flex; gap: 10px; max-width: 500px; margin-bottom: 8px; }
+.lookup input { flex: 1; font-family: var(--font-mono); }
+.lookup #lookup-no { flex: 1 1 220px; min-width: 0; font-family: var(--font-mono); }
+.lookup #lookup-pw { flex: 0 1 140px; min-width: 0; font-family: var(--font-mono); text-align: center; }
+.lookup #lookup-pw::placeholder { font-family: var(--font-body); font-size: 13.5px; }
+@media (max-width: 560px) {
+  .lookup { flex-wrap: wrap; }
+  .lookup #lookup-no { flex: 1 1 100%; }
+  .lookup #lookup-pw { flex: 1 1 auto; }
+}
+.f-label2 { font-size: 13px; font-weight: 800; color: var(--muted); margin: 18px 0 8px; }
+.my-body {
+  background: var(--ground);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14.5px;
+  margin-bottom: 10px;
+}
+.my-body p { margin: 0 0 6px; line-height: 1.7; }
+.my-meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.my-edit textarea { min-height: 96px; margin-bottom: 10px; }
+.my-edit-btns { display: flex; gap: 8px; margin-bottom: 10px; }
+.got-reply {
+  background: var(--accent-soft);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 14.5px;
+  margin-bottom: 10px;
+}
+.got-reply .gr-title { display: block; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; margin: 2px 0 5px; }
+.got-reply .gr-head {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--accent-ink);
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.got-reply p { margin: 0; line-height: 1.75; }
+
+.edit-rule { font-size: 13px; color: var(--muted); margin: 10px 0 0; line-height: 1.65; }
+.edit-rule b { color: var(--accent-ink); }
+
+.mail-row { display: flex; gap: 8px; }
+.mail-row input { flex: 1; min-width: 0; }
+.mail-row .btn { white-space: nowrap; flex: none; padding: 12px 16px; font-size: 14px; }
+.mail-verify { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.mail-verify input { flex: 0 1 176px; min-width: 0; font-family: var(--font-mono); text-align: center; letter-spacing: 0.08em; }
+.mail-verify input::placeholder { font-family: var(--font-body); letter-spacing: 0; font-size: 14px; }
+.mail-verify .btn { flex: none; padding: 12px 18px; font-size: 14px; }
+.mail-hint { font-size: 12.5px; color: var(--muted); }
+.mail-hint b { font-family: var(--font-mono); color: var(--accent-ink); }
+.mail-ok { font-size: 13.5px; font-weight: 700; color: var(--good); background: var(--good-soft); border-radius: 10px; padding: 10px 14px; margin: 10px 0 0; }
+
+.rc-warn {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--warm);
+  background: var(--warm-soft);
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin: 14px 0;
+}
+.rc-warn b { color: var(--warm); }
+.rc-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+.rc-actions .btn { flex: 1; padding: 13px 10px; font-size: 14.5px; }
+.sub-close { width: 100%; background: none; color: var(--muted); box-shadow: none; font-weight: 600; }
+.sub-close:hover { background: var(--ground); color: var(--ink); }
+
+.rc-privacy { font-size: 12px; color: var(--muted); }
+.privacy-line {
+  font-size: 13.5px;
+  color: var(--muted);
+  background: var(--ground);
+  border-radius: 10px;
+  padding: 11px 14px;
+  margin: 14px 0 0;
+  line-height: 1.65;
+}
+.privacy-line b { color: var(--good); }
+
+.cheer-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.cheer-form .mini-in2 {
+  border: 1.5px solid var(--line); border-radius: 11px;
+  background: var(--surface); color: var(--ink);
+  font-family: var(--font-body); font-size: 14.5px; padding: 12px 14px;
+}
+.cheer-form #cheer-name { flex: 0 1 130px; }
+.cheer-form #cheer-text { flex: 1 1 240px; min-width: 0; }
+.cheer-form .mini-in2:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cheer-form .btn { flex: none; }
+.cheer-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.cheer { padding: 16px 18px; }
+.cheer p { font-size: 14.5px; line-height: 1.7; margin: 0 0 8px; font-weight: 500; }
+.cheer span { font-size: 12.5px; color: var(--muted); }
+
+.soft-div { border: none; border-top: 1px solid var(--line); margin: 40px 0 26px; }
+.simple-status {
+  background: var(--ground);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 4px;
+}
+.ss-badge {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 800;
+  background: var(--warm-soft); color: var(--warm);
+  border-radius: 999px; padding: 5px 14px; margin-bottom: 10px;
+}
+.simple-status p { font-size: 15px; line-height: 1.75; margin: 0 0 8px; }
+.ss-when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+.timeline { list-style: none; margin: 20px 0 0; padding: 0; max-width: 500px; }
+.timeline li { display: flex; gap: 13px; padding: 10px 0; align-items: baseline; font-size: 15px; }
+.timeline .t-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); flex: none; transform: translateY(1px); }
+.timeline li.done .t-dot { background: var(--good); box-shadow: 0 0 0 3px var(--good-soft); }
+.timeline li.now .t-dot { background: var(--warm); box-shadow: 0 0 0 3px var(--warm-soft); }
+.timeline .t-when { margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 8px; }
+.case { padding: 19px 21px; }
+.case b { font-size: 15.5px; font-weight: 700; display: block; margin: 10px 0 7px; letter-spacing: -0.01em; }
+.case p { font-size: 14px; color: var(--muted); margin: 0; }
+.stats { max-width: 580px; margin-top: 10px; }
+.stat-row { display: grid; grid-template-columns: 96px 1fr 46px; gap: 14px; align-items: center; margin-bottom: 11px; font-size: 14px; font-weight: 600; }
+.stat-row .bar { height: 11px; background: #f1eee7; border-radius: 999px; overflow: hidden; }
+.stat-row .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #E8515C); border-radius: 999px; }
+.stat-row .num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: right; }
+
+/* ── 내비게이터 ── */
+.navq { max-width: 640px; }
+.navq .q { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 16px; }
+.navq .opts { display: grid; gap: 11px; }
+.opt {
+  text-align: left;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 15px;
+  padding: 17px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.opt:hover { border-color: var(--accent); transform: translateY(-1px); }
+.opt small { display: block; color: var(--muted); font-size: 13.5px; font-weight: 500; margin-top: 3px; }
+.nav-result { border: 1.5px solid var(--accent); padding: 22px 24px; margin-top: 6px; }
+.nav-result .where { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent-ink); margin: 0 0 10px; }
+.nav-result p { font-size: 15px; margin: 0 0 14px; }
+.nav-restart { background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; margin-top: 16px; padding: 0; }
+
+.nav-extra {
+  font-size: 14.5px;
+  color: var(--muted);
+  background: var(--ground);
+  border-radius: 11px;
+  padding: 12px 15px;
+  margin: 0 0 14px;
+}
+.nav-mail {
+  font-size: 15px;
+  background: var(--accent-soft);
+  border-radius: 11px;
+  padding: 12px 15px;
+  margin: 0 0 14px;
+}
+.nav-mail b { font-family: var(--font-mono); color: var(--accent-ink); }
+.nav-tip { font-size: 14px; color: var(--warm); background: var(--warm-soft); border-radius: 11px; padding: 12px 15px; margin: 14px 0 0; }
+.ex { font-size: 0.82em; color: var(--muted); font-weight: 500; }
+
+.tpl-box { border: 1.5px solid var(--line); border-radius: 13px; overflow: hidden; margin: 4px 0 0; }
+.tpl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--ground);
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.copy-btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  color: var(--accent-ink);
+  white-space: nowrap;
+}
+.copy-btn:hover { background: var(--accent); color: #fff; border-color: transparent; }
+.tpl-body {
+  margin: 0;
+  padding: 15px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  background: var(--surface);
+  color: var(--ink);
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.office-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 760px) { .office-grid { grid-template-columns: 1fr; } }
+.office { padding: 22px 24px; }
+.ofc-addr { font-size: 15.5px; font-weight: 700; line-height: 1.6; margin: 12px 0 14px; letter-spacing: -0.01em; }
+.ofc-list { margin: 0; display: grid; grid-template-columns: 54px 1fr; gap: 7px 12px; font-size: 14.5px; }
+.ofc-list dt { color: var(--muted); font-weight: 600; }
+.ofc-list dd { margin: 0; font-family: var(--font-mono); font-size: 14px; }
+.ofc-note { font-size: 13.5px; color: var(--muted); margin: 14px 0 0; }
+
+/* ── 미디어 소식 ── */
+.media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 780px) { .media-grid { grid-template-columns: 1fr; } }
+.media-card { overflow: hidden; }
+.media-card p { margin: 0; padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 2px; }
+.media-card p b { font-size: 15px; font-weight: 700; }
+.media-card p span { font-size: 12.5px; color: var(--muted); }
+.media-video { aspect-ratio: 16 / 9; background: #000; }
+.media-video iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ── 사람 카드 · 조직도 ── */
+.people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.person { padding: 18px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.person b { font-size: 15px; font-weight: 700; }
+.person > span:not(.p-face):not(.chip) { font-size: 13px; color: var(--muted); }
+.person .chip { margin-top: 6px; }
+.team-note {
+  font-size: 13.5px;
+  color: var(--muted);
+  background: var(--ground);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 14px 0 0;
+  line-height: 1.7;
+}
+.p-face {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent-ink);
+  display: grid; place-items: center;
+  font-size: 17px; font-weight: 800; margin-bottom: 8px;
+}
+.p-face.lead { background: var(--accent); color: #fff; }
+.org-top { align-items: center; text-align: center; max-width: 320px; margin: 0 auto 0; }
+.org-line { width: 2px; height: 22px; background: var(--line); margin: 0 auto; }
+
+/* ── 참여 안내 ── */
+.join-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .join-grid { grid-template-columns: 1fr; } }
+.join-card { padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.join-card > b { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
+.join-steps { margin: 0; padding-left: 20px; font-size: 14.5px; line-height: 1.8; }
+.join-steps li::marker { color: var(--accent); font-weight: 700; }
+.join-card .btn { text-decoration: none; }
+.join-note { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.65; }
+
+/* ── 모달 · 토스트 ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 27, 31, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.on { display: flex; }
+.modal { max-width: 440px; width: 100%; padding: 28px 28px 24px; border-radius: 20px; box-shadow: var(--shadow-lift); }
+.modal h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 10px; }
+.modal p { font-size: 15px; color: var(--muted); margin: 0 0 16px; }
+.receipt {
+  background: var(--ground);
+  border: 1.5px dashed var(--line);
+  border-radius: 13px;
+  padding: 15px 17px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+.receipt b { color: var(--accent-ink); }
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(90px);
+  background: #24272b;
+  color: #faf8f4;
+  font-size: 14.5px;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+  z-index: 120;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: var(--shadow-lift);
+}
+#toast.on { transform: translateX(-50%) translateY(0); }
+
+.assure {
+  background: linear-gradient(180deg, rgba(238, 246, 252, 0) 0%, var(--accent-wash) 100%);
+  padding: 54px 20px 58px;
+  text-align: center;
+  color: var(--accent);
+}
+.assure-in { max-width: 1060px; margin: 0 auto; }
+.assure svg { display: block; margin: 0 auto 14px; opacity: 0.9; }
+.assure-line {
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.assure-line b { color: var(--accent); }
+.assure-sub { font-size: 15.5px; color: var(--muted); margin: 0 0 22px; font-weight: 500; }
+
+/* ── 소개 ── */
+.about-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; }
+@media (max-width: 820px) { .about-grid { grid-template-columns: 1fr; } }
+.profile { display: flex; gap: 20px; padding: 22px 24px; align-items: flex-start; }
+@media (max-width: 520px) { .profile { flex-direction: column; } }
+.pf-photo {
+  width: 128px; aspect-ratio: 3 / 4; flex: none;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #dbe9f5 0%, #b9d4ea 100%);
+  display: grid; place-items: center; text-align: center;
+  font-size: 12px; color: #4a6c88; font-weight: 600; line-height: 1.5;
+}
+.pf-body > b { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.pf-role { font-size: 14px; color: var(--muted); font-weight: 600; margin: 4px 0 14px; }
+.pf-facts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pf-facts li { display: flex; gap: 12px; font-size: 14px; line-height: 1.6; }
+.pf-facts li span { flex: none; min-width: 52px; font-weight: 700; color: var(--muted); font-size: 13px; padding-top: 1px; }
+.greet-card { padding: 22px 24px; display: flex; flex-direction: column; }
+.greet-k { font-size: 12.5px; font-weight: 800; color: var(--muted); margin: 0 0 12px; }
+.greet-txt { font-size: 17px; line-height: 1.8; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+.greet-sign { margin-top: auto; padding-top: 14px; font-size: 14px; color: var(--accent-ink); font-weight: 700; }
+
+.walk { list-style: none; margin: 0; padding: 0; max-width: 560px; }
+.walk li {
+  display: flex; gap: 16px; align-items: baseline;
+  padding: 10px 0 10px 18px;
+  border-left: 2px solid var(--line);
+  position: relative;
+  font-size: 15.5px;
+}
+.walk li::before {
+  content: ""; position: absolute; left: -6px; top: 18px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--line);
+}
+.walk li.wk-now { font-weight: 700; }
+.walk li.wk-now::before { background: var(--accent); border-color: var(--accent); }
+.wk-y { font-family: var(--font-mono); font-size: 13px; color: var(--accent); min-width: 42px; flex: none; }
+
+.mem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+@media (max-width: 760px) { .mem-grid { grid-template-columns: 1fr; } }
+.mem-ph { border-radius: 14px; }
+.mem p { font-size: 13.5px; color: var(--muted); margin: 8px 2px 0; line-height: 1.55; }
+
+.vote-card {
+  display: flex; gap: 26px; align-items: center; flex-wrap: wrap;
+  padding: 24px 28px; margin-bottom: 16px;
+}
+.vote-num { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; color: var(--accent); line-height: 1; }
+.vote-num em { font-style: normal; font-size: 0.5em; }
+.vote-card p { font-size: 15px; line-height: 1.75; margin: 0; }
+.vote-card b { color: var(--accent-ink); }
+
+.voices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width: 760px) { .voices { grid-template-columns: 1fr; } }
+.voice { padding: 18px 20px; }
+.voice p { font-size: 14.5px; line-height: 1.7; margin: 0 0 10px; font-weight: 500; }
+.voice span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+
+.promise-cta {
+  background: var(--accent-soft);
+  border-radius: 18px;
+  padding: 26px 24px;
+  text-align: center;
+}
+.promise-cta p { font-size: 16.5px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+
+/* ── 하단 연락처 스트립 ── */
+.sns-strip { background: var(--accent-soft); padding: 20px; }
+.sns-in {
+  max-width: 1060px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; flex-wrap: wrap;
+}
+.sns-in p { font-size: 14.5px; margin: 0; color: var(--ink); }
+.sns-in p b { color: var(--accent-ink); }
+.sns-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.sns-btn {
+  font-size: 13.5px; font-weight: 800; letter-spacing: -0.01em;
+  padding: 9px 18px; border-radius: 999px; text-decoration: none;
+  background: var(--surface); color: var(--ink);
+  border: 1.5px solid transparent;
+  transition: transform .14s ease, border-color .14s ease;
+}
+.sns-btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+.sns-btn.on { background: var(--accent); color: #fff; }
+@media (max-width: 620px) { .sns-in { flex-direction: column; gap: 12px; text-align: center; } }
+
+.contact-strip { background: var(--surface); border-top: 1px solid var(--line); padding: 26px 20px; }
+.cs-in {
+  max-width: 1060px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+}
+@media (max-width: 760px) { .cs-in { grid-template-columns: 1fr; gap: 16px; } }
+.cs-card { display: flex; flex-direction: column; gap: 2px; }
+.cs-k { font-size: 12px; font-weight: 800; letter-spacing: 0.05em; color: var(--accent-ink); }
+.cs-card b { font-family: var(--font-mono); font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+.cs-card p { font-size: 13px; color: var(--muted); margin: 2px 0 0; line-height: 1.55; }
+
+footer.site {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 13.5px;
+  color: var(--muted);
+  padding: 24px 20px 32px;
+}
+footer.site .in { max-width: 1060px; margin: 0 auto; }
+
+/* ── 모바일 쾌적성 보강 (≤560px) ── */
+@media (max-width: 560px) {
+  /* 통계 막대: 라벨/수치 폭 축소 */
+  .stat-row { grid-template-columns: 74px 1fr 40px; gap: 9px; font-size: 13px; }
+
+  /* 카드 안쪽 여백 축소 — 좁은 화면에서 내용 폭 확보 */
+  .card.pledge, .field-card .fc-body, .brief, .office, .join-card, .person { padding-left: 17px; padding-right: 17px; }
+  .pledge { padding-top: 18px; padding-bottom: 18px; }
+
+  /* 공약 카드: 제목과 상태 배지가 겹치지 않게 세로로 */
+  .pledge { grid-template-columns: 1fr; }
+  .pledge .status { justify-self: start; }
+
+  /* 서브탭: 2열이 좁으면 1열 + 가로 여백 최소화 */
+  .subtabs { gap: 8px; }
+  .subtab { padding: 13px 14px; }
+
+  /* 히어로 문구 줄바꿈 자연스럽게 */
+  .hero h1 { font-size: clamp(26px, 8.2vw, 34px); line-height: 1.34; }
+
+  /* 진행 기록 사진: 좁은 폭에 맞춤 */
+  .tk-shot { max-width: 100%; aspect-ratio: 16 / 9; }
+
+  /* 접수증 버튼 세로 배치 */
+  .rc-actions { flex-direction: column; }
+
+  /* 조회 결과 안 여백 */
+  .simple-status { padding: 15px 16px; }
+}
+
+/* 아주 좁은 화면 (≤380px) */
+@media (max-width: 380px) {
+  .subtabs { grid-template-columns: 1fr; }
+  .home-tally { grid-template-columns: repeat(2, 1fr); }
+  .stat-row { grid-template-columns: 64px 1fr 36px; }
+}
+
+
+/* ── 공개 게시판 ── */
+.board-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.fchip2 {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 14px; font-weight: 600;
+  padding: 8px 16px; color: var(--muted);
+}
+.fchip2:hover { border-color: var(--accent); color: var(--accent-ink); }
+.fchip2.on { background: var(--accent); color: #fff; border-color: transparent; font-weight: 700; }
+
+.board-list { display: flex; flex-direction: column; gap: 14px; }
+.board-item { padding: 20px 22px; display: flex; flex-direction: column; gap: 8px; }
+.bi-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bi-date { margin-left: auto; font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.board-item > b { font-size: 17px; font-weight: 700; letter-spacing: -0.015em; }
+.bi-body { font-size: 14.5px; line-height: 1.75; color: var(--muted); margin: 0; }
+.bi-reply {
+  background: var(--accent-soft);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 2px;
+}
+.bi-who { display: block; font-size: 12.5px; font-weight: 800; color: var(--accent-ink); margin-bottom: 5px; }
+.bi-reply p { font-size: 14.5px; line-height: 1.75; margin: 0; }
+.bi-from { font-size: 12.5px; color: var(--muted); }
+.board-note { font-size: 13px; color: var(--muted); background: var(--ground); border-radius: 10px; padding: 12px 15px; margin: 16px 0 0; line-height: 1.65; }
+.board-empty { padding: 34px 20px; text-align: center; color: var(--muted); font-size: 14.5px; }
+@media (max-width: 560px) { .board-item { padding: 17px 18px; } .bi-date { margin-left: 0; } }
+
+/* ══ 디자인 정제 (공식 사이트 조형 참고 · 색은 사이트 기본 accent 사용) ══ */
+
+/* 섹션 제목 — 왼쪽 강조 바 + 굵은 타이포 */
+h2.sec {
+  position: relative;
+  padding-left: 16px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+h2.sec::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.16em; bottom: 0.2em;
+  width: 5px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+h2.sec .pun { letter-spacing: -0.02em; }
+
+/* 카테고리 배지 — 각지게 (알약과 대비) */
+.chip.blue, .chip.warm, .chip.good {
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  padding: 5px 11px;
+}
+
+/* 소제목 — 짧은 강조 언더라인 */
+.subhead {
+  position: relative;
+  padding-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.subhead::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 34px; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* 활동·현장 카드 — 호버 시 살짝 떠오르며 강조 */
+.media-card, .field-card {
+  transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.media-card:hover, .field-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* 상단 탭 — 활성 탭 하단 인디케이터 */
+.tab-btn.active { position: relative; }
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 14px; right: 14px; bottom: -1px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+}
+
+/* 히어로 — 여유 있는 상단부 + 또렷한 타이포 */
+.hero { padding-top: 52px; padding-bottom: 46px; }
+.hero h1 { letter-spacing: -0.045em; font-weight: 800; }
+
+/* 성과 타일 — 상단 강조선 */
+.home-tally { border-top: 3px solid var(--accent); border-radius: 0 0 16px 16px; }
+
+@media (max-width: 560px) {
+  h2.sec { padding-left: 12px; }
+  h2.sec::before { width: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="demo-banner"><b>비공식 시안</b> 🛠 의원실·당협과 무관하게 제작한 제안용 프로토타입입니다. 공약명·경력 등 일부만 실제 공개 자료이고 나머지는 예시이며, 민원은 <b>실제로 접수되지 않습니다</b> · <a href="admin.html">보좌진 대시보드 보기</a></div>
+
+
+<header class="site-head">
+  <div class="head-in">
+      <div class="brand">
+      <svg width="34" height="30" viewBox="0 0 34 30" aria-hidden="true">
+        <path d="M3 14 C6 8 12 5 17 5 C23 5 29 9 30 15 C31 20 28 24 23 24 L15 24 L9 28 L10.5 23.5 C6 22 2.5 19 3 14 Z" fill="none" stroke="#0e6ba8" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M8 16 Q10.5 13.5 13 16 T18 16 T23 16 T27 15.5" fill="none" stroke="#0e6ba8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="word">우리동네 주진우<small>말만 해운대 · 해운대 지역구 소통 창구</small></div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab-btn active" data-v="home">홈</button>
+      <button class="tab-btn" data-v="news">활동</button>
+      <button class="tab-btn" data-v="pledge">의정현황</button>
+      <button class="tab-btn" data-v="about">소개</button>
+      <button class="tab-btn" data-v="ask">일단 말해주!</button>
+      <button class="tab-btn" data-v="guide">어디에 말하주?</button>
+      <button class="tab-btn" data-v="join">당원가입·후원</button>
+    </nav>
+    <button class="bigtext-btn" id="bigtext">가<span style="font-size:1.2em;">A</span> 큰 글씨</button>
+  </div>
+</header>
+
+<main>
+  <!-- ─────────── 홈 ─────────── -->
+  <section class="view on" id="v-home">
+    <div class="hero">
+      <p class="greet">해운대 이웃 여러분,</p>
+      <h1>"말만 하이소,<br>주진우가 다 <span class="pun-word">해<span id="flip">온</span>대</span>"</h1>
+      <p class="reading" id="reading">해온대 — 지금까지 해온 것들</p>
+      <div class="pun-track" aria-hidden="true">
+        <span class="pt" data-i="0">해온대</span>
+        <span class="pt-sep">→</span>
+        <span class="pt" data-i="1">해준대</span>
+        <span class="pt-sep">→</span>
+        <span class="pt" data-i="2">해운대</span>
+      </div>
+      <div class="cta-row">
+        <button class="btn" data-go="news">활동 보기 — 당협이 하는 일</button>
+        <button class="btn ghost" data-go="pledge">말한 대로, 해온 대로 — 의정현황</button>
+      </div>
+    </div>
+
+    <div class="now-grid">
+      <div class="card now-card">
+        <p class="k">당협 활동 (예시)</p>
+        <b>청년분과 대학가 간담회 — 청년 12명과 두 시간</b>
+        <p class="m">8.22 · 사진 5장 · 「활동」에서 보기</p>
+      </div>
+      <div class="card now-card">
+        <p class="k">공약 트래커</p>
+        <b>2024년 총선 공약 6건 등록 — 반송터널·BuTX·그린시티 재정비 외</b>
+        <p class="m">진행 단계는 의원실 확인 후 표시 · 「말한 대로, 해온 대로」</p>
+      </div>
+      <div class="card now-card">
+        <p class="k">주간 주진우 (예시)</p>
+        <b>8월 3주차 — 법사위 질의, 지역 간담회 2회</b>
+        <p class="m">이번 주 의원실이 한 일 요약</p>
+      </div>
+    </div>
+  
+    <h3 class="home-h">요즘 이런 일을 했습니다</h3>
+    <p class="home-sub">해운대 곳곳에서 있었던 일들. 사진을 눌러 자세히 보실 수 있어요. (예시)</p>
+    <div class="act-gallery">
+      <button class="act-shot" data-go="pledge">
+        <span class="as-photo ph-a"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <b>○○초 통학로 안전 점검</b>
+        <span class="as-meta">8.19 · 안전 펜스 설치 확인</span>
+      </button>
+      <button class="act-shot" data-go="pledge">
+        <span class="as-photo ph-c"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <b>○○시장 상인 간담회</b>
+        <span class="as-meta">8.05 · 건의 9건 접수</span>
+      </button>
+      <button class="act-shot" data-go="pledge">
+        <span class="as-photo ph-d"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <b>해수욕장 보행로 점검</b>
+        <span class="as-meta">7.29 · 유모차로 직접 통행</span>
+      </button>
+      <button class="act-shot" data-go="news">
+        <span class="as-photo ph-b"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <b>장산역 출근길 인사</b>
+        <span class="as-meta">매주 화요일 아침</span>
+      </button>
+    </div>
+
+    <div class="home-tally">
+      <div class="ht-item"><b>6</b><span>2024 공약</span></div>
+      <div class="ht-item"><b>2</b><span>대표발의 법안</span></div>
+      <div class="ht-item"><b>4</b><span>이번 달 현장</span></div>
+      <div class="ht-item"><b>4</b><span>당협 분과</span></div>
+    </div>
+</section>
+
+  <!-- ─────────── 소개 ─────────── -->
+  <section class="view" id="v-about">
+    <h2 class="sec">의원 소개</h2>
+    <p class="sec-sub">공개 자료 기준으로 정리했습니다. 사진·인사말은 실제 운영 시 의원실 자료로 교체됩니다.</p>
+
+    <div class="subtabs">
+      <button class="subtab active" data-s="me">
+        <span class="st-name">프로필</span>
+        <span class="st-pun">걸어온 길</span>
+        <span class="st-count">인사말 포함</span>
+      </button>
+      <button class="subtab" data-s="team">
+        <span class="st-name">함께 뛰는 사람들</span>
+        <span class="st-pun">시·구의원</span>
+        <span class="st-count">2026.6 당선 기준</span>
+      </button>
+      <button class="subtab" data-s="org">
+        <span class="st-name">당협 조직</span>
+        <span class="st-pun">해운대갑</span>
+        <span class="st-count">분과 4</span>
+      </button>
+      <button class="subtab" data-s="promise">
+        <span class="st-name">그날의 약속</span>
+        <span class="st-pun">2024년 봄</span>
+        <span class="st-count">53.7%</span>
+      </button>
+    </div>
+
+    <div class="pane on" id="s-me">
+    <div class="about-grid">
+      <div class="card profile">
+        <div class="pf-photo" role="img" aria-label="의원 프로필 사진 자리">
+          <span>프로필 사진 자리<br>(예시)</span>
+        </div>
+        <div class="pf-body">
+          <b>주진우</b>
+          <p class="pf-role">국민의힘 · 부산 해운대구갑 · 제22대 국회의원(초선)</p>
+          <ul class="pf-facts">
+            <li><span>학력</span>대연고 — 부산에서 학창 시절 · 서울대 법대</li>
+            <li><span>상임위</span>법제사법위원회 · 기후에너지환경노동위원회</li>
+            <li><span>지역구</span>우1·2·3동 / 중1·2동 / 좌1·2·3·4동 / 송정동</li>
+            <li><span>채널</span><a href="https://www.youtube.com/@joojjinwoo" target="_blank" rel="noopener">유튜브 「주진우의 이슈해설」</a> · <a href="https://www.facebook.com/joojjinwoo/" target="_blank" rel="noopener">페이스북</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card greet-card">
+        <p class="greet-k">인사말 <span class="ex">(예시 — 실제 운영 시 의원님 글로 교체)</span></p>
+        <p class="greet-txt">"해운대의 골목과 바다를 매일 걷겠습니다.<br>말씀해 주시면 듣고, 들은 것은 해내겠습니다."</p>
+        <span class="greet-sign">— 주진우 드림</span>
+      </div>
+    </div>
+
+    <h3 class="subhead">걸어온 길</h3>
+    <ol class="walk">
+      <li><span class="wk-y">1975</span>서울 출생 — 학창 시절은 부산에서 (대연고등학교 졸업)</li>
+      <li><span class="wk-y">1994</span>서울대학교 법과대학 입학 (공법 전공)</li>
+      <li><span class="wk-y">&nbsp;</span>제41회 사법시험 합격 · 사법연수원 31기</li>
+      <li><span class="wk-y">&nbsp;</span>검사 — 대구지검·서울중앙지검·법무부·대검찰청, 서울동부지검 형사6부장 등</li>
+      <li><span class="wk-y">2022</span>대통령비서실 초대 법률비서관</li>
+      <li class="wk-now"><span class="wk-y">2024</span>제22대 국회의원 당선 — 부산 해운대구갑 (득표율 53.7%)</li>
+    </ol>
+
+    </div>
+
+    <div class="pane" id="s-team">
+    <p class="pane-lede">해운대갑은 국회의원 혼자 뛰지 않습니다. 시·구의원의 공약과 활동도 이 사이트에서 함께 추적할 예정입니다. <b>시의원은 2026년 6월 지방선거 당선 기준 실제 명단</b>입니다.</p>
+    <div class="people-grid">
+      <div class="card person">
+        <span class="p-face">박</span>
+        <b>박준영 시의원</b>
+        <span>부산시의회 · 해운대 제1선거구<br>(우1·2·3동, 중1동)</span>
+        <span class="chip blue">국민의힘 · 초선</span>
+        <span class="chip">공약 추적 준비 중</span>
+      </div>
+      <div class="card person">
+        <span class="p-face">구</span>
+        <b>해운대구의회 구의원</b>
+        <span>제9대 (2026년 7월 개원)</span>
+        <span class="chip">명단 확인 중 — 확인 즉시 올립니다</span>
+      </div>
+    </div>
+    <p class="team-note">참고로 중2동·좌1~4동·송정동(해운대 제2선거구)은 더불어민주당 <b>최은영</b> 시의원의 지역입니다. 소속과 무관하게, 주민 민원은 「어디에 말하주?」에서 알맞은 곳으로 안내해드립니다.</p>
+    </div>
+
+    <div class="pane" id="s-org">
+    <p class="pane-lede">당원협의회가 어떻게 움직이는지도 공개합니다. (직책·이름은 당협 확인 후 입력)</p>
+    <div class="org">
+      <div class="card person org-top"><span class="p-face lead">주</span><b>당협위원장 — 주진우</b><span>국회의원 (해운대구갑)</span></div>
+      <div class="org-line" aria-hidden="true"></div>
+      <div class="people-grid">
+        <div class="card person"><span class="p-face">분</span><b>청년분과위원장 (예시)</b><span>○○○</span></div>
+        <div class="card person"><span class="p-face">분</span><b>여성분과위원장 (예시)</b><span>○○○</span></div>
+        <div class="card person"><span class="p-face">분</span><b>조직분과위원장 (예시)</b><span>○○○</span></div>
+        <div class="card person"><span class="p-face">분</span><b>홍보분과위원장 (예시)</b><span>○○○</span></div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="pane" id="s-promise">
+    <p class="pane-lede">선거는 끝났지만, 그때 주고받은 마음이 이 사이트의 출발점입니다.</p>
+
+    <div class="mem-grid">
+      <div class="mem"><div class="ph ph-a mem-ph"><span class="ph-tag">2024 선거 포스터 자리 (의원실 파일로 교체)</span></div><p>"사통팔달 해운대 · 살고 싶은 해운대 · 활력 있는 해운대" — 그때의 세 가지 약속</p></div>
+      <div class="mem"><div class="ph ph-c mem-ph"><span class="ph-tag">출근길 인사 사진 자리 (예시)</span></div><p>장산역 앞, 매일 아침의 약속</p></div>
+      <div class="mem"><div class="ph ph-d mem-ph"><span class="ph-tag">개표일 사진 자리 (예시)</span></div><p>2024년 4월 10일 밤, 감사의 인사</p></div>
+    </div>
+
+    <div class="card vote-card">
+      <span class="vote-num">53.7<em>%</em></span>
+      <p>2024년 4월, 해운대갑 주민 절반이 넘는 분들이 주진우에게 마음을 보냈습니다.<br><b>그 수만큼의 기대를 기억하며 일합니다.</b></p>
+    </div>
+
+    <div class="voices">
+      <div class="card voice"><p>"약속을 지키는지 지켜보려고 뽑았습니다. 지금도 지켜보는 중입니다."</p><span>우동 주민 (예시)</span></div>
+      <div class="card voice"><p>"출근길에 매일 인사하시길래, 꾸준한 사람이겠다 싶었습니다."</p><span>좌동 주민 (예시)</span></div>
+      <div class="card voice"><p>"검사 시절보다 동네 일 할 때 더 바빠 보이면 좋겠어요."</p><span>중동 주민 (예시)</span></div>
+    </div>
+
+    <div class="promise-cta">
+      <p>그날의 약속, 지금 어디까지 왔는지 직접 확인하세요.</p>
+      <button class="btn" data-go="pledge">말한 대로, 해온 대로 — 공약 확인</button>
+    </div>
+      </div>
+  </section>
+
+  <!-- ─────────── 의정현황 ─────────── -->
+  <section class="view" id="v-pledge">
+    <h2 class="sec">의정현황</h2>
+    <p class="sec-sub">해운대를 위해 무엇을 약속했고, 무엇을 해왔는지. (공약명·대표발의 법안은 실제 자료, 진행 상태·현장 활동은 예시)</p>
+
+    <div class="subtabs" id="subtabs">
+      <button class="subtab active" data-s="pledge">
+        <span class="st-name">공약 트래커</span>
+        <span class="st-pun">말한 대로, 해온 대로</span>
+        <span class="st-count">6건 · 실제 공약</span>
+      </button>
+      <button class="subtab" data-s="act">
+        <span class="st-name">현장 활동</span>
+        <span class="st-pun">가서 봤습니다</span>
+        <span class="st-count">현장 4 · 법안 2</span>
+      </button>
+    </div>
+
+    <!-- 공약 트래커 -->
+    <div class="pane on" id="s-pledge">
+      <p class="pane-lede"><b>말한 대로, 해온 대로.</b> 약속한 것과 실제로 해온 것을 나란히 놓고, 근거 자료와 함께 공개합니다.</p>
+      <div class="rule-box">
+        <b>판정 기준 공개</b> — 완료: 사업 종료 + 근거 공개 · 일부 달성: 단계 일부 이행 · 추진 중: 예산·행정 절차 진행 · 준비: 계획 수립. <b>지연되면 사유를 숨기지 않고 그대로 적습니다.</b>
+      </div>
+      <div class="verify-note">
+        아래 공약명은 <b>2024년 총선 당시 후보 인터뷰·공보 기준의 실제 공약</b>입니다. 진행 단계·해온 일 기록은
+        의원실 자료 확인 후 입력됩니다 — 확인 전에는 부풀리지 않고 <b>"확인 중"</b>으로 둡니다.
+      </div>
+
+      <div class="card pledge">
+        <b>반송터널 조기 착공 <span class="chip warm">1호 공약</span></b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip blue">사통팔달 해운대</span> 부산 외부순환도로의 마지막 구간. 동부산 교통 체증 해소의 핵심 사업.</p>
+        <details class="track">
+          <summary>해온 일 3건 보기 · 사진 2장</summary>
+          <ul class="track-list">
+            <li class="has-shot"><span class="tk-d">5.14</span>터널 예정 구간 현장 확인<span class="tk-shot ph-a"><span class="ph-tag">현장 사진 (예시)</span></span></li>
+            <li><span class="tk-d">6.27</span>국토부 관계자 면담 — 사업 일정 협의</li>
+            <li class="has-shot"><span class="tk-d">8.11</span>주민 설명회 개최<span class="tk-shot ph-c"><span class="ph-tag">현장 사진 (예시)</span></span></li>
+          </ul>
+          <p class="track-note">📷 사진이 있는 기록은 현장 모습이 함께 보입니다. 위 기록·사진은 <b>구조를 보여드리는 예시</b>이며, 실제 자료는 의원실 확인 후 올라갑니다.</p>
+        </details>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+      <div class="card pledge">
+        <b>BuTX 부산형 급행철도 도입</b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip blue">사통팔달 해운대</span> 부산역에서 해운대까지 10분대 연결. 차세대 급행 교통망.</p>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+      <div class="card pledge">
+        <b>도시철도 연장·간선 우회도로 확충</b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip blue">사통팔달 해운대</span> 도시철도 연장과 간선도로 우회로 확충으로 상습 정체 완화.</p>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+      <div class="card pledge">
+        <b>센텀 언더그라운드 시티 조성</b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip good">살고 싶은 해운대</span> BuTX 해운대역 일대를 복합 문화·상업 환승 공간으로.</p>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+      <div class="card pledge">
+        <b>해운대 그린시티(신시가지) 재정비</b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip good">살고 싶은 해운대</span> 좌동 신시가지 등 노후 주거지 재정비·재개발 추진.</p>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+      <div class="card pledge">
+        <b>MICE·관광 인프라 확충</b>
+        <span class="status s0">확인 중</span>
+        <p class="why"><span class="chip warm">활력 있는 해운대</span> 글로벌 전시·컨벤션 산업 육성과 관광 인프라 확장.</p>
+        <p class="links"><a href="https://www.sisamirae.com/news/article.html?no=183186" target="_blank" rel="noopener">근거: 후보 인터뷰 (시사미래신문, 2024)</a></p>
+      </div>
+    </div>
+
+    <!-- 현장 활동 -->
+    <div class="pane" id="s-act">
+      <p class="pane-lede"><b>가서 봤습니다.</b> 현장에서 확인한 것과, 그래서 어떻게 됐는지를 사진과 함께 남깁니다. 국회 안 기록(질의·표결)도 아래에 함께 정리합니다.</p>
+
+      <div class="field-grid">
+        <article class="card field-card">
+          <div class="ph ph-a" role="img" aria-label="통학로 현장 점검 사진 (예시)">
+            <span class="ph-tag">현장 사진 (예시)</span>
+          </div>
+          <div class="fc-body">
+            <div class="fc-top">
+              <span class="chip blue">통학로</span>
+              <span class="fc-when">8.19 (화) · ○○초 정문 앞</span>
+            </div>
+            <b>“아이들 눈높이에서 보니 차가 안 보이더라”</b>
+            <p class="fc-saw"><span class="lbl">확인한 것</span>등굣길 시간대에 직접 서 봤습니다. 주차된 차량에 가려 횡단보도 진입부가 보이지 않는 구간을 확인했습니다.</p>
+            <p class="fc-did"><span class="lbl">그래서</span>안전 펜스·과속 방지 시설 설치 요청 → <b>설치 완료</b>. 공약 「통학로 안전 개선」 완료 처리.</p>
+            <p class="links"><a href="#" class="demo-link">관련 공약 보기 (예시)</a></p>
+          </div>
+        </article>
+
+        <article class="card field-card">
+          <div class="ph ph-b" role="img" aria-label="사거리 교통 현장 점검 사진 (예시)">
+            <span class="ph-tag">현장 사진 (예시)</span>
+          </div>
+          <div class="fc-body">
+            <div class="fc-top">
+              <span class="chip blue">교통</span>
+              <span class="fc-when">8.12 (화) · △△사거리</span>
+            </div>
+            <b>“퇴근 시간에 직접 서서 신호를 세어봤습니다”</b>
+            <p class="fc-saw"><span class="lbl">확인한 것</span>좌회전 대기가 두 번씩 걸리는 구간. 주민들이 말씀하신 그대로였습니다.</p>
+            <p class="fc-did"><span class="lbl">그래서</span>경찰서 교통과에 신호 체계 개선 요청 → <b>신호 주기 조정 완료</b>. 우회 도로 확충은 절차 진행 중.</p>
+          </div>
+        </article>
+
+        <article class="card field-card">
+          <div class="ph ph-c" role="img" aria-label="상가 간담회 사진 (예시)">
+            <span class="ph-tag">현장 사진 (예시)</span>
+          </div>
+          <div class="fc-body">
+            <div class="fc-top">
+              <span class="chip blue">상권</span>
+              <span class="fc-when">8.05 (화) · ○○시장</span>
+            </div>
+            <b>“상인분들 얘기 두 시간 들었습니다”</b>
+            <p class="fc-saw"><span class="lbl">확인한 것</span>간담회에서 나온 건의 9건. 그중 6건이 주차 문제였습니다.</p>
+            <p class="fc-did"><span class="lbl">그래서</span>건의 3건은 「일단 말해주!」 민원함으로 이관해 처리 중, 나머지는 구청 협의 요청.</p>
+          </div>
+        </article>
+
+        <article class="card field-card">
+          <div class="ph ph-d" role="img" aria-label="해수욕장 보행로 점검 사진 (예시)">
+            <span class="ph-tag">현장 사진 (예시)</span>
+          </div>
+          <div class="fc-body">
+            <div class="fc-top">
+              <span class="chip blue">보행 환경</span>
+              <span class="fc-when">7.29 (화) · 해수욕장 진입로</span>
+            </div>
+            <b>“유모차를 끌고 한 바퀴 돌아봤습니다”</b>
+            <p class="fc-saw"><span class="lbl">확인한 것</span>턱이 높아 유모차·휠체어가 지나기 어려운 지점 4곳.</p>
+            <p class="fc-did"><span class="lbl">그래서</span>국비 확보 후 재설계 단계. 착공 시점 확정되면 이 자리에 갱신합니다.</p>
+          </div>
+        </article>
+      </div>
+
+      <h3 class="subhead">대표발의 법안</h3>
+      <div class="card bill-card">
+        <div class="bill-top"><b>북극항로청 설치 법안</b><span class="status s0">확인 중</span></div>
+        <p class="why">북극항로 시대에 대비한 전담 기관 설치. <b>우리 동네와의 관계:</b> 부산이 북극항로의 거점 항만이 되기 위한 제도적 기반입니다.</p>
+        <p class="links"><span class="chip blue">대표발의</span> <span class="chip">2026.03</span> <a href="https://v.daum.net/v/20260317142637644" target="_blank" rel="noopener">근거: 보도 (2026.3.17)</a></p>
+      </div>
+      <div class="card bill-card">
+        <div class="bill-top"><b>한국수산진흥공사 설치 법안</b><span class="status s0">확인 중</span></div>
+        <p class="why">수산업 진흥 전담 공사 설치. <b>우리 동네와의 관계:</b> 수산·해양 도시 부산의 기반 산업과 직결됩니다.</p>
+        <p class="links"><span class="chip blue">대표발의</span> <span class="chip">2026.03</span> <a href="https://v.daum.net/v/20260317142637644" target="_blank" rel="noopener">근거: 보도 (2026.3.17)</a></p>
+      </div>
+
+      <h3 class="subhead">현장에서 국회로</h3>
+      <p class="pane-lede">현장에서 확인한 문제를 국회에서 어떻게 다뤘는지 — 질의·표결 기록입니다.</p>
+      <div class="card act-item">
+        <span class="act-date">8.21<small>목</small></span>
+        <div class="act-body">
+          <b>법제사법위원회 전체회의 질의 (예시)</b>
+          <p class="why">통학로 안전 법안 심사 — 8.19 현장에서 본 사례를 근거로 질의.</p>
+        </div>
+        <span class="chip blue">영상 있음</span>
+      </div>
+      <div class="card act-item">
+        <span class="act-date">8.21<small>목</small></span>
+        <div class="act-body">
+          <b>본회의 표결 참여 (예시)</b>
+          <p class="why">연안 안전 관리 법률안 포함 12건 표결.</p>
+        </div>
+        <span class="chip">기록</span>
+      </div>
+      <div class="card act-item">
+        <span class="act-date">8.14<small>목</small></span>
+        <div class="act-body">
+          <b>상임위 법안심사소위 (예시)</b>
+          <p class="why">소상공인 지원 법안 축조 심사 — 8.05 시장 간담회 건의 반영.</p>
+        </div>
+        <span class="chip">기록</span>
+      </div>
+      <div class="card act-item">
+        <span class="act-date">8.07<small>목</small></span>
+        <div class="act-body">
+          <b>대정부질문 (예시)</b>
+          <p class="why">지역 현안 관련 정부 답변 요구.</p>
+        </div>
+        <span class="chip blue">영상 있음</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── 소식 ─────────── -->
+  <section class="view" id="v-news">
+    <h2 class="sec">활동 <span class="pun">당협이 이렇게 뛰고 있습니다</span></h2>
+    <p class="sec-sub">의원실과 당협이 해운대에서 한 일들 — 사진과 영상으로 보여드립니다. (예시 데이터)</p>
+    <div class="subtabs">
+      <button class="subtab active" data-s="media">
+        <span class="st-name">사진·영상</span>
+        <span class="st-pun">현장 스케치</span>
+        <span class="st-count">3건</span>
+      </button>
+      <button class="subtab" data-s="week">
+        <span class="st-name">주간 주진우</span>
+        <span class="st-pun">브리핑·일정</span>
+        <span class="st-count">주 1회 발행</span>
+      </button>
+      <button class="subtab" data-s="party">
+        <span class="st-name">당협 활동</span>
+        <span class="st-pun">해운대갑 당원협의회</span>
+        <span class="st-count">분과·당원 소식</span>
+      </button>
+      <button class="subtab" data-s="daily">
+        <span class="st-name">일상 한 컷</span>
+        <span class="st-pun">일상의 주진우</span>
+        <span class="st-count">수시 업데이트</span>
+      </button>
+    </div>
+
+
+    <h3 class="subhead">응원 한마디</h3>
+    <p class="pane-lede">활동을 보시고 한마디 남겨주세요. <b>사무국 확인 후 게시됩니다.</b></p>
+    <div class="cheer-form">
+      <input class="mini-in2" id="cheer-name" maxlength="10" placeholder="닉네임">
+      <input class="mini-in2" id="cheer-text" maxlength="80" placeholder="응원 한마디 (80자까지)">
+      <button class="btn" id="cheer-send">남기기</button>
+    </div>
+    <div class="cheer-list">
+      <div class="card cheer"><p>"장산역에서 매주 인사하시는 모습 보기 좋아요. 힘내세요!"</p><span>좌동 주민 (예시) · 8.20</span></div>
+      <div class="card cheer"><p>"통학로 펜스 생기고 나서 애 등교가 한결 안심돼요. 감사합니다."</p><span>우2동 학부모 (예시) · 8.19</span></div>
+      <div class="card cheer"><p>"청년 간담회 또 해주세요! 지난번에 못 갔어요ㅠ"</p><span>대학생 (예시) · 8.17</span></div>
+    </div>
+
+    <div class="pane" id="s-week">
+    <div class="card brief">
+      <p class="when">8월 3주차 (예시)</p>
+      <b>법사위 질의, 그리고 동네 두 바퀴</b>
+      <ul>
+        <li>법제사법위원회 전체회의 질의 1건</li>
+        <li>지역 상가 간담회 2회 — 접수된 건의 3건은 민원함으로 이관</li>
+        <li>통학로 공약 완료 확인 현장 방문</li>
+      </ul>
+    </div>
+    <div class="card brief">
+      <p class="when">8월 2주차 (예시)</p>
+      <b>민원 7건 답변, 2건은 구청 전달</b>
+      <ul>
+        <li>접수 9건 중 7건 답변 완료, 2건 소관 기관 전달</li>
+        <li>반복 접수된 소음 민원 → 제도 개선 검토 착수</li>
+      </ul>
+    </div>
+    <h3 class="subhead">공개 일정 (예시)</h3>
+    <div class="card plain-li"><b>주민과의 대화 — ○○동 행정복지센터</b><span class="m">8.26(화) 19:00</span></div>
+    <div class="card plain-li"><b>의정보고 간담회</b><span class="m">9월 초 예정</span></div>
+      </div>
+
+    <div class="pane on" id="s-media">
+    <div class="media-grid">
+      <div class="card media-card">
+        <div class="ph ph-a mem-ph" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
+        <p><b>상가 간담회 스케치</b><span>8.20 · 사진 4장 (예시)</span></p>
+      </div>
+      <div class="card media-card">
+        <div class="media-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/DmRlwiv71rU" title="현장 영상 (예시)" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p><b>현장 라이브 영상</b><span>유튜브 임베드 — 실제로 재생됩니다</span></p>
+      </div>
+      <div class="card media-card">
+        <div class="ph ph-c mem-ph" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
+        <p><b>통학로 완료 현장</b><span>8.19 · 사진 2장 (예시)</span></p>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="pane" id="s-party">
+    <p class="pane-lede">의원 혼자가 아니라, 당협이 함께 뜁니다. 분과별 활동과 당원 소식을 전합니다. (예시 데이터)</p>
+    <div class="media-grid">
+      <div class="card media-card">
+        <div class="ph ph-c mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <p><b>청년분과 — 대학가 간담회</b><span>8.22 · 청년분과위원장 외 12명</span></p>
+      </div>
+      <div class="card media-card">
+        <div class="ph ph-a mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <p><b>여성분과 — 아동 안전 캠페인</b><span>8.18 · 좌동 일대</span></p>
+      </div>
+      <div class="card media-card">
+        <div class="ph ph-d mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <p><b>조직분과 — 당원 월례회</b><span>8.14 · 참석 40여 명</span></p>
+      </div>
+    </div>
+
+    <h3 class="subhead">당협 소식</h3>
+    <div class="card brief">
+      <p class="when">8월 4주 (예시)</p>
+      <b>분과별 여름 활동 마무리</b>
+      <ul>
+        <li>청년분과 — 대학가 정책 간담회 1회, 참여 청년 12명</li>
+        <li>여성분과 — 통학로 안전 캠페인 좌동 일대 진행</li>
+        <li>조직분과 — 당원 월례회, 하반기 활동 계획 공유</li>
+      </ul>
+    </div>
+    <div class="card brief">
+      <p class="when">8월 2주 (예시)</p>
+      <b>당원 봉사활동 — 폭염 취약가구 방문</b>
+      <ul>
+        <li>홍보분과 주관, 당원 20여 명 참여</li>
+        <li>독거 어르신 가구에 냉방용품 전달 (기부행위 아닌 자원봉사)</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">함께하실 분을 찾습니다</h3>
+    <div class="cta-strip">
+      <p>분과 활동이나 봉사에 함께하고 싶으시다면 언제든 문을 두드려 주세요.</p>
+      <button class="btn" data-go="join">당원가입·후원 보기</button>
+    </div>
+    </div>
+
+    <div class="pane" id="s-daily">
+    <p class="pane-lede">의정 기록만큼, 사람도 보여드립니다. 딱딱한 소식 사이, 가끔 이런 것도요. (의원실 제공 사진으로 채워질 자리)</p>
+    <div class="mem-grid">
+      <div class="mem"><div class="ph ph-c mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>단골 국밥집에서 — "여기 깍두기가 진리입니다"</p></div>
+      <div class="mem"><div class="ph ph-d mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>주말 아침 장산 둘레길 — 만나면 인사해 주세요</p></div>
+      <div class="mem"><div class="ph ph-b mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>사무실 책상 위 — 오늘도 민원 파일과 함께</p></div>
+    </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────── 민원·제안 ─────────── -->
+  <section class="view" id="v-ask">
+    <h2 class="sec">주민 목소리 <span class="pun">「일단 말해주!」</span></h2>
+    <p class="sec-sub">남겨주시면 <b>사무국장님이 확인하고 답변을 드립니다.</b> 회원가입 없이 남기고, 접수번호로 답변을 확인하세요.</p>
+
+    <div class="subtabs">
+      <button class="subtab active" data-s="write">
+        <span class="st-name">이야기 남기기</span>
+        <span class="st-pun">일단 말해주!</span>
+        <span class="st-count">회원가입 없이</span>
+      </button>
+      <button class="subtab" data-s="board">
+        <span class="st-name">이런 이야기가 있었어요</span>
+        <span class="st-pun">공개 게시판</span>
+        <span class="st-count">공개 동의 건만</span>
+      </button>
+    </div>
+
+    <div class="pane on" id="s-write">
+    <div class="form-wrap">
+      <div class="notice-strip">인사·인허가·수사 개입 등 <b>부정청탁에 해당하는 요청은 접수할 수 없습니다</b> (청탁금지법). 개인정보는 최소한만 수집하며 처리 완료 후 파기됩니다.</div>
+
+      <div class="field">
+        <label>어떤 이야기인가요?</label>
+        <div class="kind-row" id="kind-chips">
+          <button class="kindbtn on" data-kind="report" aria-pressed="true">
+            <b>불편 신고</b><span>지금 겪고 있는 문제를 고쳐주세요</span>
+          </button>
+          <button class="kindbtn" data-kind="idea" aria-pressed="false">
+            <b>정책 제안</b><span>이런 게 있으면 좋겠어요</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>어떤 분야인가요? <small>(다시 누르면 선택 해제)</small></label>
+        <div class="chips" id="cat-chips">
+          <button class="pick" data-route="road" aria-pressed="false">도로·교통</button>
+          <button class="pick" data-route="env" aria-pressed="false">환경·소음</button>
+          <button class="pick" aria-pressed="false">복지</button>
+          <button class="pick" aria-pressed="false">교육</button>
+          <button class="pick" aria-pressed="false">안전</button>
+          <button class="pick" aria-pressed="false">기타</button>
+        </div>
+        <div class="route-hint" id="route-hint">
+          <b>알려드려요</b> — 이 분야는 <b>해운대구청</b>이 더 빨리 처리할 수 있는 경우가 많아요 (구청 민원실 051-749-4000 · 국민신문고). 그래도 의원실이 알아야 할 일이라면 그대로 접수해 주세요. 반복되는 민원은 제도 개선으로 연결합니다.
+        </div>
+        <p class="err" id="err-cat">분야를 골라주세요</p>
+      </div>
+
+      <div class="field">
+        <label>어느 동네인가요? <small>(해운대구 갑 · 여러 동에 걸친 일이면 <b>여러 개 선택</b>할 수 있어요)</small></label>
+        <div class="dong-groups" id="dong-chips">
+          <div class="dgroup">
+            <span class="dg-label">우동</span>
+            <button class="pick" aria-pressed="false">우1동</button>
+            <button class="pick" aria-pressed="false">우2동</button>
+            <button class="pick" aria-pressed="false">우3동</button>
+          </div>
+          <div class="dgroup">
+            <span class="dg-label">중동</span>
+            <button class="pick" aria-pressed="false">중1동</button>
+            <button class="pick" aria-pressed="false">중2동</button>
+          </div>
+          <div class="dgroup">
+            <span class="dg-label">좌동</span>
+            <button class="pick" aria-pressed="false">좌1동</button>
+            <button class="pick" aria-pressed="false">좌2동</button>
+            <button class="pick" aria-pressed="false">좌3동</button>
+            <button class="pick" aria-pressed="false">좌4동</button>
+          </div>
+          <div class="dgroup">
+            <span class="dg-label">송정</span>
+            <button class="pick" aria-pressed="false">송정동</button>
+          </div>
+          <div class="dgroup">
+            <span class="dg-label">그 외</span>
+            <button class="pick" data-out="1" aria-pressed="false">잘 모르겠어요</button>
+          </div>
+        </div>
+        <button type="button" class="dong-clear" id="dong-clear" hidden>선택 모두 해제 ✕</button>
+        <p class="err" id="err-dong">동네를 골라주세요</p>
+      </div>
+
+      <div class="field">
+        <label id="body-label">무슨 일인가요?</label>
+        <textarea id="ask-body" placeholder="예: ○○ 정류장 앞 횡단보도 신호가 너무 짧아서 어르신들이 건너기 힘들어요."></textarea>
+        <p class="err" id="err-body">내용을 적어주세요</p>
+      </div>
+
+      <div class="field">
+        <label>이메일 <small>(선택 — 답변·진행 소식을 메일로 받고 싶을 때만)</small></label>
+        <div class="mail-row">
+          <input type="email" id="ask-mail" autocomplete="email" placeholder="name@example.com">
+          <button type="button" class="btn ghost" id="mail-send">인증번호 받기</button>
+        </div>
+        <div class="mail-verify" id="mail-verify" hidden>
+          <input type="text" id="mail-code" inputmode="numeric" maxlength="6" placeholder="인증번호 6자리">
+          <button type="button" class="btn" id="mail-check">확인</button>
+          <span class="mail-hint">프로토타입이라 <b id="demo-code">000000</b>을 넣으면 인증됩니다</span>
+        </div>
+        <p class="mail-ok" id="mail-ok" hidden>✓ 인증된 메일로만 소식을 보냅니다 — 오타로 남에게 갈 일이 없어요</p>
+        <p class="err" id="err-mail">이메일 형식을 확인해주세요</p>
+      </div>
+
+      <div class="field">
+        <label>조회 비밀번호 <small>(숫자 4자리를 직접 정해주세요 — 내 민원을 확인·수정할 때 씁니다)</small></label>
+        <input type="password" id="ask-pw" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="숫자 4자리">
+        <p class="err" id="err-pw">숫자 4자리로 정해주세요</p>
+      </div>
+
+      <label class="agree"><input type="checkbox" id="agree"> 개인정보 수집·이용에 동의합니다. <small>(내용·동네·연락처(선택) — 답변 완료 7일 뒤 자동 파기됩니다. 프로토타입에서는 아무것도 저장되지 않습니다)</small></label>
+      <p class="err" id="err-agree">동의에 체크해주세요</p>
+
+      <button class="btn" id="submit-ask">접수하기 (데모)</button>
+    </div>
+  
+    <hr class="soft-div">
+    <h3 class="subhead">내 민원 얼마나 되었주?</h3>
+    <div class="lookup">
+      <input type="text" id="lookup-no" inputmode="numeric" placeholder="예: 2026-0818-042">
+      <input type="password" id="lookup-pw" inputmode="numeric" maxlength="4" placeholder="비밀번호">
+      <button class="btn" id="lookup-btn">조회</button>
+    </div>
+    <p class="sec-sub" style="margin:0;">접수번호만 넣으면 <b>진행 상태</b>를, 접수증의 <b>조회 비밀번호</b>까지 넣으면 남긴 내용 확인·수정까지 할 수 있어요. (프로토타입: 아무 값이나 동작)</p>
+    <div class="card" id="lookup-result" style="display:none; padding:20px 22px; margin-top:14px; max-width:520px;">
+      <b id="lookup-title">횡단보도 신호 시간 연장 요청 (예시)</b>
+      <div class="simple-status">
+        <span class="ss-badge">처리 중</span>
+        <p>경찰서 교통과와 신호 주기 조정을 협의하고 있습니다. 결과가 나오는 대로 알려드릴게요.</p>
+        <span class="ss-when">최근 업데이트 8.21</span>
+      </div>
+      <div id="lookup-detail" hidden>
+        <p class="f-label2">내가 남긴 내용 <span class="ex">(비밀번호 확인됨)</span></p>
+        <div class="my-body" id="my-body-view">
+          <p>출근길에 보면 어르신들이 절반쯤 건넜을 때 신호가 바뀝니다. 신호 시간을 조금만 늘려주실 수 없을까요?</p>
+          <span class="my-meta">도로·교통 · 좌2동 · 8.18 접수</span>
+        </div>
+        <div class="my-edit" id="my-edit" hidden>
+          <textarea id="my-edit-text">출근길에 보면 어르신들이 절반쯤 건넜을 때 신호가 바뀝니다. 신호 시간을 조금만 늘려주실 수 없을까요?</textarea>
+          <div class="my-edit-btns">
+            <button class="btn" id="my-save">수정 저장</button>
+            <button class="btn ghost" id="my-cancel">취소</button>
+          </div>
+        </div>
+        <button class="btn ghost" id="my-edit-btn">내용 수정하기</button>
+        <p class="edit-rule">검토가 시작되기 전까지는 자유롭게 고칠 수 있어요. 검토가 시작된 뒤에는 수정 대신 <b>추가 의견</b>으로 담당자에게 전달됩니다.</p>
+
+        <p class="f-label2">받은 소식 (2건)</p>
+        <div class="got-reply">
+          <span class="gr-head">8.19 · 주진우 의원실</span>
+          <b class="gr-title">경찰서 교통과와 협의 시작</b>
+          <p>접수 확인했습니다. 어르신들 통행이 걸린 문제라 바로 경찰서 교통과와 협의를 시작했어요. 진행되는 대로 여기로 다시 알려드릴게요.</p>
+        </div>
+        <div class="got-reply">
+          <span class="gr-head">8.21 · 주진우 의원실</span>
+          <b class="gr-title">신호 주기 조정 협조 공문 발송</b>
+          <p>경찰서에 신호 주기 조정 협조 공문을 보냈습니다. 회신이 오는 대로 정리해서 안내드리겠습니다. 조금만 기다려 주세요.</p>
+        </div>
+      </div>
+      <p class="privacy-line">🔒 답변이 완료되면 남기신 연락처는 <b>7일 뒤 자동 파기</b>됩니다. 공개 사례로 전환될 때도 개인정보는 포함되지 않아요.</p>
+    </div>
+    </div>
+
+    <div class="pane" id="s-board">
+      <p class="pane-lede">주민이 남긴 이야기 중 <b>본인이 공개에 동의하고 사무국이 확인한 것</b>만 올라옵니다. 개인정보는 지운 뒤 게시합니다.</p>
+
+      <div class="board-filters">
+        <button class="fchip2 on" data-bf="all">전체</button>
+        <button class="fchip2" data-bf="답변 완료">답변 완료</button>
+        <button class="fchip2" data-bf="처리 중">처리 중</button>
+      </div>
+
+      <div class="board-list" id="board-list">
+        <article class="card board-item" data-st="답변 완료">
+          <div class="bi-top">
+            <span class="chip blue">도로·교통</span>
+            <span class="chip good">답변 완료</span>
+            <span class="bi-date">8.19</span>
+          </div>
+          <b>장산역 앞 횡단보도 신호가 너무 짧습니다</b>
+          <p class="bi-body">"출근길에 보면 어르신들이 절반쯤 건넜을 때 신호가 바뀝니다. 신호 시간을 조금만 늘려주실 수 없을까요?"</p>
+          <div class="bi-reply">
+            <span class="bi-who">주진우 의원실</span>
+            <p>경찰서 교통과와 협의해 신호 주기를 조정했습니다. 8월 말부터 보행 시간이 5초 늘어납니다. 알려주셔서 고맙습니다.</p>
+          </div>
+          <span class="bi-from">좌2동 주민 · 8.18 접수 (예시)</span>
+        </article>
+
+        <article class="card board-item" data-st="답변 완료">
+          <div class="bi-top">
+            <span class="chip blue">안전</span>
+            <span class="chip good">답변 완료</span>
+            <span class="bi-date">8.14</span>
+          </div>
+          <b>정류장 조명이 어두워 밤에 무섭습니다</b>
+          <p class="bi-body">"여학생들이 밤에 혼자 기다리기 무서워합니다. 조명 하나만 더 달아주세요."</p>
+          <div class="bi-reply">
+            <span class="bi-who">주진우 의원실</span>
+            <p>구청과 협의해 조명 1기를 추가 설치했습니다. 여전히 어두운 구간이 있으면 다시 알려주세요.</p>
+          </div>
+          <span class="bi-from">송정동 주민 · 8.05 접수 (예시)</span>
+        </article>
+
+        <article class="card board-item" data-st="처리 중">
+          <div class="bi-top">
+            <span class="chip blue">환경·소음</span>
+            <span class="chip warm">처리 중</span>
+            <span class="bi-date">8.20</span>
+          </div>
+          <b>공사장 야간 소음이 3주째 계속됩니다</b>
+          <p class="bi-body">"밤 10시가 넘어도 공사 소리가 납니다. 구청에 두 번 신고했는데 그때만 조용하고 다시 시작합니다."</p>
+          <div class="bi-reply">
+            <span class="bi-who">주진우 의원실</span>
+            <p>반복 신고 건이라 구청 건축과와 공사 업체에 직접 확인 중입니다. 진행되는 대로 이 자리에 알려드리겠습니다.</p>
+          </div>
+          <span class="bi-from">우동 주민 · 8.20 접수 (예시)</span>
+        </article>
+      </div>
+
+      <p class="board-note">🔒 이름·연락처·상세 주소는 게시 전에 지웁니다. 공개를 원치 않으시면 접수할 때 동의하지 않으시면 됩니다.</p>
+    </div>
+</section>
+
+  <!-- ─────────── 처리 현황 ─────────── -->
+  
+
+  <!-- ─────────── 어디에 말하주? ─────────── -->
+  <section class="view" id="v-guide">
+    <h2 class="sec">어디에 말하주?</h2>
+    <p class="sec-sub">몇 번만 고르시면 가장 빠른 길을 알려드립니다. 남의 소관이어도 빈손으로 돌려보내지 않을게요.</p>
+
+    <div class="navq" id="navq"></div>
+
+    <h3 class="subhead">의원실 연락처</h3>
+    <p class="pane-lede">전화가 편하시면 전화로, 서류가 필요하면 이메일로. 어느 쪽이든 받습니다.</p>
+    <div class="office-grid">
+      <div class="card office">
+        <span class="chip blue">국회 사무실</span>
+        <p class="ofc-addr">서울특별시 영등포구 의사당대로 1<br>국회의원회관 ○○○호 <span class="ex">(예시)</span></p>
+        <p class="ofc-note" style="margin:0;">국회 사무실은 위치만 안내합니다. 연락은 지역사무소나 이메일이 빠릅니다.</p>
+      </div>
+      <div class="card office">
+        <span class="chip good">해운대 지역사무소</span>
+        <p class="ofc-addr">부산광역시 해운대구 ○○로 ○○<br>○○빌딩 ○층 <span class="ex">(예시)</span></p>
+        <dl class="ofc-list">
+          <dt>전화</dt><dd>051-000-0000 <span class="ex">(예시)</span></dd>
+          <dt>운영</dt><dd>평일 09:00–18:00 (점심 12:00–13:00)</dd>
+          <dt>이메일</dt><dd>haeundae@example.kr <span class="ex">(예시)</span></dd>
+        </dl>
+      </div>
+    </div>
+    <p class="ofc-note">프로토타입이라 연락처는 예시입니다. 실제 운영 시 의원실 공식 정보로 교체됩니다.</p>
+  </section>
+
+  <!-- ─────────── 당원가입·후원 ─────────── -->
+  <section class="view" id="v-join">
+    <h2 class="sec">함께하기 <span class="pun">「함께해주!」</span></h2>
+    <p class="sec-sub">지켜봐 주시는 것만으로도 힘이 됩니다. 한 걸음 더 함께하고 싶다면 이 두 가지 방법이 있어요.</p>
+    <div class="join-grid">
+      <div class="card join-card">
+        <span class="chip blue">당원 가입</span>
+        <b>국민의힘 당원으로 함께하기</b>
+        <ol class="join-steps">
+          <li>아래 버튼으로 온라인 당원가입(온당) 접속</li>
+          <li>온라인 입당 신청서 작성 (본인 인증)</li>
+          <li>처리 완료 후 당협에서 안내 연락</li>
+        </ol>
+        <a class="btn" href="https://ondang.peoplepowerparty.kr/" target="_blank" rel="noopener">당원가입 하러 가기 ↗</a>
+        <p class="join-note">궁금한 점은 당협 사무국(지역사무소)으로 편하게 문의하세요.</p>
+      </div>
+      <div class="card join-card">
+        <span class="chip good">후원 안내</span>
+        <b>주진우 후원회를 통한 후원</b>
+        <ol class="join-steps">
+          <li>후원은 <b>공식 후원회</b>를 통해서만 받습니다</li>
+          <li>연 10만 원까지는 세액공제로 사실상 전액 돌려받습니다</li>
+          <li>후원회 계좌: ○○은행 000-000000 <span class="ex">(예시 — 후원회 확인 후 게시)</span></li>
+        </ol>
+        <p class="join-note"><b>이 사이트는 어떤 결제도 직접 받지 않습니다.</b> 자세한 한도·영수증 안내는 후원회 공고를 따릅니다.</p>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<section class="assure">
+  <div class="assure-in">
+    <svg width="30" height="27" viewBox="0 0 34 30" aria-hidden="true">
+      <path d="M3 14 C6 8 12 5 17 5 C23 5 29 9 30 15 C31 20 28 24 23 24 L15 24 L9 28 L10.5 23.5 C6 22 2.5 19 3 14 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M8 16 Q10.5 13.5 13 16 T18 16 T23 16 T27 15.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <p class="assure-line">우리동네에 <b>주진우 있주</b></p>
+    <p class="assure-sub">혼자 끙끙 앓지 마시고, 일단 말해주세요.</p>
+    <button class="btn ghost" data-go="ask">일단 말해주! — 민원 남기기</button>
+  </div>
+</section>
+
+<section class="sns-strip" aria-label="공식 채널">
+  <div class="sns-in">
+    <p><b>주진우 의원 공식 채널</b>을 구독하시면 더 많은 소식을 받아보실 수 있습니다</p>
+    <div class="sns-links">
+      <a href="https://www.youtube.com/@joojjinwoo" target="_blank" rel="noopener" class="sns-btn yt">유튜브</a>
+      <a href="https://www.facebook.com/joojjinwoo/" target="_blank" rel="noopener" class="sns-btn fb">페이스북</a>
+      <a href="https://ondang.peoplepowerparty.kr/" target="_blank" rel="noopener" class="sns-btn on">당원가입</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact-strip" aria-label="의원실 연락처">
+  <div class="cs-in">
+    <div class="cs-card">
+      <span class="cs-k">국회 사무실</span>
+      <b style="font-family:var(--font-body); font-size:14.5px;">국회의원회관 ○○○호 <span class="ex">(예시)</span></b>
+      <p>서울 영등포구 의사당대로 1 — 위치만 안내</p>
+    </div>
+    <div class="cs-card">
+      <span class="cs-k">해운대 지역사무소</span>
+      <b>051-000-0000 <span class="ex">(예시)</span></b>
+      <p>해운대구 ○○로 ○○, ○○빌딩 ○층 · 평일 09:00–18:00</p>
+    </div>
+    <div class="cs-card">
+      <span class="cs-k">이메일</span>
+      <b>office@example.kr <span class="ex">(예시)</span></b>
+      <p>행사 요청·공문은 이메일로 — 양식은 「어디에 말하주?」에</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="in">
+    <b>우리동네 주진우</b> — <b>비공식 시안입니다.</b> 주진우 의원실·국민의힘 해운대구갑 당원협의회가 제작하거나 승인한 사이트가 아니며, 어떤 공식 관계도 없습니다. 의원실에 제안하기 위해 개인이 만든 화면 데모입니다. 지금은 어떤 민원도 실제로 접수·저장되지 않습니다. 개인정보는 최소 수집 원칙을 따르며, 후원은 공식 후원회를 통해서만 가능하며, 이 사이트는 어떤 결제도 직접 받지 않습니다.
+  </div>
+</footer>
+
+<div class="modal-bg" id="modal">
+  <div class="card modal">
+    <h3>접수됐다고 치겠습니다! (데모)</h3>
+    <p>프로토타입이라 실제로는 아무것도 저장되지 않았어요. 실제 서비스라면 이런 접수증을 받게 됩니다.</p>
+    <div class="receipt">
+      접수번호 <b id="rc-no">2026-0821-013</b><br>
+      조회 비밀번호 <b id="rc-pw">****</b><br>
+      상태: 접수 완료 → 「일단 말해주!」 아래에서 조회 (비밀번호 입력 시 내용 확인·수정)<br>
+      <span class="rc-privacy">답변이 끝나면 남기신 연락처는 7일 뒤 자동 파기됩니다</span>
+    </div>
+    <p class="rc-warn">⚠️ <b>접수번호와 비밀번호를 꼭 기억해 주세요.</b> 이 두 가지가 있어야 진행 상황과 답변을 확인할 수 있고, 분실하면 다시 찾아드리기 어렵습니다. 아래 버튼으로 접수증을 저장해 두세요.</p>
+    <div class="rc-actions">
+      <button class="btn" id="rc-download">접수증 저장 (이미지)</button>
+      <button class="btn ghost" id="rc-print">인쇄 · PDF로 저장</button>
+    </div>
+    <button class="btn sub-close" id="modal-close">확인</button>
+  </div>
+</div>
+
+<div id="toast">알림</div>
+<script>
+(function () {
+  var $ = function (s, p) { return (p || document).querySelector(s); };
+  var $$ = function (s, p) { return [].slice.call((p || document).querySelectorAll(s)); };
+
+  /* ── 토스트 ── */
+  var toastEl = $("#toast"), toastTimer = null;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("on"); }, 2600);
+  }
+
+  /* ── 탭: 순서 기반 방향 슬라이드 ── */
+  var ORDER = ["home", "news", "pledge", "about", "ask", "guide", "join"];
+  var cur = "home";
+  function go(v) {
+    if (v === cur) return;
+    var dir = ORDER.indexOf(v) > ORDER.indexOf(cur) ? "slide-r" : "slide-l";
+    cur = v;
+    $$(".tab-btn").forEach(function (b) { b.classList.toggle("active", b.dataset.v === v); });
+    $$(".view").forEach(function (s) {
+      s.classList.remove("on", "slide-r", "slide-l");
+    });
+    var el = $("#v-" + v);
+    el.classList.add("on", dir);
+    window.scrollTo({ top: 0 });
+    // 안내는 늘 첫 질문부터 (앞사람이 보던 답이 남아 있지 않게)
+    if (v === "guide" && typeof renderNav === "function") renderNav("start");
+  }
+  $("#tabs").addEventListener("click", function (e) {
+    var b = e.target.closest(".tab-btn");
+    if (b) go(b.dataset.v);
+  });
+  $$("[data-go]").forEach(function (b) {
+    b.addEventListener("click", function () { go(b.dataset.go); });
+  });
+
+  /* ── 서브탭 (의정현황·소개·소식 공용) — 자기 섹션 안에서만 전환 ── */
+  $$(".subtabs").forEach(function (bar) {
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest(".subtab");
+      if (!b) return;
+      $$(".subtab", bar).forEach(function (x) { x.classList.toggle("active", x === b); });
+      var sec = bar.closest("section");
+      $$(".pane", sec).forEach(function (p) { p.classList.remove("on"); });
+      $("#s-" + b.dataset.s, sec).classList.add("on");
+      window.scrollTo({ top: 0 });
+    });
+  });
+
+  /* ── 히어로 플립: 운 ↔ 준 ── */
+  var flip = $("#flip"), reading = $("#reading");
+  // 해준대(약속) → 해온대(실적) → 해운대(우리 동네)
+  var PUN = [
+    { ch: "온", read: "해온대 — 지금까지 해온 것들" },
+    { ch: "준", read: "해준대 — 앞으로 다 해 준다는 뜻" },
+    { ch: "운", read: "해운대 — 우리가 사는 동네" }
+  ];
+  var pts = $$(".pt");
+  function markTrack(i) {
+    pts.forEach(function (p) { p.classList.toggle("on", +p.dataset.i === i); });
+  }
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    reading.textContent = "해온대(해온 일) · 해준대(할 일) · 해운대(우리 동네)";
+    pts.forEach(function (p) { p.classList.add("on"); });
+  } else {
+    var pi = 0;
+    markTrack(pi);
+    setInterval(function () {
+      flip.style.transform = "rotateX(90deg)";
+      flip.style.opacity = "0";
+      setTimeout(function () {
+        pi = (pi + 1) % PUN.length;
+        flip.textContent = PUN[pi].ch;
+        reading.textContent = PUN[pi].read;
+        markTrack(pi);
+        flip.style.transform = "rotateX(0deg)";
+        flip.style.opacity = "1";
+      }, 180);
+    }, 1900);
+  }
+
+  /* ── 큰 글씨 ── */
+  $("#bigtext").addEventListener("click", function () {
+    var on = document.documentElement.classList.toggle("big");
+    this.classList.toggle("on", on);
+    toast(on ? "큰 글씨로 보여드릴게요" : "기본 글씨로 돌아갑니다");
+  });
+
+  /* ── 예시 링크 ── */
+  $$(".demo-link").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      toast("실제 서비스에서는 보도자료·회의록 링크가 열립니다 (예시)");
+    });
+  });
+
+  /* ── 민원 폼 ── */
+  function chipGroup(id) {
+    var box = $(id);
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest(".pick");
+      if (!b) return;
+      // 이미 고른 걸 다시 누르면 선택 해제 (잘못 눌렀을 때 되돌리기)
+      var undo = b.classList.contains("on");
+      $$(".pick", box).forEach(function (x) {
+        x.classList.remove("on");
+        x.setAttribute("aria-pressed", "false");
+      });
+      if (!undo) {
+        b.classList.add("on");
+        b.setAttribute("aria-pressed", "true");
+      }
+      $("#route-hint").classList.toggle("on", !undo && !!b.dataset.route);
+      $("#err-cat").classList.remove("on");
+    });
+  }
+  chipGroup("#cat-chips");
+
+
+  /* 동네: 다중 선택 — 여러 동에 걸친 민원 대응.
+     단, "잘 모르겠어요"는 성격상 단독 선택. */
+  var dongBox = $("#dong-chips");
+  function dongSync() {
+    var any = !!$("#dong-chips .pick.on");
+    $("#dong-clear").hidden = !any;
+    if (any) $("#err-dong").classList.remove("on");
+  }
+  dongBox.addEventListener("click", function (e) {
+    var b = e.target.closest(".pick");
+    if (!b) return;
+    var turnOn = !b.classList.contains("on");
+    if (turnOn) {
+      if (b.dataset.out) {
+        // 특수 선택지는 단독으로만
+        $$(".pick", dongBox).forEach(function (x) { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+      } else {
+        // 일반 동을 고르면 특수 선택지는 해제
+        $$('.pick[data-out]', dongBox).forEach(function (x) { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+      }
+    }
+    b.classList.toggle("on", turnOn);
+    b.setAttribute("aria-pressed", turnOn ? "true" : "false");
+    dongSync();
+  });
+  $("#dong-clear").addEventListener("click", function () {
+    $$(".pick", dongBox).forEach(function (x) { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+    dongSync();
+    toast("동네 선택을 모두 해제했습니다");
+  });
+
+  /* 불편 신고 / 정책 제안 전환 */
+  var KIND = {
+    report: { label: "무슨 일인가요?", ph: "예: ○○ 정류장 앞 횡단보도 신호가 너무 짧아서 어르신들이 건너기 힘들어요." },
+    idea: { label: "어떤 제안인가요?", ph: "예: 아이들이 방과 후에 머물 공간이 부족합니다. 빈 상가를 활용하면 어떨까요?" }
+  };
+  $("#kind-chips").addEventListener("click", function (e) {
+    var b = e.target.closest(".kindbtn");
+    if (!b) return;
+    $$(".kindbtn", this).forEach(function (x) {
+      var on = x === b;
+      x.classList.toggle("on", on);
+      x.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    var k = KIND[b.dataset.kind];
+    $("#body-label").textContent = k.label;
+    $("#ask-body").placeholder = k.ph;
+  });
+  $("#ask-body").addEventListener("input", function () { $("#err-body").classList.remove("on"); });
+
+  /* ── 연락처: 숫자만 쳐도 하이픈 자동 ── */
+  $("#agree").addEventListener("change", function () { $("#err-agree").classList.remove("on"); });
+  /* 이메일 소유 확인 (데모) */
+  var mailVerified = false;
+  function mailValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function resetMailState() {
+    mailVerified = false;
+    $("#mail-verify").hidden = true;
+    $("#mail-ok").hidden = true;
+    $("#mail-code").value = "";
+  }
+  $("#ask-mail").addEventListener("input", function () {
+    $("#err-mail").classList.remove("on");
+    resetMailState();
+  });
+  $("#mail-send").addEventListener("click", function () {
+    var v = $("#ask-mail").value.trim();
+    if (!mailValid(v)) { $("#err-mail").classList.add("on"); $("#ask-mail").focus(); return; }
+    $("#mail-verify").hidden = false;
+    $("#mail-code").focus();
+    toast(v + " 로 인증번호를 보냈습니다 (데모 — 000000 입력)");
+  });
+  $("#mail-check").addEventListener("click", function () {
+    if ($("#mail-code").value.trim() !== "000000") { toast("인증번호가 맞지 않아요 (데모: 000000)"); return; }
+    mailVerified = true;
+    $("#mail-verify").hidden = true;
+    $("#mail-ok").hidden = false;
+    toast("이메일 인증 완료 — 이 주소로 소식을 보내드립니다");
+  });
+  $("#mail-code").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("#mail-check").click(); }
+  });
+
+  $("#ask-pw").addEventListener("input", function () {
+    this.value = this.value.replace(/\D/g, "").slice(0, 4);
+    if (this.value.length === 4) $("#err-pw").classList.remove("on");
+  });
+
+  $("#submit-ask").addEventListener("click", function () {
+    var ok = true;
+    if (!$("#cat-chips .pick.on")) { $("#err-cat").classList.add("on"); ok = false; }
+    if (!$("#dong-chips .pick.on")) { $("#err-dong").classList.add("on"); ok = false; }
+    if (!$("#ask-body").value.trim()) { $("#err-body").classList.add("on"); ok = false; }
+    var pwv = $("#ask-pw").value.trim();
+    if (!/^\d{4}$/.test(pwv)) { $("#err-pw").classList.add("on"); ok = false; }
+    if (!$("#agree").checked) { $("#err-agree").classList.add("on"); ok = false; }
+    if (!ok) { toast("빨간 안내가 있는 칸을 채워주세요"); return; }
+    var mv = $("#ask-mail").value.trim();
+    if (mv && !mailVerified) {
+      if (!confirm("이메일 인증이 아직 안 됐어요.\n\n인증하지 않으면 답변·진행 소식을 메일로 받지 못하고,\n접수번호와 비밀번호로만 확인하실 수 있습니다.\n\n이대로 접수할까요?")) {
+        $("#mail-send").focus();
+        return;
+      }
+      $("#ask-mail").value = ""; // 확인 안 된 주소는 저장하지 않음
+      toast("인증되지 않은 메일 주소는 저장하지 않았습니다 — 접수번호로 확인해 주세요");
+    }
+    var d = new Date();
+    var mmdd = String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    $("#rc-no").textContent = d.getFullYear() + "-" + mmdd + "-" + String(Math.floor(Math.random() * 900) + 100);
+    $("#rc-pw").textContent = pwv;
+    $("#modal").classList.add("on");
+  });
+  function closeModal() {
+    $("#modal").classList.remove("on");
+    $("#ask-body").value = "";
+    $("#ask-pw").value = "";
+    $("#ask-mail").value = "";
+    resetMailState();
+    $("#agree").checked = false;
+    $$("#cat-chips .pick, #dong-chips .pick").forEach(function (b) { b.classList.remove("on"); });
+    $("#route-hint").classList.remove("on");
+  }
+  /* ── 접수증 저장: 캔버스로 직접 그려 기기·화면과 무관하게 동일한 결과 ── */
+  function drawReceipt(scale) {
+    // A5 가로 비율(148×105mm)을 3배 해상도로. 어느 기기에서 받아도 같은 그림.
+    var W = 1480, H = 1050, c = document.createElement("canvas");
+    c.width = W * scale; c.height = H * scale;
+    var x = c.getContext("2d");
+    x.scale(scale, scale);
+    var F = '"Pretendard Variable", Pretendard, -apple-system, sans-serif';
+    var M = '"IBM Plex Mono", monospace';
+
+    x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#D31421"; x.fillRect(0, 0, W, 14);
+
+    // 로고 말풍선 + 물결
+    x.strokeStyle = "#0e6ba8"; x.lineWidth = 5; x.lineJoin = "round";
+    x.beginPath();
+    x.moveTo(92, 128); x.bezierCurveTo(105, 100, 131, 88, 153, 88);
+    x.bezierCurveTo(179, 88, 205, 105, 210, 132);
+    x.bezierCurveTo(214, 154, 201, 172, 179, 172);
+    x.lineTo(144, 172); x.lineTo(118, 189); x.lineTo(124, 169);
+    x.bezierCurveTo(105, 163, 90, 150, 92, 128);
+    x.stroke();
+    x.lineWidth = 4.4; x.lineCap = "round";
+    x.beginPath(); x.moveTo(114, 137);
+    x.quadraticCurveTo(125, 126, 136, 137); x.quadraticCurveTo(147, 148, 158, 137);
+    x.quadraticCurveTo(169, 126, 180, 137); x.quadraticCurveTo(191, 148, 201, 135);
+    x.stroke();
+
+    x.fillStyle = "#24272b"; x.font = "800 46px " + F;
+    x.fillText("우리동네 주진우", 238, 132);
+    x.fillStyle = "#6d7178"; x.font = "500 24px " + F;
+    x.fillText("말만 해운대 · 해운대 지역구 소통 창구", 238, 170);
+
+    x.fillStyle = "#e6e8ec"; x.fillRect(92, 224, W - 184, 2);
+    x.fillStyle = "#A50F1A"; x.font = "800 34px " + F;
+    x.fillText("민원 접수증", 92, 288);
+
+    // 본문 박스
+    x.fillStyle = "#f4f5f7";
+    var bx = 92, by = 322, bw = W - 184, bh = 330, r = 22;
+    x.beginPath();
+    x.moveTo(bx + r, by); x.arcTo(bx + bw, by, bx + bw, by + bh, r);
+    x.arcTo(bx + bw, by + bh, bx, by + bh, r); x.arcTo(bx, by + bh, bx, by, r);
+    x.arcTo(bx, by, bx + bw, by, r); x.closePath(); x.fill();
+
+    var rows = [
+      ["접수번호", $("#rc-no").textContent, true],
+      ["조회 비밀번호", $("#rc-pw").textContent, true],
+      ["접수 일시", new Date().toLocaleString("ko-KR", { dateStyle: "long", timeStyle: "short" }), false],
+      ["현재 상태", "접수 완료", false]
+    ];
+    rows.forEach(function (row, i) {
+      var y = by + 78 + i * 72;
+      x.fillStyle = "#6d7178"; x.font = "600 26px " + F;
+      x.fillText(row[0], bx + 44, y);
+      x.fillStyle = "#24272b";
+      x.font = row[2] ? "500 40px " + M : "600 30px " + F;
+      x.fillText(row[1], bx + 300, y + (row[2] ? 4 : 0));
+    });
+
+    // 안내
+    x.fillStyle = "#b57b17"; x.font = "700 26px " + F;
+    x.fillText("접수번호와 비밀번호를 꼭 보관해 주세요.", 92, 726);
+    x.fillStyle = "#6d7178"; x.font = "400 25px " + F;
+    x.fillText("두 가지가 있어야 진행 상황과 답변을 확인할 수 있습니다.", 92, 768);
+    x.fillText("확인하기 : 사이트 「일단 말해주!」 → 내 민원 얼마나 되었주?", 92, 812);
+    x.fillText("답변이 끝나면 남기신 연락처는 7일 뒤 자동 파기됩니다.", 92, 856);
+
+    x.fillStyle = "#e6e8ec"; x.fillRect(92, 916, W - 184, 2);
+    x.fillStyle = "#9aa0a8"; x.font = "400 22px " + F;
+    x.fillText("우리동네 주진우 · 프로토타입 화면입니다 (실제 접수 아님)", 92, 968);
+    return c;
+  }
+
+  $("#rc-download").addEventListener("click", function () {
+    try {
+      var c = drawReceipt(2);
+      var a = document.createElement("a");
+      a.download = "접수증_" + $("#rc-no").textContent + ".png";
+      a.href = c.toDataURL("image/png");
+      document.body.appendChild(a); a.click(); a.remove();
+      toast("접수증 이미지를 저장했습니다");
+    } catch (err) {
+      toast("저장에 실패했어요 — 인쇄 버튼으로 PDF 저장을 이용해 주세요");
+    }
+  });
+
+  $("#rc-print").addEventListener("click", function () {
+    var img = drawReceipt(2).toDataURL("image/png");
+    var w = window.open("", "_blank");
+    if (!w) { toast("팝업이 차단됐어요 — 허용 후 다시 눌러주세요"); return; }
+    w.document.write(
+      '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>접수증 ' + $("#rc-no").textContent + '</title>' +
+      "<style>@page{size:A5 landscape;margin:8mm}" +
+      "html,body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f4f5f7}" +
+      "img{width:100%;max-width:900px;height:auto;display:block}" +
+      "@media print{body{background:#fff;min-height:auto}img{max-width:none}}</style></head>" +
+      '<body><img src="' + img + '" alt="접수증"></body></html>'
+    );
+    w.document.close();
+    w.onload = function () { w.focus(); w.print(); };
+    toast("인쇄 창에서 'PDF로 저장'을 고르시면 됩니다");
+  });
+
+  $("#modal-close").addEventListener("click", closeModal);
+  $("#modal").addEventListener("click", function (e) { if (e.target === this) closeModal(); });
+
+  /* ── 접수번호 조회 데모 ── */
+  /* 접수번호 자동 하이픈: 숫자만 치면 2026-0818-042 꼴로 */
+  $("#lookup-no").addEventListener("input", function () {
+    var d = this.value.replace(/\D/g, "").slice(0, 11);
+    var out = d.slice(0, 4);
+    if (d.length > 4) out += "-" + d.slice(4, 8);
+    if (d.length > 8) out += "-" + d.slice(8, 11);
+    this.value = out;
+  });
+
+  $("#lookup-no").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("#lookup-btn").click(); }
+  });
+  $("#lookup-pw").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("#lookup-btn").click(); }
+  });
+
+  $("#lookup-btn").addEventListener("click", function () {
+    var v = $("#lookup-no").value.trim();
+    if (!v) { toast("접수번호를 넣어주세요 (아무 번호나 가능해요)"); return; }
+    $("#lookup-title").textContent = "접수번호 " + v + " — 횡단보도 신호 시간 연장 요청 (예시)";
+    $("#lookup-result").style.display = "block";
+    var pw = $("#lookup-pw").value.trim();
+    $("#lookup-detail").hidden = pw.length < 4;
+    $("#my-edit").hidden = true;
+    $("#my-edit-btn").hidden = false;
+    if (pw && pw.length < 4) toast("비밀번호 4자리를 넣으면 내용 확인·수정까지 열려요");
+  });
+
+  /* 공개 게시판 필터 */
+  var boardFilters = $(".board-filters");
+  if (boardFilters) {
+    boardFilters.addEventListener("click", function (e) {
+      var b = e.target.closest(".fchip2");
+      if (!b) return;
+      $$(".fchip2", this).forEach(function (x) { x.classList.toggle("on", x === b); });
+      var f = b.dataset.bf;
+      var shown = 0;
+      $$(".board-item").forEach(function (it) {
+        var ok = f === "all" || it.dataset.st === f;
+        it.style.display = ok ? "" : "none";
+        if (ok) shown++;
+      });
+      var empty = $("#board-empty");
+      if (!empty) {
+        empty = document.createElement("p");
+        empty.id = "board-empty";
+        empty.className = "board-empty";
+        empty.textContent = "해당하는 이야기가 없습니다.";
+        $("#board-list").appendChild(empty);
+      }
+      empty.style.display = shown ? "none" : "";
+    });
+  }
+
+  /* 응원 한마디 — 승인제라 바로 게시되지 않음 */
+  $("#cheer-send").addEventListener("click", function () {
+    var t = $("#cheer-text").value.trim();
+    if (!t) { toast("한마디를 적어주세요"); $("#cheer-text").focus(); return; }
+    $("#cheer-name").value = "";
+    $("#cheer-text").value = "";
+    toast("감사합니다! 사무국 확인 후 게시됩니다 🙂 (데모)");
+  });
+  $("#cheer-text").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("#cheer-send").click(); }
+  });
+
+  /* 내 민원 내용 수정 (데모) */
+  $("#my-edit-btn").addEventListener("click", function () {
+    $("#my-edit").hidden = false;
+    this.hidden = true;
+    $("#my-edit-text").focus();
+  });
+  $("#my-cancel").addEventListener("click", function () {
+    $("#my-edit").hidden = true;
+    $("#my-edit-btn").hidden = false;
+  });
+  $("#my-save").addEventListener("click", function () {
+    var t = $("#my-edit-text").value.trim();
+    if (!t) { toast("내용을 적어주세요"); return; }
+    $("#my-body-view p").textContent = t;
+    $("#my-edit").hidden = true;
+    $("#my-edit-btn").hidden = false;
+    toast("수정했습니다 — 담당자에게 수정 사실이 함께 전달됩니다 (데모)");
+  });
+
+  /* ── 어디에 말하주? 내비게이터 ── */
+  var navq = $("#navq");
+
+  var LETTER_ORG = [
+    "수신: 주진우 국회의원실",
+    "제목: ○○○ 행사 참석 요청의 건",
+    "",
+    "1. 귀 의원실의 노고에 감사드립니다.",
+    "2. 저희 ○○○에서 아래와 같이 행사를 개최하고자 하오니,",
+    "   부득이한 일정이 없으시면 참석하여 자리를 빛내주시기 바랍니다.",
+    "",
+    "   가. 행 사 명:",
+    "   나. 일     시: 2026년 ○월 ○일(○) ○○:○○",
+    "   다. 장     소:",
+    "   라. 주최·주관:",
+    "   마. 요청 사항: (축사 / 인사말 / 격려사 / 강연 등)",
+    "   바. 참석 인원: 약 ○○명",
+    "   사. 담 당 자: ○○○ (연락처 010-0000-0000)",
+    "",
+    "붙임: 행사 계획서 1부.  끝."
+  ].join("\n");
+
+  var LETTER_STUDENT = [
+    "안녕하세요, 저는 ○○학교 ○학년 ○○○입니다.",
+    "저희가 준비하는 행사에 주진우 의원님을 모시고 싶어 연락드립니다.",
+    "",
+    "· 행사 이름:",
+    "· 언제: 2026년 ○월 ○일 ○시",
+    "· 어디서:",
+    "· 어떤 행사인지: (한두 줄로 편하게 적어주세요)",
+    "· 의원님께 부탁드리고 싶은 것: (인사말 / 강연 / 질의응답 등)",
+    "· 제 연락처:",
+    "",
+    "바쁘시겠지만 검토해 주시면 감사하겠습니다."
+  ].join("\n");
+
+  function tplBlock(title, body) {
+    return '<div class="tpl-box"><div class="tpl-head"><b>' + title +
+      '</b><button class="copy-btn" type="button">양식 복사</button></div>' +
+      '<pre class="tpl-body">' + body.replace(/</g, "&lt;") + "</pre></div>";
+  }
+
+  var TREE = {
+    start: {
+      q: "어떤 일로 오셨어요?",
+      opts: [
+        { t: "동네에 불편한 게 있어요", s: "도로, 소음, 안전, 시설 같은 것", next: "life" },
+        { t: "행사에 의원님을 모시고 싶어요", s: "축사, 강연, 간담회 참석 요청", next: "invite" },
+        { t: "정책이나 제도를 제안하고 싶어요", s: "이런 게 있으면 좋겠다 싶은 일", next: "r_policy" },
+        { t: "의원실에 직접 연락하고 싶어요", s: "전화·이메일·방문 안내", next: "r_contact" }
+      ]
+    },
+    life: {
+      q: "어떤 상황인가요?",
+      opts: [
+        { t: "시설이 망가졌거나 치워야 해요", s: "도로 파임, 쓰레기, 가로등 고장", next: "r_gu" },
+        { t: "같은 문제가 자꾸 반복돼요", s: "고쳐도 또 생기는 일", next: "r_repeat" },
+        { t: "복지·지원을 알아보고 있어요", s: "수당, 돌봄, 지원금", next: "r_welfare" }
+      ]
+    },
+    invite: {
+      q: "어느 쪽에서 요청하시나요?",
+      opts: [
+        { t: "학교·동아리 학생이에요", s: "공문 없이 편하게 보내셔도 됩니다", next: "r_student" },
+        { t: "단체·기관·기업이에요", s: "공문 형식으로 보내주세요", next: "r_org" },
+        { t: "주민 모임이에요", s: "반상회, 동호회, 자생단체", next: "r_group" }
+      ]
+    },
+    r_gu: {
+      where: "이건 해운대구청이 제일 빨라요",
+      body: "고장 난 걸 고치고 치우는 일은 구청이 하루이틀 만에 처리합니다. 구청 민원실 <b>051-749-4000</b>이나 국민신문고에 먼저 남겨주세요.",
+      extra: "혹시 열흘이 지나도 감감무소식이면, 그때는 저희 차례입니다. 「일단 말해주!」에 남겨주시면 어디서 멈췄는지 대신 확인해드릴게요.",
+      ask: true
+    },
+    r_repeat: {
+      where: "이건 저희가 맡을게요",
+      body: "고쳐도 또 생기는 일은 한 번 더 고친다고 끝나지 않습니다. <b>제도나 예산이 바뀌어야 끝나는 일</b>이고, 그게 바로 정치인이 할 일입니다.",
+      extra: "언제부터, 몇 번이나 겪으셨는지 같이 적어주시면 그대로 국회에서 쓸 근거가 됩니다.",
+      ask: true
+    },
+    r_welfare: {
+      where: "신청은 주민센터가 제일 정확해요",
+      body: "받을 수 있는지, 어떻게 신청하는지는 동 주민센터와 구청 복지정책과(<b>051-749-4000</b>)가 가장 정확하게 알려드립니다.",
+      extra: "그런데 요건에 아깝게 걸려서 못 받으셨다면 — 그건 제도의 빈틈입니다. 저희에게도 꼭 알려주세요.",
+      ask: true
+    },
+    r_policy: {
+      where: "그 생각, 바로 들려주세요",
+      body: "법과 제도를 만들고 고치는 게 국회의원의 일입니다. 「일단 말해주!」에서 <b>정책 제안</b>으로 남겨주시면 검토해서 답을 드립니다.",
+      ask: true
+    },
+    r_student: {
+      where: "학생은 형식 없이, 편하게",
+      body: "공문이 뭔지 몰라도 전혀 괜찮습니다. 아래 몇 줄만 채워 이메일로 보내주세요 — 학생들의 초대는 늘 반갑습니다.",
+      email: true,
+      tpl: { title: "학생·동아리용 요청 양식", body: LETTER_STUDENT },
+      tip: "행사 <b>3주 전</b>까지 보내주시면 일정을 맞추기 좋습니다. 답변은 보통 3~5일 안에 드립니다."
+    },
+    r_org: {
+      where: "공문으로 보내주시면 됩니다",
+      body: "단체·기관·기업의 요청은 공문 형식으로 접수합니다. 아래 양식을 복사해 채운 뒤, 행사 계획서를 붙여 이메일로 보내주세요.",
+      email: true,
+      tpl: { title: "행사 참석 요청 공문 양식", body: LETTER_ORG },
+      tip: "행사 <b>3주 전</b> 접수를 권합니다. 국회 일정(본회의·상임위)과 겹치면 참석이 어려울 수 있어 여유를 두시는 편이 좋습니다."
+    },
+    r_group: {
+      where: "주민 모임이면 더 반갑습니다",
+      body: "반상회든 동호회든 형식은 따지지 않습니다. 아래 양식을 참고해서 이메일로 보내주세요 — 동네 모임에서 뵙는 게 이 일의 제일 좋은 부분입니다.",
+      email: true,
+      tpl: { title: "간편 요청 양식", body: LETTER_STUDENT },
+      tip: "모임 성격과 예상 인원을 적어주시면 준비에 도움이 됩니다."
+    },
+    r_contact: {
+      where: "이렇게 연락하시면 돼요",
+      body: "급한 일은 전화가 빠르고, 서류가 필요한 일은 이메일이 좋습니다. 자세한 주소·번호는 아래 <b>의원실 연락처</b>에 있습니다.",
+      extra: "밤늦게 생각나셨다면 「일단 말해주!」에 남겨두세요. 아침에 저희가 보고, 접수번호로 과정까지 확인하실 수 있습니다.",
+      ask: true
+    }
+  };
+
+  function renderNav(key) {
+    var node = TREE[key];
+    var html = "";
+    if (node.q) {
+      html += '<p class="q">' + node.q + '</p><div class="opts">';
+      node.opts.forEach(function (o) {
+        html += '<button class="opt" data-next="' + o.next + '">' + o.t +
+          (o.s ? "<small>" + o.s + "</small>" : "") + "</button>";
+      });
+      html += "</div>";
+      if (key !== "start") html += '<button class="nav-restart" data-next="start">처음부터 다시 고르기</button>';
+    } else {
+      html += '<div class="card nav-result"><p class="where">' + node.where + "</p>";
+      html += "<p>" + node.body + "</p>";
+      if (node.extra) html += '<p class="nav-extra">' + node.extra + "</p>";
+      if (node.email) {
+        html += '<p class="nav-mail">보내실 곳 <b>office@example.kr</b> <span class="ex">(예시 — 실제 운영 시 교체)</span></p>';
+      }
+      if (node.tpl) html += tplBlock(node.tpl.title, node.tpl.body);
+      if (node.tip) html += '<p class="nav-tip">' + node.tip + "</p>";
+      if (node.ask) html += '<button class="btn" data-go-ask="1">「일단 말해주!」로 가기</button>';
+      html += '</div><button class="nav-restart" data-next="start">처음부터 다시 고르기</button>';
+    }
+    navq.innerHTML = html;
+  }
+
+  navq.addEventListener("click", function (e) {
+    var n = e.target.closest("[data-next]");
+    if (n) { renderNav(n.dataset.next); return; }
+    if (e.target.closest("[data-go-ask]")) { go("ask"); return; }
+    var cp = e.target.closest(".copy-btn");
+    if (cp) {
+      var text = cp.closest(".tpl-box").querySelector(".tpl-body").textContent;
+      var done = function () {
+        cp.textContent = "복사했어요";
+        setTimeout(function () { cp.textContent = "양식 복사"; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (err) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    }
+  });
+  renderNav("start");
+})();
+</script>
+</body>
+</html>

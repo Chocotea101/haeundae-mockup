@@ -1,0 +1,2180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>보좌진 대시보드 — 우리동네 주진우</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --ground: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #24272b;
+  --muted: #6d7178;
+  --line: #e6e8ec;
+  --accent: #D31421;
+  --accent-ink: #A50F1A;
+  --accent-soft: #FAEEEE;
+  --warm: #b57b17;
+  --warm-soft: #faf1dd;
+  --good: #1e8a56;
+  --good-soft: #e6f4ec;
+  --danger: #c9503d;
+  --danger-soft: #fbecea;
+  --shadow: 0 1px 2px rgba(36,39,43,.04), 0 12px 32px -24px rgba(36,39,43,.22);
+  --shadow-lift: 0 18px 48px -18px rgba(36,39,43,.28);
+  --font-body: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: var(--font-body); cursor: pointer; }
+
+.demo-banner {
+  background: var(--warm-soft);
+  color: var(--warm);
+  font-size: 13px;
+  text-align: center;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+.demo-banner a { color: var(--warm); }
+
+/* ── 상단 바 ── */
+.top {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.top-in {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand .word { font-weight: 800; font-size: 17px; letter-spacing: -0.02em; }
+.brand .word small { display: block; font-size: 11px; font-weight: 600; color: var(--muted); }
+.who { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--muted); }
+.avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent-ink);
+  display: grid; place-items: center; font-size: 12px; font-weight: 800;
+}
+.view-site {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 13px; font-weight: 600;
+  padding: 7px 14px; color: var(--muted); text-decoration: none;
+}
+.view-site:hover { border-color: var(--accent); color: var(--accent-ink); }
+
+/* ── 레이아웃 ── */
+.wrap { max-width: 1240px; margin: 0 auto; padding: 22px; display: grid; grid-template-columns: 208px 1fr; gap: 22px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
+.side { display: flex; flex-direction: column; gap: 4px; }
+@media (max-width: 900px) { .side { flex-direction: row; overflow-x: auto; padding-bottom: 6px; } }
+.nav {
+  border: none; background: none; text-align: left;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 14.5px; font-weight: 600; color: var(--muted);
+  display: flex; align-items: center; gap: 9px; white-space: nowrap;
+}
+.nav:hover { background: var(--surface); color: var(--ink); }
+.nav.on { background: var(--accent); color: #fff; }
+.nav .n-count {
+  margin-left: auto; font-family: var(--font-mono); font-size: 11.5px;
+  background: rgba(0,0,0,.06); border-radius: 999px; padding: 1px 8px;
+}
+.nav.on .n-count { background: rgba(255,255,255,.22); }
+.side-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; color: #9aa0a8; padding: 14px 14px 6px; }
+@media (max-width: 900px) { .side-label { display: none; } }
+
+.page { display: none; }
+.page.on { display: block; animation: fade .24s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } }
+
+h1.pt { font-size: 24px; font-weight: 800; letter-spacing: -0.025em; margin: 0 0 4px; }
+.pt-sub { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.atabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 20px;
+}
+.atab {
+  border: none; background: none;
+  font-size: 14.5px; font-weight: 700; color: var(--muted);
+  padding: 10px 14px 12px;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1px;
+}
+.atab:hover { color: var(--ink); }
+.atab.on { color: var(--accent-ink); border-bottom-color: var(--accent); }
+.atab .ac { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin-left: 5px; font-weight: 500; }
+.atab.on .ac { color: var(--accent); }
+.apane { display: none; }
+.apane.on { display: block; animation: fade .2s ease; }
+
+.sec-h { font-size: 16px; font-weight: 800; letter-spacing: -0.015em; margin: 26px 0 12px; }
+
+/* ── KPI ── */
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 780px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+.kpi { padding: 16px 18px; }
+.kpi .k { font-size: 12.5px; color: var(--muted); font-weight: 700; margin: 0 0 6px; }
+.kpi .v { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.kpi .v em { font-style: normal; font-size: .5em; margin-left: 1px; }
+.kpi .d { font-size: 12px; font-weight: 700; margin-top: 4px; }
+.kpi .d.up { color: var(--good); }
+.kpi .d.warn { color: var(--danger); }
+.kpi.alert { border-color: var(--danger); }
+.kpi.alert .v { color: var(--danger); }
+
+/* ── 인박스 ── */
+.tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.fchip {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 13.5px; font-weight: 600;
+  padding: 7px 15px; color: var(--muted);
+}
+.fchip:hover { border-color: var(--accent); color: var(--accent-ink); }
+.fchip.on { background: var(--accent); color: #fff; border-color: transparent; }
+.tools .spacer { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+.inbox { overflow: hidden; }
+.row {
+  display: grid;
+  grid-template-columns: auto 112px minmax(0, 1fr) 72px 96px 92px;
+  gap: 14px; align-items: center;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line);
+  background: none; border-left: none; border-right: none; border-top: none;
+  width: 100%; text-align: left; font-size: 14px;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--accent-soft); }
+.row.sel { background: var(--accent-soft); }
+@media (max-width: 900px) { .row { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 12px; } .row .r-no, .row .r-when, .row .r-who { display: none; } }
+.r-cb { display: flex; }
+.r-cb input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+.r-main { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.r-now { font-size: 12.5px; color: var(--accent-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r-who { font-size: 12.5px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.r-who.none { color: var(--danger); background: var(--danger-soft); border-radius: 999px; padding: 2px 9px; justify-self: start; }
+.bulk-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--accent-soft);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+}
+.bulk-bar b { color: var(--accent-ink); }
+.bulk-sep { font-size: 12px; font-weight: 700; color: var(--muted); margin-left: 6px; }
+.bulk-bar .fchip { padding: 5px 12px; font-size: 13px; }
+.r-no { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.r-title { font-weight: 600; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r-title .dot-new { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--danger); margin-right: 7px; vertical-align: 2px; }
+.r-cat { font-size: 12.5px; color: var(--muted); }
+.r-when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.st {
+  font-size: 12px; font-weight: 700; border-radius: 999px;
+  padding: 4px 11px; text-align: center; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px; justify-self: start;
+}
+.st::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.st.s1 { background: var(--danger-soft); color: var(--danger); }
+.st.s2 { background: var(--warm-soft); color: var(--warm); }
+.st.s3 { background: var(--accent-soft); color: var(--accent-ink); }
+.st.s4 { background: var(--good-soft); color: var(--good); }
+
+/* ── 상세 패널 ── */
+.drawer-bg {
+  display: none; position: fixed; inset: 0; z-index: 90;
+  background: rgba(24,27,31,.38); backdrop-filter: blur(2px);
+}
+.drawer-bg.on { display: block; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 91;
+  width: min(560px, 100%); background: var(--surface);
+  box-shadow: var(--shadow-lift); overflow-y: auto;
+  transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.8,.3,1);
+}
+.drawer.on { transform: none; }
+@media (prefers-reduced-motion: reduce) { .drawer { transition: none; } }
+.dr-head { position: sticky; top: 0; background: var(--surface); border-bottom: 1px solid var(--line); padding: 18px 24px; z-index: 1; }
+.dr-close { position: absolute; top: 16px; right: 18px; border: none; background: var(--ground); width: 32px; height: 32px; border-radius: 50%; font-size: 14px; color: var(--muted); }
+.dr-close:hover { background: var(--danger); color: #fff; }
+.dr-no { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.dr-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0 10px; padding-right: 40px; }
+.dr-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { font-size: 12px; font-weight: 600; background: var(--ground); border-radius: 999px; padding: 4px 11px; color: var(--muted); }
+.dr-body { padding: 22px 24px 30px; }
+.dr-quote {
+  background: var(--ground); border-radius: 12px; padding: 15px 17px;
+  font-size: 14.5px; line-height: 1.75; margin: 0 0 20px;
+}
+.f-label { font-size: 12px; font-weight: 800; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+.steps { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.step-btn {
+  flex: 1; min-width: 76px; border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 9px 6px; font-size: 13px; font-weight: 700; color: var(--muted);
+}
+.step-btn.done { background: var(--good-soft); border-color: transparent; color: var(--good); }
+.step-btn.now { background: var(--accent); border-color: transparent; color: #fff; }
+.assign { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.who-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; font-size: 13.5px; font-weight: 600; padding: 7px 14px; color: var(--muted); }
+.who-btn.on { background: var(--ink); color: #fff; border-color: transparent; }
+.tpl-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
+.tpl-btn { border: 1px dashed var(--line); background: var(--surface); border-radius: 8px; font-size: 12.5px; font-weight: 600; padding: 6px 12px; color: var(--accent-ink); }
+.tpl-btn:hover { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+textarea {
+  width: 100%; border: 1.5px solid var(--line); border-radius: 12px;
+  background: var(--surface); color: var(--ink); font-family: var(--font-body);
+  font-size: 14.5px; padding: 12px 14px; min-height: 132px; resize: vertical;
+}
+textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.dr-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.btn {
+  background: var(--accent); color: #fff; border: none; border-radius: 999px;
+  font-size: 15px; font-weight: 700; padding: 12px 22px;
+  box-shadow: 0 6px 16px -8px rgba(14,107,168,.5);
+}
+.btn:hover { background: var(--accent-ink); }
+.btn.sub { background: var(--surface); color: var(--muted); border: 1px solid var(--line); box-shadow: none; }
+.btn.sub:hover { border-color: var(--accent); color: var(--accent-ink); }
+.consent { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; color: var(--muted); margin: 16px 0 0; }
+.consent input { margin-top: 4px; accent-color: var(--accent); width: 15px; height: 15px; }
+.log { list-style: none; margin: 20px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line); }
+.log li { display: flex; gap: 11px; align-items: baseline; font-size: 13.5px; padding: 5px 0; color: var(--muted); }
+.log .l-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
+.log-fixed { flex: 1; min-width: 0; }
+.log-edit {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px dashed transparent;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: inherit;
+  padding: 2px 0;
+}
+.log-edit:hover { border-bottom-color: var(--line); }
+.log-edit:focus { outline: none; border-bottom: 1px dashed var(--accent); color: var(--ink); }
+.log li.done .l-dot { background: var(--good); }
+.log .l-when { margin-left: auto; font-family: var(--font-mono); font-size: 11.5px; }
+
+/* ── 입력 화면 ── */
+.editor { padding: 20px 22px; margin-bottom: 12px; }
+.ed-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.ed-top b { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.ed-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+.rng { width: 100%; accent-color: var(--accent); }
+.pct { font-family: var(--font-mono); font-size: 13px; color: var(--muted); min-width: 44px; text-align: right; }
+.ed-note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+.mini-in {
+  border: 1.5px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  font-family: var(--font-body); font-size: 14px; width: 100%; color: var(--ink); background: var(--surface);
+}
+.mini-in:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.site-row { display: grid; grid-template-columns: 160px 1fr; gap: 18px; }
+@media (max-width: 700px) { .site-row { grid-template-columns: 1fr; } }
+.ph-slot {
+  aspect-ratio: 3 / 4;
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  color: var(--muted); font-size: 13px; background: var(--ground);
+}
+.ph-slot.sm { aspect-ratio: 1; width: 74px; flex: none; }
+.ph-slot.sm span { font-size: 11px; }
+.ph-btn {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 12px; font-weight: 700; padding: 5px 12px; color: var(--accent-ink);
+}
+.ph-btn:hover { background: var(--accent); color: #fff; border-color: transparent; }
+.site-fields { min-width: 0; }
+.org-edit-row { display: flex; gap: 12px; align-items: center; }
+.org-edit-row .mini-in { flex: 1; }
+.cn-edit { display: grid; grid-template-columns: 74px 1fr auto; gap: 14px; align-items: start; padding: 16px 18px; margin-bottom: 10px; }
+.cn-edit .mini-in { margin-bottom: 8px; }
+.cn-edit b { display: block; font-size: 15px; margin-bottom: 8px; }
+.org-item { display: grid; grid-template-columns: 74px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.org-item:last-child { border-bottom: none; }
+
+.where-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.where-card {
+  text-align: left;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.where-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.wc-icon { font-size: 22px; margin-bottom: 2px; }
+.where-card b { font-size: 16.5px; font-weight: 800; letter-spacing: -0.015em; }
+.wc-desc { font-size: 13.5px; color: var(--muted); }
+.wc-dest {
+  font-size: 13px; font-weight: 700; color: var(--accent-ink);
+  background: var(--accent-soft); border-radius: 8px; padding: 7px 11px; margin-top: 6px;
+}
+.wc-note { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+/* 작성 화면 상단 안내 배너 */
+.dest-banner {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--accent-soft); border-radius: 12px;
+  padding: 12px 16px; margin-bottom: 16px; font-size: 13.5px;
+}
+.dest-banner b { color: var(--accent-ink); }
+.dest-banner .db-tag {
+  font-size: 11.5px; font-weight: 800; letter-spacing: .06em;
+  background: var(--accent); color: #fff; border-radius: 999px; padding: 3px 10px;
+}
+
+.rule-note {
+  background: var(--accent-soft);
+  border-radius: 12px;
+  padding: 13px 17px;
+  font-size: 13.5px;
+  margin-bottom: 16px;
+}
+.rule-note b { color: var(--accent-ink); }
+.pl-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.pl-title {
+  flex: 1; min-width: 200px;
+  border: 1.5px solid transparent; border-radius: 9px;
+  background: none; font-family: var(--font-body);
+  font-size: 16px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--ink); padding: 7px 10px;
+}
+.pl-title:hover { border-color: var(--line); }
+.pl-title:focus { outline: none; border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-soft); }
+.pl-st {
+  border: 1.5px solid var(--line); border-radius: 999px;
+  font-family: var(--font-body); font-size: 13px; font-weight: 700;
+  padding: 7px 12px; color: var(--ink); background: var(--surface);
+}
+.pl-st:focus { outline: none; border-color: var(--accent); }
+.pl-del {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 8px; width: 32px; height: 32px;
+  font-size: 14px; color: var(--muted); flex: none;
+}
+.pl-del:hover { background: var(--danger); color: #fff; border-color: transparent; }
+.pl-delay { margin-top: 10px; }
+.pl-delay .f-label { margin-bottom: 6px; }
+.pl-new { border-color: var(--accent); }
+
+.pl-logs { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.plog-list { list-style: none; margin: 0 0 10px; padding: 0; }
+.plog {
+  display: grid;
+  grid-template-columns: 46px 1fr auto auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 0;
+  font-size: 14px;
+  border-bottom: 1px dashed var(--line);
+}
+.plog:last-child { border-bottom: none; }
+@media (max-width: 640px) { .plog { grid-template-columns: 44px 1fr auto; } .plog-cam, .plog-x { grid-column: 3; } }
+.plog-d { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.plog-w { line-height: 1.55; }
+.plog:not(.pub) .plog-w { color: var(--muted); }
+.plog-cam {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  padding: 3px 10px; color: var(--muted); white-space: nowrap;
+}
+.plog-cam.has { background: var(--warm-soft); color: var(--warm); border-color: transparent; }
+.plog-cam:hover { border-color: var(--accent); color: var(--accent-ink); }
+
+.plog-eye {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  padding: 3px 10px; color: var(--muted); white-space: nowrap;
+}
+.plog.pub .plog-eye { background: var(--good-soft); color: var(--good); border-color: transparent; }
+.plog-eye:hover { border-color: var(--accent); color: var(--accent-ink); }
+.plog-x {
+  border: none; background: none; color: #c3c7cd;
+  font-size: 13px; padding: 2px 4px; line-height: 1;
+}
+.plog-x:hover { color: var(--danger); }
+.plog-empty { font-size: 13.5px; color: var(--muted); padding: 8px 0; }
+.plog-add { display: grid; grid-template-columns: 148px 1fr auto; gap: 8px; }
+@media (max-width: 640px) { .plog-add { grid-template-columns: 1fr; } }
+.plog-date { font-family: var(--font-mono); font-size: 13px; }
+.plog-btn {
+  border: 1px solid var(--accent); background: var(--surface);
+  border-radius: 10px; font-size: 13.5px; font-weight: 700;
+  padding: 8px 16px; color: var(--accent-ink); white-space: nowrap;
+}
+.plog-btn:hover { background: var(--accent); color: #fff; }
+
+.f-grid2 { display: grid; grid-template-columns: 180px 1fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 640px) { .f-grid2 { grid-template-columns: 1fr; } }
+.chip-mode {
+  font-size: 12.5px; font-weight: 700;
+  background: var(--warm-soft); color: var(--warm);
+  border-radius: 999px; padding: 6px 14px;
+}
+.fitem {
+  display: grid;
+  grid-template-columns: auto 92px 1fr auto auto;
+  gap: 12px; align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.fitem:last-child { border-bottom: none; }
+.fitem.new { background: var(--accent-soft); }
+.fi-order { display: flex; flex-direction: column; gap: 2px; }
+.fi-move {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 6px; width: 24px; height: 20px;
+  font-size: 10px; line-height: 1; color: var(--muted);
+  display: grid; place-items: center; padding: 0;
+}
+.fi-move:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-ink); }
+.fi-move:disabled { opacity: 0.3; cursor: default; }
+.fi-date { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.fi-body { min-width: 0; }
+.fi-body b { display: block; font-weight: 700; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fi-body span { font-size: 12.5px; color: var(--muted); }
+.fi-x { border: none; background: none; color: #c3c7cd; font-size: 13px; padding: 4px; }
+.fi-x:hover { color: var(--danger); }
+@media (max-width: 640px) { .fitem { grid-template-columns: auto 1fr auto; } .fi-date { display: none; } .fitem .tag { display: none; } }
+
+/* ── 통계 ── */
+.bars { padding: 20px 22px; }
+.bar-row { display: grid; grid-template-columns: 92px 1fr 46px; gap: 13px; align-items: center; margin-bottom: 10px; font-size: 13.5px; font-weight: 600; }
+.bar { height: 10px; background: var(--ground); border-radius: 999px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #E8515C); border-radius: 999px; }
+.bar-row .n { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: right; }
+
+.notify-rules { list-style: none; margin: 12px 0 14px; padding: 0; }
+.notify-rules li { padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 14.5px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.notify-rules li:last-child { border-bottom: none; }
+.notify-rules b { color: var(--accent-ink); }
+
+.srow {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  gap: 14px; align-items: center;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.srow:last-child { border-bottom: none; }
+.srow .avatar { width: 34px; height: 34px; font-size: 13px; }
+.sr-body b { display: block; font-weight: 700; }
+.sr-body span { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.lead-chip {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 12px; font-weight: 700;
+  padding: 4px 12px; color: var(--muted); white-space: nowrap;
+}
+.srow.lead .lead-chip { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+.lead-chip:hover { border-color: var(--accent); color: var(--accent-ink); }
+.sr-me { font-size: 11.5px; font-weight: 700; color: var(--good); background: var(--good-soft); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+@media (max-width: 640px) { .srow { grid-template-columns: auto 1fr auto; } .srow .sr-me { display: none; } }
+
+.cn-grid { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 640px) { .cn-grid { grid-template-columns: 1fr; } }
+
+.login-bg {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--ground);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.login-bg.off { display: none; }
+.login-box { max-width: 400px; width: 100%; padding: 30px 30px 26px; text-align: center; box-shadow: var(--shadow-lift); }
+.login-title { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; display: block; margin-bottom: 8px; }
+.login-sub { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin: 0 0 18px; }
+.login-accounts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+.acct {
+  border: 1.5px solid var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 14px; font-weight: 700;
+  padding: 8px 16px; color: var(--muted);
+}
+.acct.on { background: var(--accent); color: #fff; border-color: transparent; }
+#login-pw { margin-bottom: 12px; text-align: center; }
+
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 27, 31, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 150;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.on { display: flex; }
+
+.mail-box { max-width: 480px; width: 100%; padding: 24px 26px; position: relative; }
+.mail-tag { font-size: 12px; font-weight: 800; color: var(--warm); background: var(--warm-soft); border-radius: 999px; padding: 5px 13px; display: inline-block; margin: 0 0 16px; }
+.mail-head { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.mail-head > div { display: grid; grid-template-columns: 82px 1fr; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.mail-head > div:last-child { border-bottom: none; }
+.mail-head span { color: var(--muted); font-weight: 600; }
+.mail-head b { font-weight: 600; word-break: break-all; }
+.mail-body { font-size: 14.5px; line-height: 1.8; white-space: pre-line; margin-bottom: 18px; }
+.mail-btn {
+  display: block; text-align: center;
+  background: var(--accent); color: #fff; text-decoration: none;
+  border-radius: 10px; font-size: 15px; font-weight: 700; padding: 13px;
+}
+.mail-btn:hover { background: var(--accent-ink); }
+.mail-foot { font-size: 12.5px; color: var(--muted); margin: 12px 0 0; text-align: center; }
+
+.pub-btns { display: flex; gap: 6px; }
+.pub-item { grid-template-columns: minmax(0, 1fr) auto auto; align-items: start; }
+.pub-dest { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.dest-chip {
+  border: 1.5px dashed var(--line); background: var(--surface);
+  border-radius: 999px; font-size: 12px; font-weight: 700;
+  padding: 4px 12px; color: var(--muted);
+}
+.dest-chip.on { border-style: solid; border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+.dest-chip:disabled { opacity: 0.6; cursor: default; }
+.pub-where { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: var(--good); }
+.assign-sub { font-size: 12px; font-weight: 700; color: var(--muted); margin: 8px 0 6px; }
+.tgt-sub {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: var(--ground);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+.tgt-summary { font-size: 13px; font-weight: 700; color: var(--accent-ink); margin: 10px 0 20px; }
+.tgt-summary.warn { color: var(--danger); }
+.who-btn.tgt-kind.open { border-style: dashed; border-color: var(--accent); color: var(--accent-ink); }
+.sr-title { display: block; font-size: 14.5px; font-weight: 700; margin: 2px 0 4px; letter-spacing: -0.01em; }
+
+.sent-reply {
+  background: var(--ground);
+  border-radius: 12px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+}
+.sent-reply .sr-head { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.sent-reply p { margin: 0; line-height: 1.7; }
+
+.tag.purge { background: var(--warm-soft); color: var(--warm); }
+.tag.purge.done { background: var(--danger-soft); color: var(--danger); }
+
+#toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(90px);
+  background: #24272b; color: #f7f7f5; font-size: 14px; font-weight: 600;
+  padding: 12px 22px; border-radius: 999px; transition: transform .25s ease;
+  z-index: 200; box-shadow: var(--shadow-lift); max-width: 90vw; text-align: center;
+}
+#toast.on { transform: translateX(-50%) translateY(0); }
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="demo-banner"><b>비공식 시안</b> 🛠 의원실·당협과 무관하게 제작한 보좌진용 화면 데모입니다. 실제 민원 데이터가 아니며 저장되지 않습니다 · <a href="index.html">주민 화면 보기</a></div>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg width="30" height="27" viewBox="0 0 34 30" aria-hidden="true">
+        <path d="M3 14 C6 8 12 5 17 5 C23 5 29 9 30 15 C31 20 28 24 23 24 L15 24 L9 28 L10.5 23.5 C6 22 2.5 19 3 14 Z" fill="none" stroke="#0e6ba8" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M8 16 Q10.5 13.5 13 16 T18 16 T23 16 T27 15.5" fill="none" stroke="#0e6ba8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="word">우리동네 주진우<small>보좌진 대시보드</small></div>
+    </div>
+    <a class="view-site" href="index.html">주민 화면 →</a>
+    <div class="who"><span class="avatar">보</span>김보좌 <span style="color:#c3c7cd">|</span> 의원실</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="side">
+    <p class="side-label">주민 목소리</p>
+    <button class="nav on" data-p="inbox">📥 민원 인박스 <span class="n-count" id="cnt-inbox">6</span></button>
+    <button class="nav" data-p="approve">✅ 게시 승인 <span class="n-count" id="cnt-approve">2</span></button>
+    <button class="nav" data-p="stats">📊 통계</button>
+
+    <p class="side-label">사이트에 올리기</p>
+    <button class="nav" data-p="where">🗺 어디에 올리지?</button>
+    <button class="nav" data-p="field">📷 현장 활동</button>
+    <button class="nav" data-p="brief">📰 소식·브리핑</button>
+    <button class="nav" data-p="pledge">✅ 공약 트래커</button>
+
+    <p class="side-label">사이트 관리</p>
+    <button class="nav" data-p="site">🎨 사이트 내용</button>
+    <button class="nav" data-p="staff">👥 사람 관리</button>
+  </nav>
+
+  <main>
+    <!-- ─── 민원 인박스 ─── -->
+    <section class="page on" id="p-inbox">
+      <h1 class="pt">민원 인박스</h1>
+      <p class="pt-sub">오늘 처리해야 할 것부터 보여드립니다. 클릭하면 진행 소식 작성 화면이 열립니다.</p>
+      <div class="dest-banner"><span class="db-tag">운영 방식</span> 주민이 남긴 글은 <b>사무국장님이 확인하고 답변</b>합니다 · 답변은 <b>신청인만</b> 봅니다 (일단 말해주! 조회)</div>
+
+      <div class="kpis">
+        <div class="card kpi alert">
+          <p class="k">답변 대기</p>
+          <div class="v" id="k-wait">3</div>
+          <p class="d warn" id="k-wait-d">2건은 7일 경과</p>
+        </div>
+        <div class="card kpi">
+          <p class="k">이번 주 접수</p>
+          <div class="v">9</div>
+          <p class="d up">지난주 대비 +2</p>
+        </div>
+        <div class="card kpi">
+          <p class="k">답변 완료율</p>
+          <div class="v">87<em>%</em></div>
+          <p class="d up">목표 85% 달성</p>
+        </div>
+        <div class="card kpi">
+          <p class="k">평균 처리</p>
+          <div class="v">9<em>일</em></div>
+          <p class="d up">지난달 11일</p>
+        </div>
+      </div>
+
+      <div class="tools" style="margin-top:22px;">
+        <button class="fchip on" data-f="all">전체</button>
+        <button class="fchip" data-f="1">접수</button>
+        <button class="fchip" data-f="2">검토</button>
+        <button class="fchip" data-f="3">처리 중</button>
+        <button class="fchip" data-f="4">답변 완료</button>
+        <span class="spacer" id="row-count"></span>
+      </div>
+
+      <div class="bulk-bar" id="bulk-bar" hidden>
+        <b id="bulk-count">0건 선택</b>
+        <span class="bulk-sep">담당 배정</span>
+        <span id="bulk-staff"></span>
+        <span class="bulk-sep">상태 변경</span>
+        <button class="fchip" data-bst="1">접수</button>
+        <button class="fchip" data-bst="2">검토</button>
+        <button class="fchip" data-bst="3">처리 중</button>
+        <button class="fchip" data-bst="4">답변 완료</button>
+        <button class="fchip" id="bulk-clear" style="margin-left:auto;">선택 해제</button>
+      </div>
+      <div class="card inbox" id="inbox"></div>
+      <p class="ed-note" style="margin-top:10px;">체크박스로 여러 건을 고르면 담당 배정·상태 변경을 한 번에 할 수 있습니다. 접수된 민원은 <b>자동 배정되지 않습니다</b> — 사람이 확인하고 직접 배정합니다.</p>
+    </section>
+
+    <!-- ─── 통계 ─── -->
+    <section class="page" id="p-stats">
+      <h1 class="pt">통계</h1>
+      <p class="pt-sub">주민 화면의 「얼마나 했주?」에 그대로 공개되는 숫자입니다.</p>
+      <div class="kpis">
+        <div class="card kpi"><p class="k">누적 접수</p><div class="v">142</div><p class="d">2026년 누계</p></div>
+        <div class="card kpi"><p class="k">답변 완료</p><div class="v">124</div><p class="d up">87%</p></div>
+        <div class="card kpi"><p class="k">제도 개선 연결</p><div class="v">7</div><p class="d up">반복 민원에서 발굴</p></div>
+        <div class="card kpi"><p class="k">공개 사례</p><div class="v">18</div><p class="d">동의받은 건만</p></div>
+      </div>
+      <h2 class="sec-h">분야별 접수</h2>
+      <div class="card bars">
+        <div class="bar-row"><span>도로·교통</span><div class="bar"><i style="width:34%"></i></div><span class="n">48건</span></div>
+        <div class="bar-row"><span>환경·소음</span><div class="bar"><i style="width:22%"></i></div><span class="n">31건</span></div>
+        <div class="bar-row"><span>복지</span><div class="bar"><i style="width:18%"></i></div><span class="n">26건</span></div>
+        <div class="bar-row"><span>교육</span><div class="bar"><i style="width:14%"></i></div><span class="n">20건</span></div>
+        <div class="bar-row"><span>안전</span><div class="bar"><i style="width:12%"></i></div><span class="n">17건</span></div>
+      </div>
+      <h2 class="sec-h">동별 접수</h2>
+      <div class="card bars">
+        <div class="bar-row"><span>좌동</span><div class="bar"><i style="width:38%"></i></div><span class="n">54건</span></div>
+        <div class="bar-row"><span>우동</span><div class="bar"><i style="width:27%"></i></div><span class="n">38건</span></div>
+        <div class="bar-row"><span>중동</span><div class="bar"><i style="width:21%"></i></div><span class="n">30건</span></div>
+        <div class="bar-row"><span>송정동</span><div class="bar"><i style="width:14%"></i></div><span class="n">20건</span></div>
+      </div>
+      <p class="ed-note" style="margin-top:14px;">좌동 접수가 가장 많습니다. 반복되는 유형은 「현장 활동」으로 옮겨 직접 확인하는 것을 권합니다.</p>
+    </section>
+
+    <!-- ─── 공약 트래커 입력 ─── -->
+    <section class="page" id="p-pledge">
+      <h1 class="pt">공약 트래커 입력</h1>
+      <p class="pt-sub">공약 진행 상황을 관리합니다.</p>
+      <div class="dest-banner"><span class="db-tag">실리는 곳</span> 주민 화면 → <b>의정현황 → 말한 대로, 해온 대로</b> · 진행 기록은 <b>공개</b>로 표시한 것만 주민에게 보입니다</div>
+
+      <div class="tools">
+        <button class="btn" id="add-pledge">+ 공약 추가</button>
+        <span class="spacer" id="pledge-count"></span>
+      </div>
+
+      <div class="rule-note">
+        판정 기준 — <b>완료</b>: 사업 종료 + 근거 공개 · <b>일부 달성</b>: 단계 일부 이행 · <b>추진 중</b>: 예산·행정 절차 진행 · <b>준비</b>: 계획 수립.
+        지연된 공약은 사유를 적어야 저장됩니다. <b>주민 화면에 그대로 공개됩니다.</b><br>
+        진행 기록에 <b>＋사진</b>을 눌러 현장 사진을 붙이면, 공약 카드에서 함께 보여 약속이 지켜지는 과정이 눈에 보입니다.
+      </div>
+
+      <div id="pledge-list"></div>
+      <button class="btn" data-save="공약 트래커">변경 사항 저장</button>
+    </section>
+
+    <!-- ─── 현장 활동 입력 ─── -->
+    <section class="page" id="p-field">
+      <h1 class="pt">현장 활동 올리기</h1>
+      <p class="pt-sub">현장에 다녀온 기록을 남깁니다.</p>
+      <div class="dest-banner"><span class="db-tag">실리는 곳</span> 주민 화면 → <b>의정현황 → 가서 봤습니다</b> · <b>확인한 것</b>과 <b>그래서 어떻게 했는지</b>를 함께 적어야 게시됩니다</div>
+      <div class="card editor">
+        <p class="f-label">현장 사진</p>
+        <div style="border:1.5px dashed var(--line); border-radius:12px; padding:28px; text-align:center; color:var(--muted); font-size:14px; margin-bottom:18px;">
+          사진을 끌어다 놓거나 클릭해 올리세요 <span style="display:block; font-size:12.5px; margin-top:4px;">(데모 화면이라 업로드는 동작하지 않습니다)</span>
+        </div>
+        <div class="f-grid2">
+          <div>
+            <p class="f-label">활동한 날짜</p>
+            <input type="date" class="mini-in" id="field-date">
+          </div>
+          <div>
+            <p class="f-label">장소</p>
+            <input class="mini-in" id="field-where" placeholder="예: ○○초 정문 앞">
+          </div>
+        </div>
+        <p class="f-label">제목 — 현장의 말로</p>
+        <input class="mini-in" id="field-title" style="margin-bottom:16px;" placeholder="예: 아이들 눈높이에서 보니…">
+        <p class="f-label">확인한 것</p>
+        <textarea id="field-saw" style="min-height:88px; margin-bottom:16px;" placeholder="현장에서 무엇을 보고 들었는지 적어주세요."></textarea>
+        <p class="f-label">그래서 — 어떻게 조치했는지</p>
+        <textarea id="field-did" style="min-height:88px;" placeholder="요청한 곳, 처리 결과, 연결된 공약을 적어주세요."></textarea>
+        <div class="dr-actions">
+          <button class="btn" id="field-publish">게시하기</button>
+          <button class="btn sub" data-save="임시 저장">임시 저장</button>
+        </div>
+      </div>
+
+      <div class="tools" style="margin-top:26px;">
+        <h2 class="sec-h" style="margin:0;">등록된 현장 활동 <span id="field-count" style="font-weight:600; color:var(--muted); font-size:14px;"></span></h2>
+        <span class="spacer"></span>
+        <span class="chip-mode" id="field-mode" hidden>수동 정렬 사용 중 — 새 글은 맨 위에 들어갑니다</span>
+        <button class="fchip" id="field-resort" hidden>날짜순으로 되돌리기</button>
+      </div>
+      <p class="ed-note" style="margin:0 0 12px;">기본은 <b>활동한 날짜의 최신순</b>입니다. ▲▼로 순서를 직접 바꾸면 수동 정렬로 전환됩니다 — 주민 화면에는 이 순서 그대로 실립니다.</p>
+      <div class="card inbox" id="field-list"></div>
+    </section>
+
+    <!-- ─── 주간 브리핑 ─── -->
+    <section class="page" id="p-brief">
+      <h1 class="pt">주간 브리핑 작성</h1>
+      <p class="pt-sub">한 주 동안의 활동을 정리해 주민께 전합니다.</p>
+      <div class="dest-banner"><span class="db-tag">실리는 곳</span> 주민 화면 → <b>소식 → 주간 주진우</b> · 첨부한 사진·영상은 <b>사진·영상으로 보는 소식</b>에도 실립니다</div>
+      <div class="card editor">
+        <div class="ed-top"><b>8월 4주차</b><span class="tag" id="brief-state">작성 중</span></div>
+        <p class="f-label" style="margin-top:14px;">어느 소식인가요?</p>
+        <div class="chips" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+          <button class="fchip on" id="kind-office" type="button">의원실 소식 — 주간 주진우</button>
+          <button class="fchip" id="kind-party" type="button">당협 활동 — 분과·당원 소식</button>
+        </div>
+        <p class="f-label">한 줄 제목</p>
+        <input class="mini-in" id="brief-title" style="margin-bottom:16px;" placeholder="예: 법사위 질의와 동네 두 바퀴">
+        <p class="f-label">사진·영상 첨부</p>
+        <div style="border:1.5px dashed var(--line); border-radius:12px; padding:20px; text-align:center; color:var(--muted); font-size:13.5px; margin-bottom:16px;">
+          사진을 올리거나 유튜브 링크를 붙여넣으세요 — 주민 화면 「사진·영상으로 보는 소식」에 실립니다 <span style="display:block; font-size:12px; margin-top:3px;">(데모 화면이라 업로드는 동작하지 않습니다)</span>
+        </div>
+        <p class="f-label">이번 주 한 일 (한 줄에 하나씩)</p>
+        <textarea placeholder="법제사법위원회 전체회의 질의 1건&#10;지역 상가 간담회 2회&#10;민원 7건 답변 완료"></textarea>
+        <p class="ed-note">이번 주 자동 집계: 접수 9건 · 답변 7건 · 현장 활동 2건 — 브리핑에 넣으시겠어요?</p>
+        <p class="f-label">언제 올릴까요?</p>
+        <div class="chips" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+          <button class="fchip on" id="when-now" type="button">지금 바로 올리기</button>
+          <button class="fchip" id="when-later" type="button">예약 발행</button>
+        </div>
+        <div class="f-grid2" id="brief-schedule" hidden>
+          <div><p class="f-label">발행 날짜</p><input type="date" class="mini-in" id="brief-date"></div>
+          <div><p class="f-label">시각</p><input type="time" class="mini-in" id="brief-time" value="09:00"></div>
+        </div>
+        <div class="dr-actions">
+          <button class="btn" id="brief-publish">지금 올리기</button>
+          <button class="btn sub" data-save="임시 저장">임시 저장</button>
+        </div>
+        <p class="ed-note" id="brief-hint">올리면 주민 화면 「주간 주진우」에 바로 실립니다.</p>
+      </div>
+    </section>
+    <!-- ─── 어디에 올리지? (콘텐츠 안내 허브) ─── -->
+    <section class="page" id="p-where">
+      <h1 class="pt">어디에 올리지?</h1>
+      <p class="pt-sub">올리려는 게 무엇인지 고르면, 주민 화면 어디에 실리는지 알려드리고 바로 그 작성 화면으로 이동합니다.</p>
+      <div class="where-grid">
+        <button class="card where-card" data-go-p="field">
+          <span class="wc-icon">📷</span>
+          <b>현장에 다녀왔어요</b>
+          <span class="wc-desc">간담회·현장 점검·주민 만남 — 사진과 함께</span>
+          <span class="wc-dest">주민 화면 → 의정현황 → <b>가서 봤습니다</b></span>
+          <span class="wc-note">확인한 것 + 그래서 어떻게 했는지를 함께 적어야 게시됩니다</span>
+        </button>
+        <button class="card where-card" data-go-p="brief">
+          <span class="wc-icon">📰</span>
+          <b>이번 주 소식을 전해요</b>
+          <span class="wc-desc">한 주 동안 한 일 요약 · 사진·영상 첨부</span>
+          <span class="wc-dest">주민 화면 → 소식 → <b>주간 주진우</b></span>
+          <span class="wc-note">매주 금요일 발행. 예약하거나 바로 올릴 수 있어요</span>
+        </button>
+        <button class="card where-card" data-go-p="brief">
+          <span class="wc-icon">🤝</span>
+          <b>당협에서 활동했어요</b>
+          <span class="wc-desc">분과 활동·당원 봉사·월례회</span>
+          <span class="wc-dest">주민 화면 → 소식 → <b>당협 활동</b></span>
+          <span class="wc-note">브리핑 화면에서 "당협 활동"을 고르면 됩니다</span>
+        </button>
+        <button class="card where-card" data-go-p="pledge">
+          <span class="wc-icon">✅</span>
+          <b>공약이 진전됐어요</b>
+          <span class="wc-desc">진행률 변경 · 진행 기록 추가</span>
+          <span class="wc-dest">주민 화면 → 의정현황 → <b>말한 대로, 해온 대로</b></span>
+          <span class="wc-note">기록마다 공개/내부를 고를 수 있습니다</span>
+        </button>
+        <button class="card where-card" data-go-p="inbox">
+          <span class="wc-icon">📥</span>
+          <b>민원 진행 상황을 알려요</b>
+          <span class="wc-desc">접수된 민원에 진행 소식 보내기</span>
+          <span class="wc-dest">신청인만 열람 → <b>내 민원 얼마나 되었주?</b></span>
+          <span class="wc-note">공개 사례로 올리려면 게시 승인을 거칩니다</span>
+        </button>
+        <button class="card where-card" data-go-p="approve">
+          <span class="wc-icon">✅</span>
+          <b>처리 사례를 공개해요</b>
+          <span class="wc-desc">동의받은 민원을 비식별 요약으로</span>
+          <span class="wc-dest">주민 화면 → <b>이런 이야기가 있었어요</b> 게시판</span>
+          <span class="wc-note">게시 위치를 골라 승인하면 실립니다</span>
+        </button>
+      </div>
+      <p class="ed-note" style="margin-top:14px;">헷갈리면 여기로 오세요. 각 작성 화면 위에도 실리는 위치를 적어두었습니다.</p>
+    </section>
+
+    <!-- ─── 게시 승인 ─── -->
+    <section class="page" id="p-approve">
+      <h1 class="pt">게시 승인</h1>
+      <p class="pt-sub">신청인이 공개에 동의한 이야기입니다. 비식별 요약을 확인하고 승인하면 주민 화면 <b>「일단 말해주! → 이런 이야기가 있었어요」</b> 게시판에 실립니다.</p>
+      <div class="card inbox" id="approve-list"></div>
+      <p class="ed-note" style="margin-top:10px;">승인 전에는 절대 공개되지 않습니다. 보류하면 대기 목록에 남고, 반려하면 게시 없이 종료됩니다.</p>
+
+      <h2 class="sec-h">응원 한마디 승인 <span id="cheer-count" style="font-weight:600; color:var(--muted); font-size:14px;"></span></h2>
+      <p class="ed-note" style="margin:0 0 12px;">주민이 「활동」에 남긴 응원입니다. 승인하면 사이트에 게시됩니다.</p>
+      <div class="card inbox" id="cheer-list-admin"></div>
+    </section>
+
+    <!-- ─── 사이트 내용 편집 ─── -->
+    <section class="page" id="p-site">
+      <h1 class="pt">사이트 내용</h1>
+      <p class="pt-sub">주민 화면에 보이는 사진·글을 여기서 바꿉니다.</p>
+      <div class="dest-banner"><span class="db-tag">실리는 곳</span> 주민 화면 → <b>소개</b> 탭 전체 (프로필 · 함께 뛰는 사람들 · 당협 조직)</div>
+
+      <div class="atabs">
+        <button class="atab on" data-a="site-profile">의원 프로필</button>
+        <button class="atab" data-a="site-members">시·구의원 소개<span class="ac" id="ac-members"></span></button>
+        <button class="atab" data-a="site-org">당협 조직도<span class="ac" id="ac-org"></span></button>
+      </div>
+      <div class="apane on" id="a-site-profile">
+      <div class="card editor">
+        <div class="site-row">
+          <div class="ph-slot" id="ph-profile">
+            <span>프로필 사진</span>
+            <button class="ph-btn" type="button">사진 올리기</button>
+          </div>
+          <div class="site-fields">
+            <p class="f-label">이름·직함</p>
+            <input class="mini-in" value="주진우" style="margin-bottom:12px;">
+            <p class="f-label">소개 한 줄</p>
+            <input class="mini-in" value="국민의힘 · 부산 해운대구갑 · 제22대 국회의원(초선)" style="margin-bottom:12px;">
+            <p class="f-label">인사말 <span style="font-weight:600; color:var(--muted);">(주민 화면 프로필 옆 카드)</span></p>
+            <textarea style="min-height:88px;">"해운대의 골목과 바다를 매일 걷겠습니다.
+말씀해 주시면 듣고, 들은 것은 해내겠습니다."</textarea>
+          </div>
+        </div>
+        <p class="f-label" style="margin-top:16px;">걸어온 길 <span style="font-weight:600; color:var(--muted);">(한 줄에 하나씩 · 연도 먼저)</span></p>
+        <textarea style="min-height:120px;">1975 서울 출생 — 학창 시절은 부산에서 (대연고등학교 졸업)
+1994 서울대학교 법과대학 입학 (공법 전공)
+제41회 사법시험 합격 · 사법연수원 31기
+검사 — 대구지검·서울중앙지검·법무부·대검찰청, 서울동부지검 형사6부장 등
+2022 대통령비서실 초대 법률비서관
+2024 제22대 국회의원 당선 — 부산 해운대구갑 (득표율 53.7%)</textarea>
+        <button class="btn" data-save="의원 프로필" style="margin-top:14px;">저장</button>
+      </div>
+
+      </div>
+
+      <div class="apane" id="a-site-members">
+      <p class="ed-note" style="margin:0 0 12px;">사람 관리에서 등록한 분들입니다. 여기서는 사진과 소개·공약을 채웁니다.</p>
+      <div id="site-councilors"></div>
+
+      </div>
+
+      <div class="apane" id="a-site-org">
+      <div class="card editor">
+        <p class="f-label">위원장</p>
+        <div class="org-edit-row">
+          <div class="ph-slot sm"><span>사진</span><button class="ph-btn" type="button">올리기</button></div>
+          <input class="mini-in" value="주진우 — 당협위원장 (국회의원)">
+        </div>
+        <p class="f-label" style="margin-top:16px;">분과위원장 <span style="font-weight:600; color:var(--muted);">(직책과 이름)</span></p>
+        <div id="org-list"></div>
+        <div class="f-grid2" style="margin-top:12px;">
+          <div><p class="f-label">직책</p><input class="mini-in" id="org-role" placeholder="예: 청년분과위원장"></div>
+          <div><p class="f-label">이름</p><input class="mini-in" id="org-name" placeholder="예: 홍길동"></div>
+        </div>
+        <button class="btn" id="org-add">분과 추가</button>
+      </div>
+      </div>
+    </section>
+
+    <!-- ─── 보좌진 관리 ─── -->
+    <section class="page" id="p-staff">
+      <h1 class="pt">보좌진 관리</h1>
+      <p class="pt-sub">보좌진별 계정과 이메일 알림을 관리합니다. 실서비스에서는 여기 등록된 주소로 자동 발송됩니다.</p>
+
+      <div class="atabs">
+        <button class="atab on" data-a="staff-accounts">보좌진 계정<span class="ac" id="ac-staff"></span></button>
+        <button class="atab" data-a="staff-cn">시·구의원 명단<span class="ac" id="ac-cn"></span></button>
+        <button class="atab" data-a="staff-notify">이메일 알림</button>
+      </div>
+
+      <div class="apane" id="a-staff-notify">
+      <div class="card editor">
+        <div class="ed-top"><b>이메일 알림 규칙</b><span class="tag">데모 — 실제 발송 없음</span></div>
+        <ul class="notify-rules">
+          <li>새 민원·문의가 접수되면 → <b id="notify-scope">사이트 담당 보좌진</b>에게 접수 알림
+            <button class="tpl-btn" data-preview="new">메일 미리보기</button></li>
+          <li>민원 담당이 배정되면 → <b>배정된 보좌진</b>에게 배정 알림
+            <button class="tpl-btn" data-preview="assign">메일 미리보기</button></li>
+          <li>모든 메일에 <b>대시보드 바로가기 링크</b>가 함께 갑니다</li>
+        </ul>
+        <label class="consent"><input type="checkbox" id="notify-all"> 접수 알림을 사이트 담당만이 아니라 <b>모든 보좌진</b>에게 보냅니다</label>
+      </div>
+
+      </div>
+
+      <div class="apane on" id="a-staff-accounts">
+      <div class="tools" style="margin-top:0;">
+        <h2 class="sec-h" style="margin:0;">보좌진 계정 <span id="staff-count" style="font-weight:600; color:var(--muted); font-size:14px;"></span></h2>
+      </div>
+      <div class="card inbox" id="staff-list"></div>
+
+      </div>
+
+      <div class="apane" id="a-staff-cn">
+      <div class="tools" style="margin-top:0;">
+        <h2 class="sec-h" style="margin:0;">시·구의원 명단 <span id="cn-count" style="font-weight:600; color:var(--muted); font-size:14px;"></span></h2>
+      </div>
+      <p class="ed-note" style="margin:0 0 12px;">여기 등록된 분들이 민원의 <b>전달 대상</b>과 <b>담당</b> 선택지에 나타납니다.</p>
+      <div class="card inbox" id="cn-list"></div>
+      <div class="card editor" style="margin-top:14px; margin-bottom:26px;">
+        <div class="ed-top"><b>시·구의원 등록</b></div>
+        <div class="cn-grid">
+          <div><p class="f-label">구분</p><select class="mini-in" id="cn-kind"><option value="city">시의원</option><option value="gu">구의원</option></select></div>
+          <div><p class="f-label">이름 (직함 포함)</p><input class="mini-in" id="cn-name" placeholder="예: 홍길동 구의원"></div>
+          <div><p class="f-label">담당 지역 (선택)</p><input class="mini-in" id="cn-area" placeholder="예: 좌1·2동"></div>
+        </div>
+        <button class="btn" id="cn-add">명단에 추가 (데모)</button>
+      </div>
+
+      <div class="card editor" style="margin-top:14px;">
+        <div class="ed-top"><b>새 계정 발급</b></div>
+        <div class="f-grid2">
+          <div><p class="f-label">이름</p><input class="mini-in" id="staff-name" placeholder="예: 최비서"></div>
+          <div><p class="f-label">이메일</p><input class="mini-in" id="staff-email" placeholder="example@assembly.go.kr"></div>
+        </div>
+        <button class="btn" id="staff-add">계정 발급 (데모)</button>
+        <p class="ed-note">발급하면 해당 주소로 초기 비밀번호 설정 메일이 갑니다 (실서비스 기준).</p>
+      </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ─── 로그인 (데모) ─── -->
+<div class="login-bg" id="login">
+  <div class="card login-box">
+    <div class="brand" style="justify-content:center; padding:0; margin-bottom:6px;">
+      <svg width="30" height="27" viewBox="0 0 34 30" aria-hidden="true">
+        <path d="M3 14 C6 8 12 5 17 5 C23 5 29 9 30 15 C31 20 28 24 23 24 L15 24 L9 28 L10.5 23.5 C6 22 2.5 19 3 14 Z" fill="none" stroke="#0e6ba8" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M8 16 Q10.5 13.5 13 16 T18 16 T23 16 T27 15.5" fill="none" stroke="#0e6ba8" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <b class="login-title">보좌진 로그인</b>
+    <p class="login-sub">데모 화면입니다 — 계정을 고르고 로그인하면 그 이름으로 대시보드를 씁니다. 실서비스에서는 보좌진별 아이디·비밀번호가 발급됩니다.</p>
+    <div class="login-accounts" id="login-accounts"></div>
+    <input type="password" class="mini-in" id="login-pw" placeholder="비밀번호 (아무거나)">
+    <button class="btn" id="login-btn" style="width:100%;">로그인</button>
+  </div>
+</div>
+
+<!-- ─── 메일 미리보기 (데모) ─── -->
+<div class="modal-bg" id="mail-modal">
+  <div class="card mail-box">
+    <button class="dr-close" id="mail-close" aria-label="닫기" style="position:absolute;">✕</button>
+    <p class="mail-tag">이런 메일이 발송됩니다 (데모 미리보기)</p>
+    <div class="mail-head">
+      <div><span>보낸 사람</span><b>우리동네 주진우 &lt;noreply@example.kr&gt;</b></div>
+      <div><span>받는 사람</span><b id="mail-to">—</b></div>
+      <div><span>제목</span><b id="mail-subject">—</b></div>
+    </div>
+    <div class="mail-body" id="mail-body"></div>
+    <a class="mail-btn" id="mail-link" href="#">대시보드에서 확인하기 →</a>
+    <p class="mail-foot">실서비스에서는 이 링크가 사이트 주소(도메인 확정 후)로 연결됩니다.</p>
+  </div>
+</div>
+
+<div class="drawer-bg" id="drawer-bg"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+<div id="toast">알림</div>
+<script>
+(function () {
+  var $ = function (s, p) { return (p || document).querySelector(s); };
+  var $$ = function (s, p) { return [].slice.call((p || document).querySelectorAll(s)); };
+
+  var toastEl = $("#toast"), tt = null;
+  function toast(m) {
+    toastEl.textContent = m;
+    toastEl.classList.add("on");
+    clearTimeout(tt);
+    tt = setTimeout(function () { toastEl.classList.remove("on"); }, 2400);
+  }
+
+  /* ── 좌측 내비 ── */
+  $(".side").addEventListener("click", function (e) {
+    var b = e.target.closest(".nav");
+    if (!b) return;
+    $$(".nav").forEach(function (x) { x.classList.toggle("on", x === b); });
+    $$(".page").forEach(function (p) { p.classList.remove("on"); });
+    $("#p-" + b.dataset.p).classList.add("on");
+    window.scrollTo({ top: 0 });
+  });
+
+  /* ── 사이트 내용: 시·구의원 소개 · 조직도 ── */
+  var ORG = [
+    { id: 1, role: "청년분과위원장", name: "○○○ (예시)" },
+    { id: 2, role: "여성분과위원장", name: "○○○ (예시)" },
+    { id: 3, role: "조직분과위원장", name: "○○○ (예시)" },
+    { id: 4, role: "홍보분과위원장", name: "○○○ (예시)" }
+  ];
+  var orgSeq = 5;
+
+  function renderSiteCouncilors() {
+    var box = $("#site-councilors");
+    if (!box) return;
+    box.innerHTML = COUNCILORS.length
+      ? COUNCILORS.map(function (c) {
+          return '<div class="card editor cn-edit" data-id="' + c.id + '">' +
+            '<div class="ph-slot sm"><span>사진</span><button class="ph-btn" type="button">올리기</button></div>' +
+            "<div><b>" + c.name + "</b>" +
+              '<input class="mini-in" placeholder="소개 한 줄 — 예: 좌1·2동을 맡고 있습니다" value="' + (c.intro || "").replace(/"/g, "&quot;") + '" data-k="intro">' +
+              '<textarea placeholder="주요 공약 — 한 줄에 하나씩" data-k="pledges" style="min-height:70px;">' + (c.pledges || "") + "</textarea>" +
+            "</div>" +
+            '<button class="fchip" data-save-cn="1">저장</button>' +
+          "</div>";
+        }).join("")
+      : '<p class="empty">사람 관리에서 시·구의원을 먼저 등록해 주세요.</p>';
+  }
+
+  $("#site-councilors").addEventListener("input", function (e) {
+    var wrap = e.target.closest(".cn-edit");
+    if (!wrap || !e.target.dataset.k) return;
+    var c = councilorById(+wrap.dataset.id);
+    if (c) c[e.target.dataset.k] = e.target.value;
+  });
+  $("#site-councilors").addEventListener("click", function (e) {
+    if (e.target.closest("[data-save-cn]")) toast("소개를 저장했습니다 (데모)");
+  });
+
+  function renderOrg() {
+    $("#org-list").innerHTML = ORG.map(function (o) {
+      return '<div class="org-item" data-id="' + o.id + '">' +
+        '<div class="ph-slot sm"><span>사진</span><button class="ph-btn" type="button">올리기</button></div>' +
+        "<div><b>" + o.role + "</b><span style=\"display:block; font-size:13px; color:var(--muted);\">" + o.name + "</span></div>" +
+        '<button class="fi-x" aria-label="삭제">✕</button>' +
+      "</div>";
+    }).join("");
+  }
+  var _origRenderOrg = renderOrg;
+  renderOrg = function () { _origRenderOrg(); if (typeof syncTabCounts === "function") syncTabCounts(); };
+
+  $("#org-add").addEventListener("click", function () {
+    var r = $("#org-role").value.trim(), n = $("#org-name").value.trim();
+    if (!r) { toast("직책을 적어주세요"); $("#org-role").focus(); return; }
+    ORG.push({ id: orgSeq++, role: r, name: n || "○○○" });
+    renderOrg();
+    $("#org-role").value = ""; $("#org-name").value = "";
+    toast(r + " 을(를) 조직도에 추가했습니다 (데모)");
+  });
+  $("#org-list").addEventListener("click", function (e) {
+    if (!e.target.closest(".fi-x")) return;
+    var id = +e.target.closest(".org-item").dataset.id;
+    ORG = ORG.filter(function (o) { return o.id !== id; });
+    renderOrg();
+    toast("조직도에서 뺐습니다 (데모)");
+  });
+  renderOrg();
+
+  /* 사진 올리기 버튼 (데모) */
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".ph-btn")) toast("실제 서비스에서는 사진을 올려 바로 반영됩니다 (데모)");
+  });
+
+  /* 주간 브리핑: 지금 올리기 / 예약 발행 */
+  var briefMode = "now";
+  $("#brief-date").value = TODAY;
+  function briefSync() {
+    var later = briefMode === "later";
+    $("#brief-schedule").hidden = !later;
+    $("#brief-publish").textContent = later ? "발행 예약" : "지금 올리기";
+    $("#when-now").classList.toggle("on", !later);
+    $("#when-later").classList.toggle("on", later);
+    $("#brief-hint").textContent = later
+      ? "예약한 시각이 되면 자동으로 주민 화면 「주간 주진우」에 실립니다."
+      : "올리면 주민 화면 「주간 주진우」에 바로 실립니다.";
+  }
+  var briefKind = "office";
+  function briefKindSync() {
+    var party = briefKind === "party";
+    $("#kind-office").classList.toggle("on", !party);
+    $("#kind-party").classList.toggle("on", party);
+    var b = document.querySelector('#p-brief .dest-banner');
+    if (b) b.innerHTML = party
+      ? '<span class="db-tag">실리는 곳</span> 주민 화면 → <b>소식 → 당협 활동</b> · 분과 활동·당원 소식이 실립니다'
+      : '<span class="db-tag">실리는 곳</span> 주민 화면 → <b>소식 → 주간 주진우</b> · 첨부한 사진·영상은 <b>사진·영상으로 보는 소식</b>에도 실립니다';
+  }
+  $("#kind-office").addEventListener("click", function () { briefKind = "office"; briefKindSync(); });
+  $("#kind-party").addEventListener("click", function () { briefKind = "party"; briefKindSync(); });
+  briefKindSync();
+
+  $("#when-now").addEventListener("click", function () { briefMode = "now"; briefSync(); });
+  $("#when-later").addEventListener("click", function () { briefMode = "later"; briefSync(); });
+  $("#brief-publish").addEventListener("click", function () {
+    var t = $("#brief-title").value.trim();
+    if (!t) { toast("한 줄 제목을 적어주세요"); $("#brief-title").focus(); return; }
+    if (briefMode === "later") {
+      var d = $("#brief-date").value, tm = $("#brief-time").value;
+      if (!d) { toast("발행 날짜를 골라주세요"); $("#brief-date").focus(); return; }
+      $("#brief-state").textContent = "발행 예약 " + d.slice(5).replace("-", ".") + " " + tm;
+      $("#brief-state").className = "tag purge";
+      toast(d.slice(5).replace("-", ".") + " " + tm + " 발행 예약했습니다 (데모)");
+    } else {
+      $("#brief-state").textContent = "발행됨 · " + todayShort();
+      $("#brief-state").className = "tag";
+      toast("주민 화면 「" + (briefKind === "party" ? "당협 활동" : "주간 주진우") + "」에 올렸습니다 (데모)");
+    }
+  });
+  briefSync();
+
+  /* ── 관리자 서브탭 (섹션 안에서만 전환) ── */
+  $$(".atabs").forEach(function (bar) {
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest(".atab");
+      if (!b) return;
+      var sec = bar.closest("section");
+      $$(".atab", bar).forEach(function (x) { x.classList.toggle("on", x === b); });
+      $$(".apane", sec).forEach(function (p) { p.classList.remove("on"); });
+      var pane = $("#a-" + b.dataset.a, sec);
+      if (pane) pane.classList.add("on");
+      window.scrollTo({ top: 0 });
+    });
+  });
+
+  /* 서브탭 배지 숫자 */
+  function syncTabCounts() {
+    // 초기화 순서상 아직 정의 전인 배열이 있을 수 있어 방어적으로 읽는다
+    function put(sel, arr) {
+      var el = $(sel);
+      if (el && arr && arr.length !== undefined) el.textContent = arr.length;
+    }
+    put("#ac-staff", typeof STAFF !== "undefined" && STAFF);
+    put("#ac-cn", typeof COUNCILORS !== "undefined" && COUNCILORS);
+    put("#ac-members", typeof COUNCILORS !== "undefined" && COUNCILORS);
+    put("#ac-org", typeof ORG !== "undefined" && ORG);
+  }
+
+  /* 콘텐츠 허브: 카드 → 작성 화면 이동 */
+  document.addEventListener("click", function (e) {
+    var c = e.target.closest("[data-go-p]");
+    if (!c) return;
+    var target = c.dataset.goP;
+    var nav = document.querySelector('.nav[data-p="' + target + '"]');
+    if (nav) nav.click();
+  });
+
+  /* ── 민원 데이터 (데모) ── */
+  var STATUS = { 1: "접수", 2: "검토", 3: "처리 중", 4: "답변 완료" };
+  var ITEMS = [
+    { no: "2026-0821-013", t: "장산역 앞 횡단보도 신호가 너무 짧습니다", cat: "도로·교통", dong: "좌동", when: "8.21", st: 1, days: 1, isNew: true, assignee: null,
+      body: "출근길에 보면 어르신들이 절반쯤 건넜을 때 신호가 바뀝니다. 지팡이 짚으신 분들은 뛰지도 못하는데 차가 밀고 들어옵니다. 신호 시간을 조금만 늘려주실 수 없을까요?", tel: "010-****-5432" },
+    { no: "2026-0820-011", t: "공사장 야간 소음이 3주째 계속됩니다", cat: "환경·소음", dong: "우동", when: "8.20", st: 1, days: 2, isNew: true, assignee: null,
+      body: "밤 10시가 넘어도 공사 소리가 납니다. 구청에 두 번 신고했는데 그때만 조용하고 다시 시작합니다. 아이가 잠을 못 잡니다.", tel: "010-****-1188" },
+    { no: "2026-0814-006", t: "어린이집 앞 불법 주정차 단속 요청", cat: "안전", dong: "좌동", when: "8.14", st: 3, days: 8, isNew: false, assignee: "s2",
+      updates: [{ d: "8.16", by: "이비서", title: "경찰서에 협조 공문 발송 — 회신 대기", text: "등원 시간대 이중주차 집중 단속을 요청하는 공문을 경찰서 교통과에 보냈습니다. 회신이 오면 바로 알려드리겠습니다." }],
+      body: "등원 시간에 차들이 이중 주차를 해서 아이들이 차 사이로 걸어 나옵니다. 사고 나기 전에 조치가 필요합니다.", tel: "연락처 미기재" },
+    { no: "2026-0812-004", t: "경로당 냉방기가 고장 난 지 오래됐어요", cat: "복지", dong: "중동", when: "8.12", st: 3, days: 10, isNew: false, assignee: "s1",
+      updates: [{ d: "8.14", by: "김보좌", title: "구청과 수리 일정 조율 중", text: "구청 복지과와 냉방기 수리 일정을 잡고 있습니다. 이번 주 안에 방문 일정을 확정하는 것이 목표입니다." }],
+      body: "어르신들이 더위에 그냥 앉아 계십니다. 수리 요청은 했다는데 감감무소식입니다.", tel: "010-****-7701" },
+    { no: "2026-0808-002", t: "해수욕장 진입로 턱이 높아 유모차가 못 지나갑니다", cat: "보행 환경", dong: "중동", when: "8.08", st: 2, days: 14, isNew: false, assignee: "s3",
+      updates: [{ d: "8.15", by: "박실장", title: "현장 사진 확인 요청드림", text: "정확한 위치 파악을 위해 현장 사진을 부탁드렸습니다. 사진이 오면 바로 구청과 협의를 시작하겠습니다." }],
+      body: "휠체어 쓰시는 분도 돌아서 가시더군요. 턱을 낮추거나 경사로를 놓아주시면 좋겠습니다.", tel: "010-****-3320" },
+    { no: "2026-0805-001", t: "정류장 조명이 어두워 밤에 무섭습니다", cat: "안전", dong: "송정동", when: "8.05", st: 4, days: 16, isNew: false, assignee: "s1", doneDays: 9,
+      updates: [
+        { d: "8.06", by: "김보좌", title: "조명 설치 위치 현장 확인", text: "밤 시간대에 직접 나가 어두운 구간을 확인하고 설치 위치를 정했습니다." },
+        { d: "8.14", by: "김보좌", title: "조명 설치 완료 — 안내", text: "정류장에 조명 1기를 추가로 설치했습니다. 밤에 지나실 때 여전히 어두운 구간이 있으면 다시 알려주세요." }
+      ],
+      body: "여학생들이 밤에 혼자 기다리기 무서워합니다. 조명 하나만 더 달아주세요.", tel: "010-****-9002" }
+  ];
+
+  var W_DEF = "소관 기관 협의";
+  var R_DEF = "답변 발송";
+
+  /* 시·구의원 명단 — 사람 관리 화면에서 등록/삭제 */
+  var COUNCILORS = [
+    { id: 1, kind: "city", name: "박준영 시의원", area: "우1·2·3동, 중1동" },
+    { id: 2, kind: "gu", name: "구의원 ㄱ (예시)", area: "명단 확인 후 교체" },
+    { id: 3, kind: "gu", name: "구의원 ㄴ (예시)", area: "명단 확인 후 교체" }
+  ];
+  var cnSeq = 4;
+  function councilorById(id) { return COUNCILORS.find(function (c) { return c.id === id; }); }
+
+  /* 담당 키: "s1"=보좌진, "c1"=시·구의원 */
+  function personName(key) {
+    if (!key) return null;
+    var kind = String(key).charAt(0), id = +String(key).slice(1);
+    if (kind === "s") { var p = STAFF.find(function (x) { return x.id === id; }); return p ? p.name : null; }
+    if (kind === "c") { var c = councilorById(id); return c ? c.name : null; }
+    return null;
+  }
+
+  function staffName(id) {
+    var p = STAFF.find(function (x) { return x.id === id; });
+    return p ? p.name : null;
+  }
+
+  var filter = "all", cur = null;
+
+  var selected = new Set();
+
+  function render() {
+    var list = ITEMS.filter(function (i) { return filter === "all" || String(i.st) === filter; });
+    var box = $("#inbox");
+    if (!list.length) {
+      box.innerHTML = '<p class="empty">해당하는 민원이 없습니다.</p>';
+    } else {
+      box.innerHTML = list.map(function (i) {
+        var an = personName(i.assignee);
+        return '<button class="row' + (selected.has(i.no) ? " sel" : "") + '" data-no="' + i.no + '">' +
+          '<span class="r-cb"><input type="checkbox" ' + (selected.has(i.no) ? "checked" : "") + ' aria-label="선택"></span>' +
+          '<span class="r-no">' + i.no + "</span>" +
+          '<span class="r-main"><span class="r-title">' + (i.isNew ? '<span class="dot-new"></span>' : "") + i.t + "</span>" +
+            ((i.updates && i.updates.length) ? '<span class="r-now">↳ ' + i.updates[i.updates.length - 1].title + "</span>" : "") + "</span>" +
+          (an ? '<span class="r-who">' + an + "</span>" : '<span class="r-who none">미배정</span>') +
+          '<span class="r-when">' + i.when + " · " + i.days + "일</span>" +
+          '<span class="st s' + i.st + '">' + STATUS[i.st] + "</span>" +
+          "</button>";
+      }).join("");
+    }
+    $("#row-count").textContent = list.length + "건 표시";
+    var wait = ITEMS.filter(function (i) { return i.st < 4; }).length;
+    var over = ITEMS.filter(function (i) { return i.st < 4 && i.days >= 7; }).length;
+    var unassigned = ITEMS.filter(function (i) { return i.st < 4 && !i.assignee; }).length;
+    $("#k-wait").textContent = wait;
+    $("#k-wait-d").textContent = unassigned ? "미배정 " + unassigned + "건 — 담당을 지정해주세요" : (over ? over + "건은 7일 경과" : "지연 건 없음");
+    $("#k-wait-d").className = (unassigned || over) ? "d warn" : "d up";
+    $("#cnt-inbox").textContent = ITEMS.length;
+    renderBulk();
+  }
+
+  /* ── 다중 선택 · 일괄 처리 ── */
+  function renderBulk() {
+    var bar = $("#bulk-bar");
+    if (!selected.size) { bar.hidden = true; return; }
+    bar.hidden = false;
+    $("#bulk-count").textContent = selected.size + "건 선택";
+    $("#bulk-staff").innerHTML = STAFF.map(function (p) {
+      return '<button class="fchip" data-bs="s' + p.id + '">' + p.name + "</button>";
+    }).join("");
+  }
+
+  $("#bulk-bar").addEventListener("click", function (e) {
+    var picked = ITEMS.filter(function (i) { return selected.has(i.no); });
+    var bs = e.target.closest("[data-bs]");
+    if (bs) {
+      var p = STAFF.find(function (x) { return "s" + x.id === bs.dataset.bs; });
+      picked.forEach(function (i) { i.assignee = "s" + p.id; i.isNew = false; if (i.st === 1) i.st = 2; });
+      toast(picked.length + "건을 " + p.name + " 담당으로 배정 — 배정 알림 메일 발송 (데모)");
+      selected.clear();
+      render();
+      return;
+    }
+    var st = e.target.closest("[data-bst]");
+    if (st) {
+      var n = +st.dataset.bst;
+      picked.forEach(function (i) { i.st = n; i.isNew = false; });
+      toast(picked.length + "건의 상태를 “" + STATUS[n] + "”로 바꿨습니다 (데모)");
+      selected.clear();
+      render();
+      return;
+    }
+    if (e.target.closest("#bulk-clear")) { selected.clear(); render(); }
+  });
+
+  $(".tools").addEventListener("click", function (e) {
+    var b = e.target.closest(".fchip");
+    if (!b) return;
+    filter = b.dataset.f;
+    $$(".fchip").forEach(function (x) { x.classList.toggle("on", x === b); });
+    render();
+  });
+
+  /* ── 상세 패널 ── */
+  var TPL = {
+    "접수 안내": "안녕하세요, 주진우 의원실입니다.\n말씀해 주신 내용 잘 받았습니다. 담당자를 정해 확인한 뒤 다시 연락드리겠습니다.",
+    "구청 전달": "안녕하세요, 주진우 의원실입니다.\n말씀해 주신 건은 해운대구청 소관이라 담당 부서에 전달했습니다. 진행 상황은 저희가 함께 확인하겠습니다.",
+    "처리 완료": "안녕하세요, 주진우 의원실입니다.\n말씀해 주신 건이 이렇게 처리되었습니다.\n\n- 조치 내용:\n- 처리 일자:\n\n불편이 남아 있으면 다시 알려주세요."
+  };
+
+  function esc2(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  }
+  function todayShort() {
+    var d = new Date();
+    return (d.getMonth() + 1) + "." + String(d.getDate()).padStart(2, "0");
+  }
+
+  var PURGE_DAYS = 7;
+  function privacyTag(i) {
+    if (i.st === 4 && typeof i.doneDays === "number") {
+      if (i.doneDays >= PURGE_DAYS) return '<span class="tag purge done">연락처 파기됨 — 완료 후 ' + PURGE_DAYS + '일 경과</span>';
+      return '<span class="tag">' + i.tel + '</span><span class="tag purge">파기 D-' + (PURGE_DAYS - i.doneDays) + "</span>";
+    }
+    return '<span class="tag">' + i.tel + "</span>";
+  }
+
+  function openDrawer(no) {
+    cur = ITEMS.filter(function (i) { return i.no === no; })[0];
+    if (!cur) return;
+    cur.updates = cur.updates || [];
+    cur.tgtIds = cur.tgtIds || [];
+    if (cur.tgtAssembly === undefined) cur.tgtAssembly = true;
+    drawerKind = null;
+    var steps = [1, 2, 3, 4].map(function (n) {
+      var cls = n < cur.st ? "done" : (n === cur.st ? "now" : "");
+      return '<button class="step-btn ' + cls + '" data-step="' + n + '">' + STATUS[n] + "</button>";
+    }).join("");
+    $("#drawer").innerHTML =
+      '<div class="dr-head">' +
+        '<button class="dr-close" aria-label="닫기">✕</button>' +
+        '<p class="dr-no">' + cur.no + "</p>" +
+        "<h2>" + cur.t + "</h2>" +
+        '<div class="dr-meta"><span class="tag">' + cur.cat + '</span><span class="tag">' + cur.dong +
+          '</span><span class="tag">접수 ' + cur.when + '</span><span class="tag">' + cur.days + '일 경과</span>' +
+          privacyTag(cur) + "</div>" +
+      "</div>" +
+      '<div class="dr-body">' +
+        '<p class="f-label">주민이 남긴 내용</p>' +
+        '<p class="dr-quote">' + cur.body + "</p>" +
+        '<p class="f-label">처리 단계 <span style="font-weight:600; color:var(--muted);">— 주민에게는 간단한 상태 한 줄로만 보입니다</span></p>' +
+        '<div class="steps">' + steps + "</div>" +
+        '<p class="f-label">담당 ' + (cur.assignee ? "" : '<span style="color:var(--danger); font-weight:700;">— 미배정, 지정해주세요</span>') + "</p>" +
+        '<p class="assign-sub">보좌진</p>' +
+        '<div class="assign">' +
+          STAFF.map(function (p) {
+            return '<button class="who-btn' + (cur.assignee === "s" + p.id ? " on" : "") + '" data-sid="s' + p.id + '">' + p.name + "</button>";
+          }).join("") +
+        "</div>" +
+        '<p class="assign-sub">시·구의원</p>' +
+        '<div class="assign">' +
+          (COUNCILORS.length ? COUNCILORS.map(function (c) {
+            return '<button class="who-btn' + (cur.assignee === "c" + c.id ? " on" : "") + '" data-sid="c' + c.id + '">' + c.name + "</button>";
+          }).join("") : '<span class="ed-note">사람 관리에서 시·구의원을 등록하면 여기 나타납니다</span>') +
+        "</div>" +
+
+        '<p class="f-label">전달 대상 <span style="font-weight:600; color:var(--muted);">(주민 대신 사무국이 정합니다 — 여러 명 선택 가능)</span></p>' +
+        '<div class="assign" id="tgt-top">' +
+          '<button class="who-btn tgt-a' + (cur.tgtAssembly ? " on" : "") + '">국회의원 주진우</button>' +
+          '<button class="who-btn tgt-kind" data-kind="city">시의원 ▾</button>' +
+          '<button class="who-btn tgt-kind" data-kind="gu">구의원 ▾</button>' +
+        "</div>" +
+        '<div class="tgt-sub" id="tgt-sub" hidden></div>' +
+        '<p class="tgt-summary" id="tgt-summary"></p>' +
+
+        ((cur.updates && cur.updates.length)
+          ? '<p class="f-label">보낸 소식 (' + cur.updates.length + '건)</p>' +
+            cur.updates.map(function (u) {
+              return '<div class="sent-reply"><span class="sr-head">' + u.d + " · " + u.by + ' 발송</span><b class="sr-title">' + esc2(u.title) + '</b><p>' + esc2(u.text) + "</p></div>";
+            }).join("")
+          : "") +
+
+        '<p class="f-label">진행 소식 보내기 <span style="font-weight:600; color:var(--muted);">— 지금 단계에서 무엇을 했는지, 제목 한 줄 + 자세한 내용으로</span></p>' +
+        '<input class="mini-in" id="up-title" style="margin-bottom:10px;" placeholder="제목 한 줄 — 예: 협조 공문 발송">' +
+        '<div class="tpl-row">' +
+          Object.keys(TPL).map(function (k) { return '<button class="tpl-btn" data-tpl="' + k + '">' + k + " 템플릿</button>"; }).join("") +
+        "</div>" +
+        '<textarea id="reply" placeholder="자세한 내용 — 주민이 그대로 받아봅니다. 템플릿을 눌러 불러올 수도 있어요."></textarea>' +
+        (cur.st < 4 ? '<label class="consent"><input type="checkbox" id="mark-done"> 이 소식으로 <b>답변 완료</b> 처리합니다</label>' : "") +
+        '<label class="consent"><input type="checkbox" id="consent"> 이 건을 <b>공개 사례집</b>에 올립니다 (이름·연락처·상세 주소를 지운 뒤 게시)</label>' +
+        '<div class="dr-actions">' +
+          '<button class="btn" id="send">소식 보내기</button>' +
+          '<button class="btn sub" id="save-draft">임시 저장</button>' +
+        "</div>" +
+
+        '<p class="f-label">처리 이력 <span style="font-weight:600; color:var(--muted);">— 소식 제목이 그대로 쌓입니다. 제목 줄은 눌러서 고칠 수 있어요</span></p>' +
+        '<ul class="log">' +
+          '<li class="done"><span class="l-dot"></span><span class="log-fixed">주민 접수</span><span class="l-when">' + cur.when + "</span></li>" +
+          (cur.assignee
+            ? '<li class="done"><span class="l-dot"></span><span class="log-fixed">담당 배정 — ' + personName(cur.assignee) + '</span><span class="l-when">' + cur.when + "</span></li>"
+            : '<li><span class="l-dot"></span><span class="log-fixed">담당 배정 — 아직 미배정</span><span class="l-when">—</span></li>') +
+          (cur.updates || []).map(function (u, i2) {
+            return '<li class="done"><span class="l-dot"></span>' +
+              '<input class="log-edit" data-ui="' + i2 + '" value="' + u.title.replace(/"/g, "&quot;") + '" title="눌러서 제목 수정">' +
+              '<span class="l-when">' + u.d + "</span></li>";
+          }).join("") +
+          '<li class="' + (cur.st === 4 ? "done" : "") + '"><span class="l-dot"></span><span class="log-fixed">답변 완료</span><span class="l-when">' +
+            (cur.st === 4 ? (cur.updates && cur.updates.length ? "완료 · " + cur.updates[cur.updates.length - 1].d : "완료") : "—") + "</span></li>" +
+        "</ul>" +
+      "</div>";
+    $("#drawer").classList.add("on");
+    renderTgtSummary();
+    $("#drawer").setAttribute("aria-hidden", "false");
+    $("#drawer-bg").classList.add("on");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDrawer() {
+    $("#drawer").classList.remove("on");
+    $("#drawer").setAttribute("aria-hidden", "true");
+    $("#drawer-bg").classList.remove("on");
+    document.body.style.overflow = "";
+    cur = null;
+  }
+
+  $("#inbox").addEventListener("click", function (e) {
+    var r = e.target.closest(".row");
+    if (!r) return;
+    if (e.target.closest(".r-cb")) {
+      var no = r.dataset.no;
+      if (selected.has(no)) selected.delete(no); else selected.add(no);
+      render();
+      return;
+    }
+    openDrawer(r.dataset.no);
+  });
+  $("#drawer-bg").addEventListener("click", closeDrawer);
+  window.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDrawer(); });
+
+  var drawerKind = null; // 전달 대상에서 펼친 종류(city/gu)
+
+  function renderTgtSub() {
+    var box = $("#tgt-sub");
+    if (!drawerKind) { box.hidden = true; return; }
+    var list = COUNCILORS.filter(function (c) { return c.kind === drawerKind; });
+    box.innerHTML = (list.length
+      ? list.map(function (c) {
+          return '<button class="who-btn tgt-c' + (cur.tgtIds.indexOf(c.id) >= 0 ? " on" : "") + '" data-cid="' + c.id + '">' + c.name + "</button>";
+        }).join("")
+      : '<span class="ed-note">등록된 ' + (drawerKind === "city" ? "시의원" : "구의원") + '이 없습니다 — 사람 관리에서 추가하세요</span>') +
+      (cur.tgtIds.length ? '<button class="fchip" id="tgt-clear" style="margin-left:auto;">의원 선택 모두 해제</button>' : "");
+    box.hidden = false;
+  }
+
+  function renderTgtSummary() {
+    var parts = [];
+    if (cur.tgtAssembly) parts.push("국회의원 주진우");
+    cur.tgtIds.forEach(function (id) { var c = councilorById(id); if (c) parts.push(c.name); });
+    var el = $("#tgt-summary");
+    el.textContent = parts.length ? "전달: " + parts.join(" · ") : "전달 대상이 없습니다 — 최소 한 곳을 골라주세요";
+    el.classList.toggle("warn", !parts.length);
+  }
+
+  $("#drawer").addEventListener("input", function (e) {
+    if (e.target.classList.contains("log-edit") && cur) {
+      var u = cur.updates[+e.target.dataset.ui];
+      if (u) { u.title = e.target.value.trim(); render(); }
+    }
+  });
+
+  $("#drawer").addEventListener("click", function (e) {
+    if (e.target.closest(".dr-close")) { closeDrawer(); return; }
+    if (!cur) return; // 드로어가 닫힌 뒤 남은 클릭 이벤트 무시
+
+    var st = e.target.closest("[data-step]");
+    if (st && cur) {
+      cur.st = +st.dataset.step;
+      cur.isNew = false;
+      openDrawer(cur.no);
+      render();
+      toast("상태를 “" + STATUS[cur.st] + "”로 바꿨습니다");
+      return;
+    }
+    /* 전달 대상 */
+    if (e.target.closest(".tgt-a")) {
+      cur.tgtAssembly = !cur.tgtAssembly;
+      e.target.closest(".tgt-a").classList.toggle("on", cur.tgtAssembly);
+      renderTgtSummary();
+      return;
+    }
+    var tk = e.target.closest(".tgt-kind");
+    if (tk) {
+      drawerKind = drawerKind === tk.dataset.kind ? null : tk.dataset.kind;
+      $$(".tgt-kind", this).forEach(function (x) { x.classList.toggle("open", x.dataset.kind === drawerKind); });
+      renderTgtSub();
+      return;
+    }
+    var tc = e.target.closest(".tgt-c");
+    if (tc) {
+      var cid = +tc.dataset.cid;
+      var at = cur.tgtIds.indexOf(cid);
+      if (at >= 0) cur.tgtIds.splice(at, 1); else cur.tgtIds.push(cid);
+      renderTgtSub();
+      renderTgtSummary();
+      return;
+    }
+    if (e.target.closest("#tgt-clear")) {
+      cur.tgtIds = [];
+      renderTgtSub();
+      renderTgtSummary();
+      toast("의원 선택을 모두 해제했습니다");
+      return;
+    }
+    /* 담당 배정 (보좌진 + 시·구의원) */
+    var who = e.target.closest(".who-btn");
+    if (who && who.dataset.sid) {
+      var key = who.dataset.sid;
+      cur.assignee = key;
+      cur.isNew = false;
+      if (cur.st === 1) cur.st = 2;
+      render();
+      openDrawer(cur.no); // 라벨·처리 이력까지 함께 갱신
+      if (key.charAt(0) === "s") {
+        var sp = STAFF.find(function (p) { return "s" + p.id === key; });
+        toast(sp.name + " 담당 배정 — 배정 알림 메일 발송 (데모)");
+        setTimeout(function () { openMail("assign", sp); }, 350);
+      } else {
+        toast(personName(key) + " 담당 — 의원실 간 전달은 사무국 절차를 따릅니다 (데모)");
+      }
+      return;
+    }
+    var tpl = e.target.closest("[data-tpl]");
+    if (tpl) {
+      $("#reply").value = TPL[tpl.dataset.tpl];
+      $("#reply").focus();
+      return;
+    }
+    if (e.target.closest("#send")) {
+      var ttl = $("#up-title").value.trim();
+      var body = $("#reply").value.trim();
+      if (!ttl) { toast("제목 한 줄을 적어주세요"); $("#up-title").focus(); return; }
+      if (!body) { toast("자세한 내용을 적어주세요"); $("#reply").focus(); return; }
+      cur.updates.push({ d: todayShort(), by: me.name, title: ttl, text: body });
+      var done = $("#mark-done") ? $("#mark-done").checked : false;
+      if (done || cur.st === 4) { cur.st = 4; cur.doneDays = 0; }
+      else if (cur.st < 3) cur.st = 3;
+      cur.isNew = false;
+      var pub = $("#consent").checked;
+      var cnt = cur.updates.length;
+      render();
+      closeDrawer();
+      toast("소식을 보냈습니다 (" + cnt + "번째)" +
+        (done ? " — 답변 완료 처리, 연락처는 " + PURGE_DAYS + "일 뒤 자동 파기" : "") +
+        (pub ? " · 게시 승인 대기에 올림" : "") + " (데모)");
+      return;
+    }
+    if (e.target.closest("#save-draft")) { toast("임시 저장했습니다 (데모)"); }
+  });
+
+  /* ── 공약 트래커: 추가·수정·삭제 ── */
+  var PL_ST = { 1: "준비", 2: "추진 중", 3: "일부 달성", 4: "완료" };
+  var TODAY = (function () {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  })();
+  var PLEDGES = [
+    { id: 1, t: "○○초등학교 통학로 안전 개선", pct: 100, st: 4, delay: "", note: "근거 자료 2건 연결됨",
+      logs: [
+        { d: "2026-03-04", w: "학부모 간담회에서 통학로 위험 구간 3곳 확인", pub: true },
+        { d: "2026-04-18", w: "국비 확보 — 안전시설 설치 예산 반영", pub: true },
+        { d: "2026-06-02", w: "구청·교육지원청 합동 현장 점검", pub: true, photo: true },
+        { d: "2026-08-19", w: "안전 펜스·과속 방지 시설 설치 완료 확인", pub: true, photo: true }
+      ] },
+    { id: 2, t: "△△사거리 교통 혼잡 완화", pct: 60, st: 3, delay: "", note: "근거 자료 1건 연결됨",
+      logs: [
+        { d: "2026-05-11", w: "퇴근 시간대 현장 확인 — 좌회전 2회 대기 구간", pub: true },
+        { d: "2026-07-03", w: "경찰서 교통과에 신호 체계 개선 요청", pub: true },
+        { d: "2026-08-12", w: "신호 주기 조정 완료 / 우회 도로는 절차 진행 중", pub: true }
+      ] },
+    { id: 3, t: "해수욕장 주변 보행 환경 정비", pct: 35, st: 2, delay: "설계 용역 발주가 2개월 지연되었습니다.", note: "국비 확보 완료 · 착공 대기",
+      logs: [
+        { d: "2026-07-29", w: "유모차로 진입로 통행 — 턱 높은 지점 4곳 확인", pub: true, photo: true },
+        { d: "2026-08-05", w: "설계비 국비 확보", pub: true },
+        { d: "2026-08-20", w: "용역 발주 지연 — 구청에 일정 확인 요청", pub: false }
+      ] },
+    { id: 4, t: "청년 창업 지원 공간 조성", pct: 10, st: 1, delay: "", note: "부지 검토 단계",
+      logs: [
+        { d: "2026-08-11", w: "빈 상가 3곳 후보지 답사", pub: false }
+      ] }
+  ];
+  var plSeq = 5;
+
+  function plRender(focusId) {
+    $("#pledge-list").innerHTML = PLEDGES.map(function (p) {
+      var opts = [1, 2, 3, 4].map(function (n) {
+        return '<option value="' + n + '"' + (n === p.st ? " selected" : "") + ">" + PL_ST[n] + "</option>";
+      }).join("");
+      return '<div class="card editor' + (p.isNew ? " pl-new" : "") + '" data-id="' + p.id + '">' +
+        '<div class="pl-head">' +
+          '<input class="pl-title" value="' + p.t.replace(/"/g, "&quot;") + '" placeholder="공약 이름을 적어주세요">' +
+          '<select class="pl-st">' + opts + "</select>" +
+          '<button class="pl-del" title="삭제" aria-label="삭제">✕</button>' +
+        "</div>" +
+        '<div class="ed-row">' +
+          '<input class="rng" type="range" min="0" max="100" step="5" value="' + p.pct + '">' +
+          '<span class="pct">' + p.pct + "%</span>" +
+        "</div>" +
+        (p.note ? '<p class="ed-note">' + p.note + "</p>" : "") +
+        '<div class="pl-delay">' +
+          '<p class="f-label">지연 사유 <span style="font-weight:600; color:var(--muted);">(늦어진 공약은 필수 — 주민 화면에 공개)</span></p>' +
+          '<input class="mini-in pl-delay-in" value="' + (p.delay || "").replace(/"/g, "&quot;") +
+            '" placeholder="예: 용역 발주가 2개월 지연">' +
+        "</div>" +
+        plLogHtml(p) +
+      "</div>";
+    }).join("");
+    plCount();
+    if (focusId) {
+      var el = $('.editor[data-id="' + focusId + '"] .pl-title');
+      if (el) { el.focus(); el.scrollIntoView({ block: "center" }); }
+    }
+  }
+
+  function esc(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  }
+
+  function plLogHtml(p) {
+    var logs = (p.logs || []).slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; });
+    var rows = logs.length
+      ? logs.map(function (l, i) {
+          return '<li class="plog' + (l.pub ? " pub" : "") + '" data-i="' + i + '">' +
+            '<span class="plog-d">' + l.d.slice(5).replace("-", ".") + "</span>" +
+            '<span class="plog-w">' + esc(l.w) + "</span>" +
+            '<button class="plog-cam' + (l.photo ? " has" : "") + '" title="' + (l.photo ? "사진 첨부됨 — 누르면 뺍니다" : "이 기록에 사진 첨부") + '">' + (l.photo ? "📷 사진" : "＋사진") + "</button>" +
+            '<button class="plog-eye" title="' + (l.pub ? "주민 화면에 공개 중 — 누르면 비공개" : "내부 기록 — 누르면 공개") +
+              '">' + (l.pub ? "공개" : "내부") + "</button>" +
+            '<button class="plog-x" title="기록 삭제" aria-label="기록 삭제">✕</button>' +
+          "</li>";
+        }).join("")
+      : '<li class="plog-empty">아직 기록이 없습니다. 무엇을 했는지 한 줄씩 남겨주세요.</li>';
+    return '<div class="pl-logs">' +
+      '<p class="f-label">진행 기록 <span style="font-weight:600; color:var(--muted);">(' +
+        logs.filter(function (l) { return l.pub; }).length + '건 공개 · 사진 ' +
+        logs.filter(function (l) { return l.photo; }).length + '장 · 전체 ' + logs.length + '건)</span></p>' +
+      '<ul class="plog-list">' + rows + "</ul>" +
+      '<div class="plog-add">' +
+        '<input type="date" class="mini-in plog-date" value="' + TODAY + '">' +
+        '<input class="mini-in plog-in" placeholder="한 일을 한 줄로 적어주세요">' +
+        '<button class="plog-btn">기록 추가</button>' +
+      "</div>" +
+    "</div>";
+  }
+
+  function plCount() {
+    $("#pledge-count").textContent = PLEDGES.length + "건 · 완료 " +
+      PLEDGES.filter(function (p) { return p.st === 4; }).length + "건";
+  }
+
+  function plFind(el) {
+    var box = el.closest(".editor");
+    var id = +box.dataset.id;
+    return PLEDGES.filter(function (p) { return p.id === id; })[0];
+  }
+
+  $("#add-pledge").addEventListener("click", function () {
+    PLEDGES.push({ id: plSeq, t: "", pct: 0, st: 1, delay: "", note: "새로 추가한 공약", isNew: true });
+    plRender(plSeq);
+    plSeq++;
+    toast("공약을 추가했습니다. 이름을 적어주세요");
+  });
+
+  $("#pledge-list").addEventListener("input", function (e) {
+    var p = plFind(e.target);
+    if (!p) return;
+    if (e.target.classList.contains("rng")) {
+      p.pct = +e.target.value;
+      e.target.parentNode.querySelector(".pct").textContent = p.pct + "%";
+    } else if (e.target.classList.contains("pl-title")) {
+      p.t = e.target.value;
+    } else if (e.target.classList.contains("pl-delay-in")) {
+      p.delay = e.target.value;
+    }
+  });
+
+  $("#pledge-list").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.classList.contains("plog-in")) {
+      e.preventDefault();
+      e.target.closest(".plog-add").querySelector(".plog-btn").click();
+    }
+  });
+
+  $("#pledge-list").addEventListener("change", function (e) {
+    var p = plFind(e.target);
+    if (p && e.target.classList.contains("pl-st")) {
+      p.st = +e.target.value;
+      plCount();
+      toast("“" + (p.t || "새 공약") + "” 상태를 " + PL_ST[p.st] + "(으)로 바꿨습니다");
+    }
+  });
+
+  $("#pledge-list").addEventListener("click", function (e) {
+    var p0 = plFind(e.target);
+
+    /* 진행 기록 추가 */
+    if (e.target.closest(".plog-btn") && p0) {
+      var box = e.target.closest(".pl-logs");
+      var txt = box.querySelector(".plog-in").value.trim();
+      var dt = box.querySelector(".plog-date").value || TODAY;
+      if (!txt) { toast("무엇을 했는지 한 줄 적어주세요"); box.querySelector(".plog-in").focus(); return; }
+      p0.logs = p0.logs || [];
+      p0.logs.push({ d: dt, w: txt, pub: true });
+      plRender();
+      toast("진행 기록을 남겼습니다");
+      return;
+    }
+    /* 사진 첨부/해제 */
+    var cam = e.target.closest(".plog-cam");
+    if (cam && p0) {
+      var li0 = cam.closest(".plog");
+      var sorted0 = p0.logs.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; });
+      var t0 = sorted0[+li0.dataset.i];
+      t0.photo = !t0.photo;
+      plRender();
+      toast(t0.photo ? "사진을 붙였습니다 — 공약 카드에 함께 보입니다 (데모)" : "사진을 뺐습니다");
+      return;
+    }
+    /* 공개 여부 토글 */
+    var eye = e.target.closest(".plog-eye");
+    if (eye && p0) {
+      var li = eye.closest(".plog");
+      var logsSorted = p0.logs.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; });
+      var target = logsSorted[+li.dataset.i];
+      target.pub = !target.pub;
+      plRender();
+      toast(target.pub ? "이 기록을 주민 화면에 공개합니다" : "내부 기록으로 돌렸습니다");
+      return;
+    }
+    /* 기록 삭제 */
+    var x = e.target.closest(".plog-x");
+    if (x && p0) {
+      var li2 = x.closest(".plog");
+      var sorted = p0.logs.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; });
+      var del = sorted[+li2.dataset.i];
+      p0.logs = p0.logs.filter(function (l) { return l !== del; });
+      plRender();
+      toast("기록을 지웠습니다");
+      return;
+    }
+
+    if (!e.target.closest(".pl-del")) return;
+    var p = p0;
+    if (!p) return;
+    if (!confirm("“" + (p.t || "이름 없는 공약") + "”을 삭제할까요?\n주민 화면에서도 사라집니다.")) return;
+    PLEDGES = PLEDGES.filter(function (x) { return x.id !== p.id; });
+    plRender();
+    toast("공약을 삭제했습니다 (데모)");
+  });
+
+  /* 저장 시 검증 — 이름 없음 / 지연 사유 없음 */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest('[data-save="공약 트래커"]');
+    if (!b) return;
+    e.stopPropagation(); // 아래 공용 저장 핸들러가 덮어쓰지 않게
+    var noName = PLEDGES.filter(function (p) { return !p.t.trim(); });
+    if (noName.length) { toast("이름이 비어 있는 공약이 " + noName.length + "건 있습니다"); return; }
+    // 준비 단계는 아직 시작 전이니 면제. "추진 중·일부 달성"인데 절반도 못 간 건만 사유를 받는다.
+    var late = PLEDGES.filter(function (p) { return (p.st === 2 || p.st === 3) && p.pct < 50 && !p.delay.trim(); });
+    if (late.length) { toast("진행이 더딘 공약 " + late.length + "건은 지연 사유를 적어주세요"); return; }
+    toast("공약 " + PLEDGES.length + "건을 저장했습니다 (데모 — 실제로는 저장되지 않습니다)");
+  }, true);
+
+  plRender();
+
+  /* ── 현장 활동: 날짜 등록·자동 정렬·수동 순서 조정 ── */
+  var FIELD = [
+    { id: 1, d: "2026-08-19", t: "“아이들 눈높이에서 보니 차가 안 보이더라”", where: "○○초 정문 앞", cat: "통학로" },
+    { id: 2, d: "2026-08-12", t: "“퇴근 시간에 직접 서서 신호를 세어봤습니다”", where: "△△사거리", cat: "교통" },
+    { id: 3, d: "2026-08-05", t: "“상인분들 얘기 두 시간 들었습니다”", where: "○○시장", cat: "상권" },
+    { id: 4, d: "2026-07-29", t: "“유모차를 끌고 한 바퀴 돌아봤습니다”", where: "해수욕장 진입로", cat: "보행 환경" }
+  ];
+  var fieldSeq = 5;
+  var fieldMode = "date"; // "date" = 활동일 최신순 자동 | "manual" = 보좌진이 정한 순서
+
+  $("#field-date").value = TODAY;
+
+  function fieldView() {
+    return fieldMode === "date"
+      ? FIELD.slice().sort(function (a, b) { return a.d < b.d ? 1 : a.d > b.d ? -1 : 0; })
+      : FIELD;
+  }
+
+  function fmtD(d) { return d.slice(5).replace("-", "."); }
+
+  function renderField() {
+    var view = fieldView();
+    $("#field-list").innerHTML = view.length
+      ? view.map(function (f, i) {
+          return '<div class="fitem' + (f.isNew ? " new" : "") + '" data-id="' + f.id + '">' +
+            '<span class="fi-order">' +
+              '<button class="fi-move" data-mv="-1" ' + (i === 0 ? "disabled" : "") + ' aria-label="위로">▲</button>' +
+              '<button class="fi-move" data-mv="1" ' + (i === view.length - 1 ? "disabled" : "") + ' aria-label="아래로">▼</button>' +
+            "</span>" +
+            '<span class="fi-date">' + fmtD(f.d) + "</span>" +
+            '<span class="fi-body"><b>' + f.t + "</b><span>" + (f.where || "") + "</span></span>" +
+            '<span class="tag">' + (f.cat || "현장") + "</span>" +
+            '<button class="fi-x" aria-label="삭제">✕</button>' +
+          "</div>";
+        }).join("")
+      : '<p class="empty">등록된 현장 활동이 없습니다.</p>';
+    $("#field-count").textContent = view.length + "건 · " + (fieldMode === "date" ? "활동일 최신순" : "수동 정렬");
+    $("#field-mode").hidden = fieldMode !== "manual";
+    $("#field-resort").hidden = fieldMode !== "manual";
+  }
+
+  $("#field-publish").addEventListener("click", function () {
+    var t = $("#field-title").value.trim();
+    var saw = $("#field-saw").value.trim();
+    var did = $("#field-did").value.trim();
+    var d = $("#field-date").value;
+    if (!d) { toast("활동한 날짜를 골라주세요"); $("#field-date").focus(); return; }
+    if (!t) { toast("제목을 적어주세요"); $("#field-title").focus(); return; }
+    if (!saw || !did) { toast("“확인한 것”과 “그래서”를 모두 적어야 게시됩니다"); (!saw ? $("#field-saw") : $("#field-did")).focus(); return; }
+    FIELD.forEach(function (f) { f.isNew = false; });
+    var item = { id: fieldSeq++, d: d, t: t, where: $("#field-where").value.trim(), cat: "현장", isNew: true };
+    if (fieldMode === "manual") {
+      FIELD.unshift(item);
+      renderField();
+      toast("게시했습니다 — 수동 정렬 중이라 맨 위에 올렸어요 (데모)");
+    } else {
+      FIELD.push(item);
+      renderField();
+      toast("게시했습니다 — 활동일(" + fmtD(d) + ") 자리에 정렬됐어요 (데모)");
+    }
+    $("#field-title").value = ""; $("#field-saw").value = ""; $("#field-did").value = ""; $("#field-where").value = "";
+    $("#field-date").value = TODAY;
+  });
+
+  $("#field-list").addEventListener("click", function (e) {
+    var row = e.target.closest(".fitem");
+    if (!row) return;
+    var id = +row.dataset.id;
+
+    var mv = e.target.closest(".fi-move");
+    if (mv && !mv.disabled) {
+      if (fieldMode === "date") {
+        FIELD = fieldView();          // 지금 보이는 순서를 그대로 이어받아
+        fieldMode = "manual";         // 수동 모드로 전환
+      }
+      var i = FIELD.findIndex(function (f) { return f.id === id; });
+      var j = i + (+mv.dataset.mv);
+      if (j < 0 || j >= FIELD.length) return;
+      var tmp = FIELD[i]; FIELD[i] = FIELD[j]; FIELD[j] = tmp;
+      renderField();
+      toast("순서를 바꿨습니다 — 수동 정렬로 전환");
+      return;
+    }
+    if (e.target.closest(".fi-x")) {
+      var f = FIELD.find(function (x) { return x.id === id; });
+      if (!confirm("“" + f.t + "”을 삭제할까요?\n주민 화면에서도 사라집니다.")) return;
+      FIELD = FIELD.filter(function (x) { return x.id !== id; });
+      renderField();
+      toast("삭제했습니다 (데모)");
+    }
+  });
+
+  $("#field-resort").addEventListener("click", function () {
+    fieldMode = "date";
+    renderField();
+    toast("활동일 최신순으로 되돌렸습니다");
+  });
+
+  renderField();
+
+  /* ── 게시 승인 대기열 (데모) ── */
+  var PUB = [
+    { id: 1, t: "횡단보도 신호 시간 연장 요청", sum: "장산역 앞 보행 신호가 짧다는 민원 → 경찰서 협의로 신호 주기 조정. 이름·연락처 제거 완료.", st: "wait", dest: { caseBook: true, home: false } },
+    { id: 2, t: "경로당 냉방기 수리", sum: "중동 경로당 냉방기 고장 민원 → 구청 협의로 수리 완료. 이름·연락처 제거 완료.", st: "wait", dest: { caseBook: true, home: true } }
+  ];
+  var DEST_LABEL = { caseBook: "공개 게시판 (이런 이야기가 있었어요)", home: "홈 「최근 활동」" };
+  function renderPub() {
+    var wait = PUB.filter(function (p) { return p.st === "wait"; });
+    $("#approve-list").innerHTML = PUB.length
+      ? PUB.map(function (p) {
+          var badge = p.st === "wait" ? '<span class="st s2">승인 대기</span>'
+            : p.st === "ok" ? '<span class="st s4">게시됨</span>' : '<span class="st s1">반려</span>';
+          var destChips = Object.keys(DEST_LABEL).map(function (k) {
+            return '<button class="dest-chip' + (p.dest[k] ? " on" : "") + '" data-dest="' + k + '"' +
+              (p.st !== "wait" ? " disabled" : "") + ">" + DEST_LABEL[k] + "</button>";
+          }).join("");
+          var destLine = p.st === "ok"
+            ? '<span class="pub-where">게시 위치: ' + Object.keys(DEST_LABEL).filter(function (k) { return p.dest[k]; }).map(function (k) { return DEST_LABEL[k]; }).join(" · ") + "</span>"
+            : '<span class="pub-dest">' + destChips + "</span>";
+          var btns = p.st === "wait"
+            ? '<span class="pub-btns"><button class="fchip" data-pub="ok">승인해서 게시</button><button class="fchip" data-pub="no">반려</button></span>'
+            : '<span class="pub-btns"><button class="fchip" data-pub="undo">되돌리기</button></span>';
+          return '<div class="fitem pub-item" data-id="' + p.id + '">' +
+            '<span class="fi-body"><b>' + p.t + "</b><span>" + p.sum + "</span>" + destLine + "</span>" + badge + btns + "</div>";
+        }).join("")
+      : '<p class="empty">게시 승인을 기다리는 민원이 없습니다.</p>';
+    $("#cnt-approve").textContent = wait.length;
+  }
+  $("#approve-list").addEventListener("click", function (e) {
+    var d = e.target.closest(".dest-chip");
+    if (d && !d.disabled) {
+      var pd = PUB.find(function (x) { return x.id === +d.closest(".fitem").dataset.id; });
+      pd.dest[d.dataset.dest] = !pd.dest[d.dataset.dest];
+      renderPub();
+      return;
+    }
+    var b = e.target.closest("[data-pub]");
+    if (!b) return;
+    var p = PUB.find(function (x) { return x.id === +b.closest(".fitem").dataset.id; });
+    if (b.dataset.pub === "ok") {
+      var where = Object.keys(DEST_LABEL).filter(function (k) { return p.dest[k]; });
+      if (!where.length) { toast("게시 위치를 하나 이상 골라주세요"); return; }
+      p.st = "ok";
+      toast("승인 — " + where.map(function (k) { return DEST_LABEL[k]; }).join("과 ") + "에 게시했습니다 (데모)");
+    }
+    else if (b.dataset.pub === "no") { p.st = "no"; toast("반려했습니다 — 게시되지 않습니다 (데모)"); }
+    else { p.st = "wait"; toast("승인 대기로 되돌렸습니다"); }
+    renderPub();
+  });
+  renderPub();
+
+  /* ── 응원 한마디 승인 대기열 (데모) ── */
+  var CHEERS = [
+    { id: 1, name: "송정 주민", text: "송정 쪽도 자주 와주세요! 응원합니다.", st: "wait" },
+    { id: 2, name: "중1동 상인", text: "간담회 때 말씀 잘 들어주셔서 감사했습니다.", st: "wait" }
+  ];
+  function renderCheers() {
+    var box = $("#cheer-list-admin");
+    if (!box) return;
+    box.innerHTML = CHEERS.length
+      ? CHEERS.map(function (c) {
+          var badge = c.st === "wait" ? '<span class="st s2">대기</span>'
+            : c.st === "ok" ? '<span class="st s4">게시됨</span>' : '<span class="st s1">반려</span>';
+          var btns = c.st === "wait"
+            ? '<span class="pub-btns"><button class="fchip" data-cheer="ok">게시</button><button class="fchip" data-cheer="no">반려</button></span>'
+            : '<span class="pub-btns"><button class="fchip" data-cheer="undo">되돌리기</button></span>';
+          return '<div class="fitem" data-id="' + c.id + '" style="grid-template-columns: minmax(0,1fr) auto auto;">' +
+            '<span class="fi-body"><b>"' + c.text + '"</b><span>' + c.name + "</span></span>" + badge + btns + "</div>";
+        }).join("")
+      : '<p class="empty">확인할 응원이 없습니다.</p>';
+    $("#cheer-count").textContent = CHEERS.filter(function (c) { return c.st === "wait"; }).length + "건 대기";
+  }
+  $("#cheer-list-admin").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cheer]");
+    if (!b) return;
+    var c = CHEERS.find(function (x) { return x.id === +b.closest(".fitem").dataset.id; });
+    if (b.dataset.cheer === "ok") { c.st = "ok"; toast("응원을 게시했습니다 — 「활동」에 실립니다 (데모)"); }
+    else if (b.dataset.cheer === "no") { c.st = "no"; toast("반려했습니다 (데모)"); }
+    else { c.st = "wait"; toast("대기로 되돌렸습니다"); }
+    renderCheers();
+  });
+  renderCheers();
+
+  /* ── 보좌진 계정 · 이메일 알림 (데모) ── */
+  var STAFF = [
+    { id: 1, name: "김보좌", email: "kim.bo@assembly.go.kr", lead: true },
+    { id: 2, name: "이비서", email: "lee.bs@assembly.go.kr", lead: false },
+    { id: 3, name: "박실장", email: "park.sj@assembly.go.kr", lead: false }
+  ];
+  var staffSeq = 4;
+  var me = STAFF[0];
+
+  function renderStaff() {
+    $("#staff-list").innerHTML = STAFF.map(function (p) {
+      return '<div class="srow' + (p.lead ? " lead" : "") + '" data-id="' + p.id + '">' +
+        '<span class="avatar">' + p.name.slice(0, 1) + "</span>" +
+        '<span class="sr-body"><b>' + p.name + "</b><span>" + p.email + "</span></span>" +
+        (p.id === me.id ? '<span class="sr-me">지금 로그인</span>' : "<span></span>") +
+        '<button class="lead-chip">' + (p.lead ? "사이트 담당" : "담당 지정") + "</button>" +
+        '<button class="fi-x" aria-label="계정 삭제">✕</button>' +
+      "</div>";
+    }).join("");
+    $("#staff-count").textContent = STAFF.length + "명 · 사이트 담당 " + STAFF.filter(function (p) { return p.lead; }).length + "명";
+    if (typeof syncTabCounts === "function") syncTabCounts();
+  }
+
+  $("#staff-list").addEventListener("click", function (e) {
+    var row = e.target.closest(".srow");
+    if (!row) return;
+    var p = STAFF.find(function (x) { return x.id === +row.dataset.id; });
+    if (e.target.closest(".lead-chip")) {
+      p.lead = !p.lead;
+      renderStaff();
+      toast(p.lead ? p.name + "님을 사이트 담당으로 지정했습니다" : p.name + "님의 사이트 담당을 해제했습니다");
+      return;
+    }
+    if (e.target.closest(".fi-x")) {
+      if (STAFF.length === 1) { toast("마지막 계정은 삭제할 수 없습니다"); return; }
+      if (p.id === me.id) { toast("로그인 중인 본인 계정은 삭제할 수 없습니다"); return; }
+      if (!confirm(p.name + "님의 계정을 삭제할까요?")) return;
+      STAFF = STAFF.filter(function (x) { return x.id !== p.id; });
+      renderStaff();
+      toast("계정을 삭제했습니다 (데모)");
+    }
+  });
+
+  function renderCouncilors() {
+    var K = { city: "시의원", gu: "구의원" };
+    $("#cn-list").innerHTML = COUNCILORS.length
+      ? COUNCILORS.map(function (c) {
+          return '<div class="srow" data-id="' + c.id + '">' +
+            '<span class="avatar">' + (c.kind === "city" ? "시" : "구") + "</span>" +
+            '<span class="sr-body"><b>' + c.name + "</b><span>" + K[c.kind] + (c.area ? " · " + c.area : "") + "</span></span>" +
+            "<span></span><span></span>" +
+            '<button class="fi-x" aria-label="삭제">✕</button>' +
+          "</div>";
+        }).join("")
+      : '<p class="empty">등록된 시·구의원이 없습니다.</p>';
+    $("#cn-count").textContent = "시의원 " + COUNCILORS.filter(function (c) { return c.kind === "city"; }).length +
+      " · 구의원 " + COUNCILORS.filter(function (c) { return c.kind === "gu"; }).length;
+    if (typeof syncTabCounts === "function") syncTabCounts();
+  }
+
+  $("#cn-add").addEventListener("click", function () {
+    var n = $("#cn-name").value.trim();
+    if (!n) { toast("이름을 적어주세요"); $("#cn-name").focus(); return; }
+    COUNCILORS.push({ id: cnSeq++, kind: $("#cn-kind").value, name: n, area: $("#cn-area").value.trim() });
+    renderCouncilors();
+    renderSiteCouncilors();
+    $("#cn-name").value = ""; $("#cn-area").value = "";
+    toast(n + " 님을 명단에 추가했습니다 (데모)");
+  });
+
+  $("#cn-list").addEventListener("click", function (e) {
+    if (!e.target.closest(".fi-x")) return;
+    var row = e.target.closest(".srow");
+    var c = councilorById(+row.dataset.id);
+    if (!confirm(c.name + " 님을 명단에서 뺄까요?")) return;
+    COUNCILORS = COUNCILORS.filter(function (x) { return x.id !== c.id; });
+    renderCouncilors();
+    renderSiteCouncilors();
+    toast("명단에서 뺐습니다 (데모)");
+  });
+  renderCouncilors();
+  renderSiteCouncilors(); // COUNCILORS 정의 이후에 실행돼야 함
+
+  $("#staff-add").addEventListener("click", function () {
+    var n = $("#staff-name").value.trim();
+    var em = $("#staff-email").value.trim();
+    if (!n) { toast("이름을 적어주세요"); $("#staff-name").focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast("이메일 주소를 확인해주세요"); $("#staff-email").focus(); return; }
+    STAFF.push({ id: staffSeq++, name: n, email: em, lead: false });
+    renderStaff();
+    $("#staff-name").value = ""; $("#staff-email").value = "";
+    toast(em + " 주소로 초기 비밀번호 설정 메일을 보냈다고 치겠습니다 (데모)");
+  });
+
+  $("#notify-all").addEventListener("change", function () {
+    $("#notify-scope").textContent = this.checked ? "모든 보좌진" : "사이트 담당 보좌진";
+    toast(this.checked ? "이제 접수 알림이 모든 보좌진에게 갑니다 (데모)" : "접수 알림을 사이트 담당에게만 보냅니다 (데모)");
+  });
+
+  /* ── 메일 미리보기 ── */
+  function mailTo(list) {
+    return list.map(function (p) { return p.name + " <" + p.email + ">"; }).join(", ");
+  }
+  function openMail(type, extra) {
+    var leads = STAFF.filter(function (p) { return p.lead; });
+    var recipients = $("#notify-all").checked ? STAFF : (leads.length ? leads : STAFF);
+    if (type === "new") {
+      $("#mail-to").textContent = mailTo(recipients);
+      $("#mail-subject").textContent = "[우리동네 주진우] 새 민원 접수 — " + TODAY.replace(/-/g, "").slice(2) + "-021";
+      $("#mail-body").textContent =
+        "새 민원이 접수되었습니다.\n\n" +
+        "· 분야: 도로·교통 (좌2동)\n" +
+        "· 제목: 장산역 앞 횡단보도 신호가 너무 짧습니다\n" +
+        "· 접수 시각: 오늘 09:12\n\n" +
+        "첫 답변 목표는 접수 후 3일입니다. 담당 배정부터 부탁드려요.";
+    } else {
+      var who = extra || me;
+      $("#mail-to").textContent = mailTo([who]);
+      $("#mail-subject").textContent = "[우리동네 주진우] 담당 배정 — " + who.name + "님";
+      $("#mail-body").textContent =
+        who.name + "님, 아래 민원의 담당으로 배정되었습니다.\n\n" +
+        "· 접수번호: 2026-0821-013\n" +
+        "· 제목: 장산역 앞 횡단보도 신호가 너무 짧습니다\n" +
+        "· 배정자: " + me.name + "\n\n" +
+        "처리 단계를 갱신하면 주민 화면 「얼마나 했주?」에 반영됩니다.";
+    }
+    $("#mail-modal").classList.add("on");
+  }
+  document.addEventListener("click", function (e) {
+    var pv = e.target.closest("[data-preview]");
+    if (pv) openMail(pv.dataset.preview);
+  });
+  $("#mail-close").addEventListener("click", function () { $("#mail-modal").classList.remove("on"); });
+  $("#mail-modal").addEventListener("click", function (e) { if (e.target === this) this.classList.remove("on"); });
+  $("#mail-link").addEventListener("click", function (e) { e.preventDefault(); toast("실서비스에서는 대시보드 주소로 연결됩니다 (데모)"); });
+
+  /* ── 로그인 (데모) ── */
+  var pickedAcct = STAFF[0];
+  function renderLoginAccounts() {
+    $("#login-accounts").innerHTML = STAFF.map(function (p) {
+      return '<button class="acct' + (p.id === pickedAcct.id ? " on" : "") + '" data-id="' + p.id + '">' + p.name + "</button>";
+    }).join("");
+  }
+  $("#login-accounts").addEventListener("click", function (e) {
+    var b = e.target.closest(".acct");
+    if (!b) return;
+    pickedAcct = STAFF.find(function (p) { return p.id === +b.dataset.id; });
+    renderLoginAccounts();
+  });
+  $("#login-pw").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("#login-btn").click(); }
+  });
+
+  $("#login-btn").addEventListener("click", function () {
+    me = pickedAcct;
+    $(".who").innerHTML = '<span class="avatar">' + me.name.slice(0, 1) + "</span>" + me.name + ' <span style="color:#c3c7cd">|</span> 의원실';
+    $("#login").classList.add("off");
+    renderStaff();
+    toast(me.name + "님으로 로그인했습니다 (데모)");
+  });
+  renderLoginAccounts();
+  renderStaff();
+
+  /* ── 저장 버튼 ── */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-save]");
+    if (b) toast(b.dataset.save + " 저장했습니다 (데모 — 실제로는 저장되지 않습니다)");
+  });
+
+  render();
+  syncTabCounts();
+})();
+</script>
+</body>
+</html>
