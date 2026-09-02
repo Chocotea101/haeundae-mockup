@@ -55,6 +55,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
   padding: 9px 16px;
   font-weight: 600;
 }
+@media (max-width: 560px) { .demo-banner { font-size: 12.5px; padding: 8px 14px; } .demo-banner .db-long { display: none; } }
 
 /* ── 헤더 ── */
 .site-head {
@@ -813,7 +814,8 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); box-sh
 }
 .nav-mail b { font-family: var(--font-mono); color: var(--accent-ink); }
 .nav-tip { font-size: 14px; color: var(--warm); background: var(--warm-soft); border-radius: 11px; padding: 12px 15px; margin: 14px 0 0; }
-.ex { font-size: 0.82em; color: var(--muted); font-weight: 500; }
+.ex { font-size: max(0.82em, 12px); color: var(--muted); font-weight: 500; }
+.links a { display: inline-block; padding: 6px 0; }
 
 .tpl-box { border: 1.5px solid var(--line); border-radius: 13px; overflow: hidden; margin: 4px 0 0; }
 .tpl-head {
@@ -1107,7 +1109,11 @@ footer.site .in { max-width: 1060px; margin: 0 auto; }
 
 /* 아주 좁은 화면 (≤380px) */
 @media (max-width: 380px) {
-  .subtabs { grid-template-columns: 1fr; }
+  .subtabs { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .subtab { padding: 11px 12px; border-radius: 12px; }
+  .subtab .st-name { font-size: 14.5px; }
+  .subtab .st-pun { font-size: 11.5px; }
+  .subtab .st-count { display: none; }
   .home-tally { grid-template-columns: repeat(2, 1fr); }
   .stat-row { grid-template-columns: 64px 1fr 36px; }
 }
@@ -1220,7 +1226,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
 </style>
 </head>
 <body>
-<div class="demo-banner"><b>비공식 시안</b> 🛠 의원실·당협과 무관하게 제작한 제안용 프로토타입입니다. 공약명·경력 등 일부만 실제 공개 자료이고 나머지는 예시이며, 민원은 <b>실제로 접수되지 않습니다</b> · <a href="admin.html">보좌진 대시보드 보기</a></div>
+<div class="demo-banner"><b>비공식 시안</b> 🛠 의원실·당협과 무관하게 제작한 제안용 프로토타입입니다. <span class="db-long">공약명·경력 등 일부만 실제 공개 자료이고 나머지는 예시이며, </span>민원은 <b>실제로 접수되지 않습니다</b> · <a href="admin.html">보좌진 대시보드 보기</a></div>
 
 
 <header class="site-head">
@@ -1565,7 +1571,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
             </div>
             <b>“상인분들 얘기 두 시간 들었습니다”</b>
             <p class="fc-saw"><span class="lbl">확인한 것</span>간담회에서 나온 건의 9건. 그중 6건이 주차 문제였습니다.</p>
-            <p class="fc-did"><span class="lbl">그래서</span>건의 3건은 「일단 말해주!」 민원함으로 이관해 처리 중, 나머지는 구청 협의 요청.</p>
+            <p class="fc-did"><span class="lbl">그래서</span>주차 문제는 구청 교통행정과와 협의를 시작했고, 나머지 건의는 의원실이 하나씩 챙기는 중.</p>
           </div>
         </article>
 
@@ -1662,35 +1668,23 @@ h2.sec .pun { letter-spacing: -0.02em; }
     </div>
 
 
-    <h3 class="subhead">응원 한마디</h3>
-    <p class="pane-lede">활동을 보시고 한마디 남겨주세요. <b>사무국 확인 후 게시됩니다.</b></p>
-    <div class="cheer-form">
-      <input class="mini-in2" id="cheer-name" maxlength="10" placeholder="닉네임">
-      <input class="mini-in2" id="cheer-text" maxlength="80" placeholder="응원 한마디 (80자까지)">
-      <button class="btn" id="cheer-send">남기기</button>
-    </div>
-    <div class="cheer-list">
-      <div class="card cheer"><p>"장산역에서 매주 인사하시는 모습 보기 좋아요. 힘내세요!"</p><span>좌동 주민 (예시) · 8.20</span></div>
-      <div class="card cheer"><p>"통학로 펜스 생기고 나서 애 등교가 한결 안심돼요. 감사합니다."</p><span>우2동 학부모 (예시) · 8.19</span></div>
-      <div class="card cheer"><p>"청년 간담회 또 해주세요! 지난번에 못 갔어요ㅠ"</p><span>대학생 (예시) · 8.17</span></div>
-    </div>
-
     <div class="pane" id="s-week">
     <div class="card brief">
       <p class="when">8월 3주차 (예시)</p>
       <b>법사위 질의, 그리고 동네 두 바퀴</b>
       <ul>
         <li>법제사법위원회 전체회의 질의 1건</li>
-        <li>지역 상가 간담회 2회 — 접수된 건의 3건은 민원함으로 이관</li>
+        <li>지역 상가 간담회 2회 — 주차 문제 건의는 구청과 협의 시작</li>
         <li>통학로 공약 완료 확인 현장 방문</li>
       </ul>
     </div>
     <div class="card brief">
       <p class="when">8월 2주차 (예시)</p>
-      <b>민원 7건 답변, 2건은 구청 전달</b>
+      <b>폭염 취약가구 방문, 그리고 해수욕장 보행로</b>
       <ul>
-        <li>접수 9건 중 7건 답변 완료, 2건 소관 기관 전달</li>
-        <li>반복 접수된 소음 민원 → 제도 개선 검토 착수</li>
+        <li>당원 20여 명과 독거 어르신 가구 방문 — 냉방용품 전달</li>
+        <li>해수욕장 보행로 유모차 통행 점검 → 구청에 턱 낮춤 요청</li>
+        <li>주민이 남긴 이야기 중 소음 문제는 제도 개선 검토 착수</li>
       </ul>
     </div>
     <h3 class="subhead">공개 일정 (예시)</h3>
@@ -1716,6 +1710,18 @@ h2.sec .pun { letter-spacing: -0.02em; }
       </div>
     </div>
 
+    <h3 class="subhead">응원 한마디</h3>
+    <p class="pane-lede">활동을 보시고 한마디 남겨주세요. <b>사무국 확인 후 게시됩니다.</b></p>
+    <div class="cheer-form">
+      <input class="mini-in2" id="cheer-name" maxlength="10" placeholder="닉네임">
+      <input class="mini-in2" id="cheer-text" maxlength="80" placeholder="응원 한마디 (80자까지)">
+      <button class="btn" id="cheer-send">남기기</button>
+    </div>
+    <div class="cheer-list">
+      <div class="card cheer"><p>"장산역에서 매주 인사하시는 모습 보기 좋아요. 힘내세요!"</p><span>좌동 주민 (예시) · 8.20</span></div>
+      <div class="card cheer"><p>"통학로 펜스 생기고 나서 애 등교가 한결 안심돼요. 감사합니다."</p><span>우2동 학부모 (예시) · 8.19</span></div>
+      <div class="card cheer"><p>"청년 간담회 또 해주세요! 지난번에 못 갔어요ㅠ"</p><span>대학생 (예시) · 8.17</span></div>
+    </div>
     </div>
 
     <div class="pane" id="s-party">
@@ -2011,7 +2017,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <div class="office-grid">
       <div class="card office">
         <span class="chip blue">국회 사무실</span>
-        <p class="ofc-addr">서울특별시 영등포구 의사당대로 1<br>국회의원회관 ○○○호 <span class="ex">(예시)</span></p>
+        <p class="ofc-addr">서울특별시 영등포구 의사당대로 1<br>국회의원회관 339호</p>
         <p class="ofc-note" style="margin:0;">국회 사무실은 위치만 안내합니다. 연락은 지역사무소나 이메일이 빠릅니다.</p>
       </div>
       <div class="card office">
@@ -2085,7 +2091,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
   <div class="cs-in">
     <div class="cs-card">
       <span class="cs-k">국회 사무실</span>
-      <b style="font-family:var(--font-body); font-size:14.5px;">국회의원회관 ○○○호 <span class="ex">(예시)</span></b>
+      <b style="font-family:var(--font-body); font-size:14.5px;">국회의원회관 339호</b>
       <p>서울 영등포구 의사당대로 1 — 위치만 안내</p>
     </div>
     <div class="cs-card">
