@@ -1366,11 +1366,8 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
 
   var PURGE_DAYS = 7;
   function privacyTag(i) {
-    if (i.st === 4 && typeof i.doneDays === "number") {
-      if (i.doneDays >= PURGE_DAYS) return '<span class="tag purge done">연락처 파기됨 — 완료 후 ' + PURGE_DAYS + '일 경과</span>';
-      return '<span class="tag">' + i.tel + '</span><span class="tag purge">파기 D-' + (PURGE_DAYS - i.doneDays) + "</span>";
-    }
-    return '<span class="tag">' + i.tel + "</span>";
+    // 주민 화면에서 연락처를 받지 않으므로 파기할 연락처가 없음
+    return '<span class="tag">연락처 수집 안 함</span>';
   }
 
   function openDrawer(no) {
@@ -1598,7 +1595,7 @@ textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3
       render();
       closeDrawer();
       toast("소식을 보냈습니다 (" + cnt + "번째)" +
-        (done ? " — 답변 완료 처리, 연락처는 " + PURGE_DAYS + "일 뒤 자동 파기" : "") +
+        (done ? " — 답변 완료 처리" : "") +
         (pub ? " · 게시 승인 대기에 올림" : "") + " (데모)");
       return;
     }

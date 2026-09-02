@@ -690,16 +690,6 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); box-sh
 .edit-rule { font-size: 13px; color: var(--muted); margin: 10px 0 0; line-height: 1.65; }
 .edit-rule b { color: var(--accent-ink); }
 
-.mail-row { display: flex; gap: 8px; }
-.mail-row input { flex: 1; min-width: 0; }
-.mail-row .btn { white-space: nowrap; flex: none; padding: 12px 16px; font-size: 14px; }
-.mail-verify { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
-.mail-verify input { flex: 0 1 176px; min-width: 0; font-family: var(--font-mono); text-align: center; letter-spacing: 0.08em; }
-.mail-verify input::placeholder { font-family: var(--font-body); letter-spacing: 0; font-size: 14px; }
-.mail-verify .btn { flex: none; padding: 12px 18px; font-size: 14px; }
-.mail-hint { font-size: 12.5px; color: var(--muted); }
-.mail-hint b { font-family: var(--font-mono); color: var(--accent-ink); }
-.mail-ok { font-size: 13.5px; font-weight: 700; color: var(--good); background: var(--good-soft); border-radius: 10px; padding: 10px 14px; margin: 10px 0 0; }
 
 .rc-warn {
   font-size: 13.5px;
@@ -1011,6 +1001,9 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); box-sh
 .mem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
 @media (max-width: 760px) { .mem-grid { grid-template-columns: 1fr; } }
 .mem-ph { border-radius: 14px; }
+/* 실사진 자동 적용 — photos/<이름>.jpg 가 있으면 그 자리에 표시 */
+[data-photo].has-photo { background-size: cover; background-position: center; }
+[data-photo].has-photo::after, [data-photo].has-photo .ph-tag, [data-photo].has-photo > span:only-child { display: none; }
 .mem p { font-size: 13.5px; color: var(--muted); margin: 8px 2px 0; line-height: 1.55; }
 
 .vote-card {
@@ -1293,22 +1286,22 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <p class="home-sub">해운대 곳곳에서 있었던 일들. 사진을 눌러 자세히 보실 수 있어요. (예시)</p>
     <div class="act-gallery">
       <button class="act-shot" data-go="pledge">
-        <span class="as-photo ph-a"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <span class="as-photo ph-a" data-photo="01-home-tonghakro"><span class="ph-tag">현장 사진 (예시)</span></span>
         <b>○○초 통학로 안전 점검</b>
         <span class="as-meta">8.19 · 안전 펜스 설치 확인</span>
       </button>
       <button class="act-shot" data-go="pledge">
-        <span class="as-photo ph-c"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <span class="as-photo ph-c" data-photo="02-home-sijang"><span class="ph-tag">현장 사진 (예시)</span></span>
         <b>○○시장 상인 간담회</b>
         <span class="as-meta">8.05 · 건의 9건 접수</span>
       </button>
       <button class="act-shot" data-go="pledge">
-        <span class="as-photo ph-d"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <span class="as-photo ph-d" data-photo="03-home-beach"><span class="ph-tag">현장 사진 (예시)</span></span>
         <b>해수욕장 보행로 점검</b>
         <span class="as-meta">7.29 · 유모차로 직접 통행</span>
       </button>
       <button class="act-shot" data-go="news">
-        <span class="as-photo ph-b"><span class="ph-tag">현장 사진 (예시)</span></span>
+        <span class="as-photo ph-b" data-photo="04-home-jangsan"><span class="ph-tag">현장 사진 (예시)</span></span>
         <b>장산역 출근길 인사</b>
         <span class="as-meta">매주 화요일 아침</span>
       </button>
@@ -1353,7 +1346,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <div class="pane on" id="s-me">
     <div class="about-grid">
       <div class="card profile">
-        <div class="pf-photo" role="img" aria-label="의원 프로필 사진 자리">
+        <div class="pf-photo" data-photo="05-profile" role="img" aria-label="의원 프로필 사진 자리">
           <span>프로필 사진 자리<br>(예시)</span>
         </div>
         <div class="pf-body">
@@ -1425,9 +1418,9 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <p class="pane-lede">선거는 끝났지만, 그때 주고받은 마음이 이 사이트의 출발점입니다.</p>
 
     <div class="mem-grid">
-      <div class="mem"><div class="ph ph-a mem-ph"><span class="ph-tag">2024 선거 포스터 자리 (의원실 파일로 교체)</span></div><p>"사통팔달 해운대 · 살고 싶은 해운대 · 활력 있는 해운대" — 그때의 세 가지 약속</p></div>
-      <div class="mem"><div class="ph ph-c mem-ph"><span class="ph-tag">출근길 인사 사진 자리 (예시)</span></div><p>장산역 앞, 매일 아침의 약속</p></div>
-      <div class="mem"><div class="ph ph-d mem-ph"><span class="ph-tag">개표일 사진 자리 (예시)</span></div><p>2024년 4월 10일 밤, 감사의 인사</p></div>
+      <div class="mem"><div class="ph ph-a mem-ph" data-photo="06-promise-poster"><span class="ph-tag">2024 선거 포스터 자리 (의원실 파일로 교체)</span></div><p>"사통팔달 해운대 · 살고 싶은 해운대 · 활력 있는 해운대" — 그때의 세 가지 약속</p></div>
+      <div class="mem"><div class="ph ph-c mem-ph" data-photo="07-promise-morning"><span class="ph-tag">출근길 인사 사진 자리 (예시)</span></div><p>장산역 앞, 매일 아침의 약속</p></div>
+      <div class="mem"><div class="ph ph-d mem-ph" data-photo="08-promise-election-night"><span class="ph-tag">개표일 사진 자리 (예시)</span></div><p>2024년 4월 10일 밤, 감사의 인사</p></div>
     </div>
 
     <div class="card vote-card">
@@ -1484,9 +1477,9 @@ h2.sec .pun { letter-spacing: -0.02em; }
         <details class="track">
           <summary>해온 일 3건 보기 · 사진 2장</summary>
           <ul class="track-list">
-            <li class="has-shot"><span class="tk-d">5.14</span>터널 예정 구간 현장 확인<span class="tk-shot ph-a"><span class="ph-tag">현장 사진 (예시)</span></span></li>
+            <li class="has-shot"><span class="tk-d">5.14</span>터널 예정 구간 현장 확인<span class="tk-shot ph-a" data-photo="09-pledge-tunnel-site"><span class="ph-tag">현장 사진 (예시)</span></span></li>
             <li><span class="tk-d">6.27</span>국토부 관계자 면담 — 사업 일정 협의</li>
-            <li class="has-shot"><span class="tk-d">8.11</span>주민 설명회 개최<span class="tk-shot ph-c"><span class="ph-tag">현장 사진 (예시)</span></span></li>
+            <li class="has-shot"><span class="tk-d">8.11</span>주민 설명회 개최<span class="tk-shot ph-c" data-photo="10-pledge-briefing"><span class="ph-tag">현장 사진 (예시)</span></span></li>
           </ul>
           <p class="track-note">📷 사진이 있는 기록은 현장 모습이 함께 보입니다. 위 기록·사진은 <b>구조를 보여드리는 예시</b>이며, 실제 자료는 의원실 확인 후 올라갑니다.</p>
         </details>
@@ -1530,7 +1523,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
 
       <div class="field-grid">
         <article class="card field-card">
-          <div class="ph ph-a" role="img" aria-label="통학로 현장 점검 사진 (예시)">
+          <div class="ph ph-a" data-photo="11-field-1" role="img" aria-label="통학로 현장 점검 사진 (예시)">
             <span class="ph-tag">현장 사진 (예시)</span>
           </div>
           <div class="fc-body">
@@ -1546,7 +1539,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
         </article>
 
         <article class="card field-card">
-          <div class="ph ph-b" role="img" aria-label="사거리 교통 현장 점검 사진 (예시)">
+          <div class="ph ph-b" data-photo="12-field-2" role="img" aria-label="사거리 교통 현장 점검 사진 (예시)">
             <span class="ph-tag">현장 사진 (예시)</span>
           </div>
           <div class="fc-body">
@@ -1561,7 +1554,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
         </article>
 
         <article class="card field-card">
-          <div class="ph ph-c" role="img" aria-label="상가 간담회 사진 (예시)">
+          <div class="ph ph-c" data-photo="13-field-3" role="img" aria-label="상가 간담회 사진 (예시)">
             <span class="ph-tag">현장 사진 (예시)</span>
           </div>
           <div class="fc-body">
@@ -1576,7 +1569,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
         </article>
 
         <article class="card field-card">
-          <div class="ph ph-d" role="img" aria-label="해수욕장 보행로 점검 사진 (예시)">
+          <div class="ph ph-d" data-photo="14-field-4" role="img" aria-label="해수욕장 보행로 점검 사진 (예시)">
             <span class="ph-tag">현장 사진 (예시)</span>
           </div>
           <div class="fc-body">
@@ -1695,7 +1688,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <div class="pane on" id="s-media">
     <div class="media-grid">
       <div class="card media-card">
-        <div class="ph ph-a mem-ph" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
+        <div class="ph ph-a mem-ph" data-photo="15-media-sangga" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
         <p><b>상가 간담회 스케치</b><span>8.20 · 사진 4장 (예시)</span></p>
       </div>
       <div class="card media-card">
@@ -1705,7 +1698,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
         <p><b>현장 라이브 영상</b><span>유튜브 임베드 — 실제로 재생됩니다</span></p>
       </div>
       <div class="card media-card">
-        <div class="ph ph-c mem-ph" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
+        <div class="ph ph-c mem-ph" data-photo="16-media-tonghakro" role="img" aria-label="현장 사진 자리"><span class="ph-tag">사진 자리 (의원실 업로드)</span></div>
         <p><b>통학로 완료 현장</b><span>8.19 · 사진 2장 (예시)</span></p>
       </div>
     </div>
@@ -1728,15 +1721,15 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <p class="pane-lede">의원 혼자가 아니라, 당협이 함께 뜁니다. 분과별 활동과 당원 소식을 전합니다. (예시 데이터)</p>
     <div class="media-grid">
       <div class="card media-card">
-        <div class="ph ph-c mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <div class="ph ph-c mem-ph" data-photo="17-party-youth"><span class="ph-tag">활동 사진 (예시)</span></div>
         <p><b>청년분과 — 대학가 간담회</b><span>8.22 · 청년분과위원장 외 12명</span></p>
       </div>
       <div class="card media-card">
-        <div class="ph ph-a mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <div class="ph ph-a mem-ph" data-photo="18-party-women"><span class="ph-tag">활동 사진 (예시)</span></div>
         <p><b>여성분과 — 아동 안전 캠페인</b><span>8.18 · 좌동 일대</span></p>
       </div>
       <div class="card media-card">
-        <div class="ph ph-d mem-ph"><span class="ph-tag">활동 사진 (예시)</span></div>
+        <div class="ph ph-d mem-ph" data-photo="19-party-org"><span class="ph-tag">활동 사진 (예시)</span></div>
         <p><b>조직분과 — 당원 월례회</b><span>8.14 · 참석 40여 명</span></p>
       </div>
     </div>
@@ -1770,9 +1763,9 @@ h2.sec .pun { letter-spacing: -0.02em; }
     <div class="pane" id="s-daily">
     <p class="pane-lede">의정 기록만큼, 사람도 보여드립니다. 딱딱한 소식 사이, 가끔 이런 것도요. (의원실 제공 사진으로 채워질 자리)</p>
     <div class="mem-grid">
-      <div class="mem"><div class="ph ph-c mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>단골 국밥집에서 — "여기 깍두기가 진리입니다"</p></div>
-      <div class="mem"><div class="ph ph-d mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>주말 아침 장산 둘레길 — 만나면 인사해 주세요</p></div>
-      <div class="mem"><div class="ph ph-b mem-ph"><span class="ph-tag">사진 자리 (예시)</span></div><p>사무실 책상 위 — 오늘도 민원 파일과 함께</p></div>
+      <div class="mem"><div class="ph ph-c mem-ph" data-photo="20-daily-gukbap"><span class="ph-tag">사진 자리 (예시)</span></div><p>단골 국밥집에서 — "여기 깍두기가 진리입니다"</p></div>
+      <div class="mem"><div class="ph ph-d mem-ph" data-photo="21-daily-jangsan"><span class="ph-tag">사진 자리 (예시)</span></div><p>주말 아침 장산 둘레길 — 만나면 인사해 주세요</p></div>
+      <div class="mem"><div class="ph ph-b mem-ph" data-photo="22-daily-desk"><span class="ph-tag">사진 자리 (예시)</span></div><p>사무실 책상 위 — 오늘도 민원 파일과 함께</p></div>
     </div>
 
     </div>
@@ -1868,20 +1861,6 @@ h2.sec .pun { letter-spacing: -0.02em; }
         <p class="err" id="err-body">내용을 적어주세요</p>
       </div>
 
-      <div class="field">
-        <label>이메일 <small>(선택 — 답변·진행 소식을 메일로 받고 싶을 때만)</small></label>
-        <div class="mail-row">
-          <input type="email" id="ask-mail" autocomplete="email" placeholder="name@example.com">
-          <button type="button" class="btn ghost" id="mail-send">인증번호 받기</button>
-        </div>
-        <div class="mail-verify" id="mail-verify" hidden>
-          <input type="text" id="mail-code" inputmode="numeric" maxlength="6" placeholder="인증번호 6자리">
-          <button type="button" class="btn" id="mail-check">확인</button>
-          <span class="mail-hint">프로토타입이라 <b id="demo-code">000000</b>을 넣으면 인증됩니다</span>
-        </div>
-        <p class="mail-ok" id="mail-ok" hidden>✓ 인증된 메일로만 소식을 보냅니다 — 오타로 남에게 갈 일이 없어요</p>
-        <p class="err" id="err-mail">이메일 형식을 확인해주세요</p>
-      </div>
 
       <div class="field">
         <label>조회 비밀번호 <small>(숫자 4자리를 직접 정해주세요 — 내 민원을 확인·수정할 때 씁니다)</small></label>
@@ -1889,7 +1868,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
         <p class="err" id="err-pw">숫자 4자리로 정해주세요</p>
       </div>
 
-      <label class="agree"><input type="checkbox" id="agree"> 개인정보 수집·이용에 동의합니다. <small>(내용·동네·연락처(선택) — 답변 완료 7일 뒤 자동 파기됩니다. 프로토타입에서는 아무것도 저장되지 않습니다)</small></label>
+      <label class="agree"><input type="checkbox" id="agree"> 개인정보 수집·이용에 동의합니다. <small>(내용·동네만 받습니다 — 연락처는 수집하지 않습니다. 프로토타입에서는 아무것도 저장되지 않습니다)</small></label>
       <p class="err" id="err-agree">동의에 체크해주세요</p>
 
       <button class="btn" id="submit-ask">접수하기 (데모)</button>
@@ -1938,7 +1917,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
           <p>경찰서에 신호 주기 조정 협조 공문을 보냈습니다. 회신이 오는 대로 정리해서 안내드리겠습니다. 조금만 기다려 주세요.</p>
         </div>
       </div>
-      <p class="privacy-line">🔒 답변이 완료되면 남기신 연락처는 <b>7일 뒤 자동 파기</b>됩니다. 공개 사례로 전환될 때도 개인정보는 포함되지 않아요.</p>
+      <p class="privacy-line">🔒 <b>연락처는 받지 않습니다.</b> 공개 사례로 전환될 때도 이름·상세 주소 같은 개인정보는 지운 뒤 게시해요.</p>
     </div>
     </div>
 
@@ -2121,7 +2100,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
       접수번호 <b id="rc-no">2026-0821-013</b><br>
       조회 비밀번호 <b id="rc-pw">****</b><br>
       상태: 접수 완료 → 「일단 말해주!」 아래에서 조회 (비밀번호 입력 시 내용 확인·수정)<br>
-      <span class="rc-privacy">답변이 끝나면 남기신 연락처는 7일 뒤 자동 파기됩니다</span>
+      <span class="rc-privacy">연락처는 받지 않았습니다 — 접수번호와 비밀번호로 확인해 주세요</span>
     </div>
     <p class="rc-warn">⚠️ <b>접수번호와 비밀번호를 꼭 기억해 주세요.</b> 이 두 가지가 있어야 진행 상황과 답변을 확인할 수 있고, 분실하면 다시 찾아드리기 어렵습니다. 아래 버튼으로 접수증을 저장해 두세요.</p>
     <div class="rc-actions">
@@ -2305,38 +2284,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
   });
   $("#ask-body").addEventListener("input", function () { $("#err-body").classList.remove("on"); });
 
-  /* ── 연락처: 숫자만 쳐도 하이픈 자동 ── */
   $("#agree").addEventListener("change", function () { $("#err-agree").classList.remove("on"); });
-  /* 이메일 소유 확인 (데모) */
-  var mailVerified = false;
-  function mailValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function resetMailState() {
-    mailVerified = false;
-    $("#mail-verify").hidden = true;
-    $("#mail-ok").hidden = true;
-    $("#mail-code").value = "";
-  }
-  $("#ask-mail").addEventListener("input", function () {
-    $("#err-mail").classList.remove("on");
-    resetMailState();
-  });
-  $("#mail-send").addEventListener("click", function () {
-    var v = $("#ask-mail").value.trim();
-    if (!mailValid(v)) { $("#err-mail").classList.add("on"); $("#ask-mail").focus(); return; }
-    $("#mail-verify").hidden = false;
-    $("#mail-code").focus();
-    toast(v + " 로 인증번호를 보냈습니다 (데모 — 000000 입력)");
-  });
-  $("#mail-check").addEventListener("click", function () {
-    if ($("#mail-code").value.trim() !== "000000") { toast("인증번호가 맞지 않아요 (데모: 000000)"); return; }
-    mailVerified = true;
-    $("#mail-verify").hidden = true;
-    $("#mail-ok").hidden = false;
-    toast("이메일 인증 완료 — 이 주소로 소식을 보내드립니다");
-  });
-  $("#mail-code").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") { e.preventDefault(); $("#mail-check").click(); }
-  });
 
   $("#ask-pw").addEventListener("input", function () {
     this.value = this.value.replace(/\D/g, "").slice(0, 4);
@@ -2352,15 +2300,6 @@ h2.sec .pun { letter-spacing: -0.02em; }
     if (!/^\d{4}$/.test(pwv)) { $("#err-pw").classList.add("on"); ok = false; }
     if (!$("#agree").checked) { $("#err-agree").classList.add("on"); ok = false; }
     if (!ok) { toast("빨간 안내가 있는 칸을 채워주세요"); return; }
-    var mv = $("#ask-mail").value.trim();
-    if (mv && !mailVerified) {
-      if (!confirm("이메일 인증이 아직 안 됐어요.\n\n인증하지 않으면 답변·진행 소식을 메일로 받지 못하고,\n접수번호와 비밀번호로만 확인하실 수 있습니다.\n\n이대로 접수할까요?")) {
-        $("#mail-send").focus();
-        return;
-      }
-      $("#ask-mail").value = ""; // 확인 안 된 주소는 저장하지 않음
-      toast("인증되지 않은 메일 주소는 저장하지 않았습니다 — 접수번호로 확인해 주세요");
-    }
     var d = new Date();
     var mmdd = String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
     $("#rc-no").textContent = d.getFullYear() + "-" + mmdd + "-" + String(Math.floor(Math.random() * 900) + 100);
@@ -2371,8 +2310,6 @@ h2.sec .pun { letter-spacing: -0.02em; }
     $("#modal").classList.remove("on");
     $("#ask-body").value = "";
     $("#ask-pw").value = "";
-    $("#ask-mail").value = "";
-    resetMailState();
     $("#agree").checked = false;
     $$("#cat-chips .pick, #dong-chips .pick").forEach(function (b) { b.classList.remove("on"); });
     $("#route-hint").classList.remove("on");
@@ -2443,7 +2380,7 @@ h2.sec .pun { letter-spacing: -0.02em; }
     x.fillStyle = "#6d7178"; x.font = "400 25px " + F;
     x.fillText("두 가지가 있어야 진행 상황과 답변을 확인할 수 있습니다.", 92, 768);
     x.fillText("확인하기 : 사이트 「일단 말해주!」 → 내 민원 얼마나 되었주?", 92, 812);
-    x.fillText("답변이 끝나면 남기신 연락처는 7일 뒤 자동 파기됩니다.", 92, 856);
+    x.fillText("연락처는 받지 않습니다 — 접수번호와 비밀번호로 확인하세요.", 92, 856);
 
     x.fillStyle = "#e6e8ec"; x.fillRect(92, 916, W - 184, 2);
     x.fillStyle = "#9aa0a8"; x.font = "400 22px " + F;
@@ -2742,6 +2679,27 @@ h2.sec .pun { letter-spacing: -0.02em; }
   });
   renderNav("start");
 })();
+
+  /* ── 실사진 자동 적용 ──
+     photos/ 폴더에 슬롯 이름의 jpg 를 넣으면 예시 자리 대신 그 사진이 뜹니다.
+     photos/photos.json 에 파일 이름 배열이 있으면 그것만 시도하고, 없으면 슬롯마다 한 번씩 찾아봅니다. */
+  (function () { try {
+    var slots = Array.prototype.slice.call(document.querySelectorAll("[data-photo]"));
+    function apply(el) {
+      var img = new Image();
+      img.onload = function () { el.style.backgroundImage = "url('" + img.src + "')"; el.classList.add("has-photo"); };
+      img.src = "photos/" + el.dataset.photo + ".jpg";
+    }
+    fetch("photos/photos.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (list) {
+        if (Array.isArray(list)) {
+          var set = {}; list.forEach(function (n) { set[String(n).replace(/\.jpe?g$/i, "")] = 1; });
+          slots.forEach(function (el) { if (set[el.dataset.photo]) apply(el); });
+        } else slots.forEach(apply);
+      })
+      .catch(function () { slots.forEach(apply); });
+  } catch (e) { /* 사진 로더 실패는 무시 */ } })();
 </script>
 </body>
 </html>
